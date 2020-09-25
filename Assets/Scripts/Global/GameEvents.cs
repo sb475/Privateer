@@ -21,6 +21,9 @@ namespace RPG.Global {
         
         public UIController uiController;
         public event EventHandler<EventArgs> ItemChanged;
+
+       
+
         public event EventHandler<int> MinorAttribPoolChanged;
         public event EventHandler<int> MajorAttribPoolChanged;
         public event EventHandler<int> PerkPoolChanged;
@@ -29,6 +32,7 @@ namespace RPG.Global {
         public event EventHandler<GameObject> OnCharacterDeath;
         public event EventHandler<GameState> OnGameStateChange;
         public event EventHandler<Vector3> OnFightBrokeOut;
+        public event EventHandler<EventArgs> UpdateCrewList;
 
 
         public class BattleTacticOptions : EventArgs
@@ -45,7 +49,6 @@ namespace RPG.Global {
 
         public CrewController crewController;
         internal bool battleEventCalled;
-
 
         private void Awake() {
             instance = this;
@@ -128,7 +131,7 @@ namespace RPG.Global {
 
 
 
-        #region ActionMenu
+#region ActionMenu
         public void SelectActionMenu(ActionMenuOptions selectedOptions, Interactable interactable)
         {
 
@@ -197,6 +200,11 @@ namespace RPG.Global {
         {
             return crewController.ListCrew();
         }
+        public List<CrewMember> GetShipRoster()
+        {
+            return crewController.ListCrewOnShip();
+        }
+
 
         public GameObject GetPlayerObject()
         {
@@ -225,6 +233,23 @@ namespace RPG.Global {
         public void OnPerkPoolChange(int poolValue)
         {
             PerkPoolChanged?.Invoke(this, poolValue);
+        }
+        internal void MoveCrewToCurrent(CrewMember crewToSwap)
+        {
+            Debug.Log(crewToSwap.name + " moving to team");
+            GetShipRoster().Remove(crewToSwap); 
+            GetCrewRoster().Add(crewToSwap);
+            if (UpdateCrewList != null) UpdateCrewList?.Invoke(this, EventArgs.Empty);
+            
+        }
+
+        internal void MoveCrewToShip(CrewMember crewToSwap)
+        {
+            Debug.Log(crewToSwap.name + " moving to ship");
+            GetCrewRoster().Remove(crewToSwap);
+            GetShipRoster().Add(crewToSwap);
+
+            if (UpdateCrewList != null) UpdateCrewList?.Invoke(this, EventArgs.Empty);
         }
 
 #endregion

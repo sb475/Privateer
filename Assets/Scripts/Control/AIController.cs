@@ -59,7 +59,7 @@ namespace RPG.Control
             private void Start() {      
 
                 guardPosition.ForceInit();
-                playerTeam = GameEvents.instance.GetCrewRoster();
+                
        
             }
 
@@ -176,9 +176,9 @@ namespace RPG.Control
             public bool IsAggrevated()
             {
                 if (attitude == AttitudeType.Hostile)
-                {    
-                        foreach (CrewMember crew in playerTeam)
-                        {
+                {    CrewMember crew = GameEvents.instance.GetPlayer();
+                        // if (crew ))
+                        // {
                             //get real angry if anyone from player party is in range and hostile
                             float distanceToPlayer = Vector3.Distance(crew.transform.position, transform.position);
                             
@@ -187,7 +187,7 @@ namespace RPG.Control
                                 target = crew.gameObject;
                                 return true;
                             }                 
-                        }
+                        // }
 
                     return false;
                 }

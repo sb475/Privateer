@@ -18,7 +18,8 @@ namespace RPG.Control
     public class CrewController : MonoBehaviour
     {
 
-        public List<CrewMember> crewMembers = new List<CrewMember>();
+        public List<CrewMember> currentTeam = new List<CrewMember>();
+        public List<CrewMember> crewOnShip;
 
         public CrewMember currentCrewMember;
         public CrewMember selectedCrewMember;
@@ -58,7 +59,7 @@ namespace RPG.Control
             cachePlayerObjects = null;
             foreach (Transform child in gameObject.transform)
             {
-                crewMembers.Add(child.GetComponent<CrewMember>());
+                currentTeam.Add(child.GetComponent<CrewMember>());
             }
             GameEvents.instance.UpdateSelectedCrew(currentCrewMember);
         }
@@ -137,7 +138,11 @@ namespace RPG.Control
 
         public List<CrewMember> ListCrew()
         {
-            return crewMembers;
+            return currentTeam;
+        }
+        public List<CrewMember> ListCrewOnShip()
+        {
+            return crewOnShip;
         }
 
         private bool InteractWithObject()

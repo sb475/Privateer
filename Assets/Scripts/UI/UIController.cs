@@ -57,6 +57,8 @@ namespace RPG.UI
         [SerializeField] GameObject submenu;
         [SerializeField] GameObject shipManageBtn;
         [SerializeField] GameObject inventoryBtn;
+        [SerializeField] DisplayCrewList currentTeamDisplay;
+        [SerializeField] DisplayCrewList onShipDisplay;
         
         [Header("Equipment and Inventory Slots")]
         public List<ItemSlot> equippedItemSlots;
@@ -277,6 +279,10 @@ namespace RPG.UI
             UpdateItemsFromEquipped(currentCrewDisplayed.equipment.GetEquippedItems());
             playerInventory.SetPlayerInventory(currentCrewDisplayed.gameObject);
             playerEquipmentStats.GenerateCharacterDisplay(currentCrewDisplayed.baseStats);
+            currentTeamDisplay.GenerateOptionsDisplay();
+            onShipDisplay.GenerateOptionsDisplay();
+            
+            
 
         }
 
