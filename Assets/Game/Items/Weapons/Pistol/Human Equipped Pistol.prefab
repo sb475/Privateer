@@ -1,0 +1,139 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8857710401711933937
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2205863586056171265}
+  - component: {fileID: 1577051005696433616}
+  m_Layer: 0
+  m_Name: Human Equipped Pistol
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2205863586056171265
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8857710401711933937}
+  m_LocalRotation: {x: -0.5670607, y: 0.5845841, z: -0.37109742, w: 0.44608337}
+  m_LocalPosition: {x: 0.11, y: 0.032, z: -0.024}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8905753826173783471}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: -4.131, y: 109.114006, z: -85.315}
+--- !u!114 &1577051005696433616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8857710401711933937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0605fd65041df944bcf5987f734a88c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onHit:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!1001 &1117220843667152801
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2205863586056171265}
+    m_Modifications:
+    - target: {fileID: 8361431008632292686, guid: 95ab0a8c03d98914fbf15d3fa05e3fa7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 8365081834263630350, guid: 95ab0a8c03d98914fbf15d3fa05e3fa7,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8365081834263630350, guid: 95ab0a8c03d98914fbf15d3fa05e3fa7,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8365081834263630350, guid: 95ab0a8c03d98914fbf15d3fa05e3fa7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8365081834263630350, guid: 95ab0a8c03d98914fbf15d3fa05e3fa7,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8365081834263630350, guid: 95ab0a8c03d98914fbf15d3fa05e3fa7,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8365081834263630350, guid: 95ab0a8c03d98914fbf15d3fa05e3fa7,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8365081834263630350, guid: 95ab0a8c03d98914fbf15d3fa05e3fa7,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8365081834263630350, guid: 95ab0a8c03d98914fbf15d3fa05e3fa7,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8365081834263630350, guid: 95ab0a8c03d98914fbf15d3fa05e3fa7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8365081834263630350, guid: 95ab0a8c03d98914fbf15d3fa05e3fa7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8365081834263630350, guid: 95ab0a8c03d98914fbf15d3fa05e3fa7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8365394138424727958, guid: 95ab0a8c03d98914fbf15d3fa05e3fa7,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8365394138424727958, guid: 95ab0a8c03d98914fbf15d3fa05e3fa7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8367555032795619750, guid: 95ab0a8c03d98914fbf15d3fa05e3fa7,
+        type: 3}
+      propertyPath: m_Name
+      value: SM_Wep_Pistol_01 (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 95ab0a8c03d98914fbf15d3fa05e3fa7, type: 3}
+--- !u!4 &8905753826173783471 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8365081834263630350, guid: 95ab0a8c03d98914fbf15d3fa05e3fa7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1117220843667152801}
+  m_PrefabAsset: {fileID: 0}

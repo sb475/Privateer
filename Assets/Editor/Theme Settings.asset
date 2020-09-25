@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Theme Settings
+  m_EditorClassIdentifier: Assembly-CSharp:SlimUI.Vivid:FlexibleUIData
+  blue:
+    blueText: {r: 0, g: 0, b: 0, a: 0}
+    blueAccent:
+      serializedVersion: 2
+      rgba: 0
+    blueShadow:
+      serializedVersion: 2
+      rgba: 0
+  orange:
+    orangeText: {r: 0, g: 0, b: 0, a: 0}
+    orangeAccent:
+      serializedVersion: 2
+      rgba: 0
+    orangeShadow:
+      serializedVersion: 2
+      rgba: 0
+  red:
+    redText: {r: 0, g: 0, b: 0, a: 0}
+    redAccent:
+      serializedVersion: 2
+      rgba: 0
+    redShadow:
+      serializedVersion: 2
+      rgba: 0
+  green:
+    greenText: {r: 0, g: 0, b: 0, a: 0}
+    greenAccent:
+      serializedVersion: 2
+      rgba: 0
+    greenShadow:
+      serializedVersion: 2
+      rgba: 0
+  purple:
+    purpleText: {r: 0, g: 0, b: 0, a: 0}
+    purpleAccent:
+      serializedVersion: 2
+      rgba: 0
+    purpleShadow:
+      serializedVersion: 2
+      rgba: 0
+  pink:
+    pinkText: {r: 0, g: 0, b: 0, a: 0}
+    pinkAccent:
+      serializedVersion: 2
+      rgba: 0
+    pinkShadow:
+      serializedVersion: 2
+      rgba: 0
+  custom1:
+    customText1: {r: 0, g: 0, b: 0, a: 0}
+    custom1Accent:
+      serializedVersion: 2
+      rgba: 0
+    custom1Shadow:
+      serializedVersion: 2
+      rgba: 0
+  custom2:
+    customText2: {r: 0, g: 0, b: 0, a: 0}
+    custom2Accent:
+      serializedVersion: 2
+      rgba: 0
+    custom2Shadow:
+      serializedVersion: 2
+      rgba: 0
+  custom3:
+    customText3: {r: 0, g: 0, b: 0, a: 0}
+    custom3Accent:
+      serializedVersion: 2
+      rgba: 0
+    custom3Shadow:
+      serializedVersion: 2
+      rgba: 0
+  currentColor: {r: 0, g: 0, b: 0, a: 0}
+  accentColor:
+    serializedVersion: 2
+    rgba: 0
+  shadowColor:
+    serializedVersion: 2
+    rgba: 0
