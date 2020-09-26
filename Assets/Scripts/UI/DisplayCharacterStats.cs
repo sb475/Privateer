@@ -28,19 +28,15 @@ namespace RPG.UI{
 
         
         private void Awake() {
-            GameEvents.instance.ItemChanged += EventGenerateDisplay;
-            //uIController.UpdateCrewDisplayedChanged += EventGenerateDisplay;
+            
         }
 
-        // private void NewSelectEventGenerateDisplay(object sender, CrewMember e)
-        // {
-        //     GenerateCharacterDisplay(player.GetComponent<BaseStats>());
-        // }
-
         private void OnEnable() {
+            GameEvents.instance.ItemChanged += EventGenerateDisplay;
             player = uIController.GetCrewToDisplay().GetComponent<BaseStats>();
             GenerateCharacterDisplay(player);
         }
+        private void OnDisable() => GameEvents.instance.ItemChanged -= EventGenerateDisplay;
 
         private void EventGenerateDisplay (object sender, System.EventArgs e)
         {

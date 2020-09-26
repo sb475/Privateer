@@ -13,14 +13,14 @@ namespace RPG.UI
         [SerializeField] private Canvas canvas;
         private Vector3 lastPosition;
         public CrewMember crew;
-        public CrewSwap crewSwap;
+        public CrewSwapContainer crewSwap;
         CanvasGroup canvasGroup;
         private RectTransform rectTransform;
 
         private void Awake() {
             canvasGroup = GetComponent<CanvasGroup>();
             rectTransform = GetComponent<RectTransform>();
-            crewSwap = GetComponentInParent<CrewSwap>();
+            crewSwap = GetComponentInParent<CrewSwapContainer>();
         }
 
         public void OnDrag(PointerEventData eventData)

@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace RPG.UI
 {
-    public class ItemSlotGeneric : MonoBehaviour, IDropHandler
+    public class ItemSlotGeneric : DropContainer
         {
             public SlotType slotType = SlotType.inventoryContainer;
 
@@ -23,7 +23,7 @@ namespace RPG.UI
                 uIInventory = GetComponentInParent<UIInventory>();
             }
 
-            public virtual void OnDrop(PointerEventData eventData)
+            public override void OnDrop(PointerEventData eventData)
             {
                 GameObject droppedObject = eventData.pointerDrag;
 
