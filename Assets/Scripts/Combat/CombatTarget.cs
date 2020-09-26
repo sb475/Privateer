@@ -20,7 +20,7 @@ namespace RPG.Combat
         }
 
 
-        public override bool HandleRaycast(CrewController callingController)
+        public override bool HandleRaycast(PlayerController callingController)
         {
             Fighter rayCaster = callingController.GetComponent<Fighter>();
 
@@ -44,7 +44,7 @@ namespace RPG.Combat
         }
 
         //RPG.Stats.Progression.ProgressionStat
-        internal void Scan(CrewController callingController)
+        internal void Scan(PlayerController callingController)
         {
             BaseStats npcTargetStat = GetComponent<BaseStats>();
             Debug.Log (gameObject.name);

@@ -13,13 +13,13 @@ namespace RPG.Cinematic
         public Vector3 offset;
         public float zoomSpeed = 4f;
         public float minZoom = 5f;
-        public float maxZoom = 15f;
+        public float maxZoom = 25f;
         float timeSinceClick;
         public float pitch = 2f;
 
         public float yawSpeed = 500f;
 
-        private float currentZoom = 10f;
+        [SerializeField] private float currentZoom = 10f;
         public float currentYaw = 0f;
         
 
@@ -48,6 +48,18 @@ namespace RPG.Cinematic
 
         }
 
+        public float GetCameraZoom ()
+        {
+            return currentZoom;
+        }
+
+        public void SetCameraMaxZoom(float value)
+        {   
+            maxZoom = value;
+        }
+
+        
+
         private void LateUpdate() {
             transform.position = target.position - offset * currentZoom;
             transform.LookAt(target.position + Vector3.up * pitch);
@@ -55,14 +67,9 @@ namespace RPG.Cinematic
             transform.RotateAround(target.position, Vector3.up, currentYaw);
         }
 
-        public void SetCameraTarget(CrewMember crewMember)
+        public void SetCameraTarget(ControllableObject controllable)
         {
-            target = crewMember.transform;
-        }
-
-        public void RotateCamera()
-        {
-            
+            target = controllable.transform;
         }
     
     }

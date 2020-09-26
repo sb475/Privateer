@@ -89,7 +89,7 @@ namespace RPG.UI {
             Text optionsToDisplay = displayMenuRectTransform.GetComponentInChildren<Text>();
 
             Button menuButton = displayMenuRectTransform.GetComponent<Button>();
-            menuButton.onClick.AddListener(() => GameEvents.SelectActionMenu_Static(options, interactable));
+            menuButton.onClick.AddListener(() => GameEvents.instance.crewController.SelectActionMenu(options, interactable));
 
             displayMenuRectTransform.gameObject.SetActive(true);
 

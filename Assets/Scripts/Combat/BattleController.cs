@@ -15,7 +15,7 @@ namespace RPG.Combat
         public event EventHandler<EventArgs> combatStarted;
         public event EventHandler<EventArgs> combatEnded;
 
-        public CrewController crewController;
+        public PlayerController crewController;
 
         [Header("Combatant tracking")]
         public List<GameObject> combatantsInRange = new List<GameObject>();
@@ -391,7 +391,7 @@ namespace RPG.Combat
         private bool SortByTurn()
         {
             //Compares combatants speed variable. If it's tied it will favor the player.
-            combatantsInRange = combatantsInRange.OrderByDescending(x => x.GetComponent<BaseStats>().GetStat(Stat.Speed)).ThenByDescending(x => x.GetComponent<CrewController>()).ToList();
+            combatantsInRange = combatantsInRange.OrderByDescending(x => x.GetComponent<BaseStats>().GetStat(Stat.Speed)).ThenByDescending(x => x.GetComponent<PlayerController>()).ToList();
             return true;
         }
 #endregion

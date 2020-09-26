@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace RPG.Stats
 {
 //need to find a better way to organize these 
@@ -20,7 +22,36 @@ namespace RPG.Stats
         Resolve,
         Charm,
         Insight,
-        Luck
+        Luck 
+    }
+
+    public class Attribute {
+        
+        int baseValue;
+        string atttributeName;
+        string attribteDescription;
+
+        public Attribute (string atttributeName, int baseValue)
+        {
+            this.atttributeName = atttributeName;
+            this.baseValue = baseValue;
+
+        }
+
+        public void OneUpAttribute()
+        {
+            baseValue ++;
+        }
+        public void OneDownAttribute()
+        {
+            baseValue --;
+        }
+        
+    }
+    public class CharacterAttributes
+    {
+        int Level;
+        List<Attribute> characterAttributes;
     }
 
 }

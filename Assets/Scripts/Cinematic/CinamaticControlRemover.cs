@@ -30,12 +30,12 @@ namespace RPG.Cinematic
         {
             
             player.GetComponent<ActionScheduler>().CancelCurrectAction();
-            player.GetComponent<CrewController>().enabled = false;
+            player.GetComponent<PlayerController>().enabled = false;
         }
 
         void EnableControl(PlayableDirector pd)
         {
-            player.GetComponent<CrewController>().enabled = true;
+            player.GetComponent<PlayerController>().enabled = true;
         }
         
         

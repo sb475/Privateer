@@ -36,50 +36,47 @@ namespace RPG.UI
             if(crewDisplayContainer.GetComponentInChildren<CrewSwapContainer>().GetCrewListType() == CrewSwapContainer.CrewListType.currentTeam)
             {
                 Debug.Log(crewDisplayContainer.GetComponentInChildren<CrewSwapContainer>().GetCrewListType());
-                crewToDisplay = GameEvents.instance.GetCrewRoster();
-                if (crewToDisplay == null) return;
+                
+                crewToDisplay = uIController.GetCrewMembersInTeam();               
+                
             }
             else
             {
                 Debug.Log(crewDisplayContainer.GetComponentInChildren<CrewSwapContainer>().GetCrewListType());
-                crewToDisplay = GameEvents.instance.GetShipRoster();
-                if (crewToDisplay == null) return;
+                
+                crewToDisplay = uIController.GetCrewMembersOnSip();
+                               
             }
             
-            
-            
+                        
             RefreshItemDisplayStat();
             
             foreach (CrewMember crew in crewToDisplay)
-            {
+            {       
+                if (crew == null) continue;
 
-                Debug.Log (crew.name);
-                
                 RectTransform displayMenuRectTransform = Instantiate(crewDisplayButton.transform, crewDisplayContainer.transform).GetComponent<RectTransform>();
+                displayMenuRectTransform.gameObject.SetActive(true);
+                TextMeshProUGUI nameToDisplay = displayMenuRectTransform.GetComponentInChildren<TextMeshProUGUI>();
+                displayMenuRectTransform.GetComponentInChildren<CrewSwappableButton>().SetCrewOnObject(crew);
+                nameToDisplay.text = crew.GetCrewName();
+                
+                
+                
+                Button menuButton = displayMenuRectTransform.GetComponentInChildren<Button>();
+        
+
+                menuButton.onClick.AddListener(() => uIController.SetCrewToDisplay(crew));
+
+               
+
             
-            if (displayMenuRectTransform.GetComponentInChildren<CrewSwappableButton>() != null)
-            {
-                    TextMeshProUGUI nameToDisplay = displayMenuRectTransform.GetComponentInChildren<TextMeshProUGUI>();
-                    displayMenuRectTransform.GetComponentInChildren<CrewSwappableButton>().SetCrewOnObject(crew);
-                    nameToDisplay.text = crew.GetCrewName();
+
+                if (crew == uIController.GetCrewToDisplay())
+                {
+                menuButton.GetComponentInChildren<Image>().color = menuButton.colors.pressedColor;
+                }
             }
-
-            
-            
-            Button menuButton = displayMenuRectTransform.GetComponent<Button>();
-     
-
-            menuButton.onClick.AddListener(() => uIController.SetCrewToDisplay(crew));
-
-            displayMenuRectTransform.gameObject.SetActive(true);
-
-           
-
-            if (crew == uIController.GetCrewToDisplay())
-            {
-               menuButton.GetComponentInChildren<Image>().color = menuButton.colors.pressedColor;
-            }
-        }
         }
 
         public void RefreshItemDisplayStat()

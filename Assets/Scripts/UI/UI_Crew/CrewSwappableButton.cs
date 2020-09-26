@@ -41,8 +41,6 @@ namespace RPG.UI
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            
-
             lastPosition = gameObject.transform.position;
             canvasGroup.blocksRaycasts = false;
             canvasGroup.alpha = .6f;

@@ -41,16 +41,15 @@ namespace RPG.Items
         //         }
         // }
 
-        public override void DefaultInteract(CrewMember playerController)
+        public void DefaultInteract(ControllableObject playerController)
         {
-            base.DefaultInteract(playerController);
 
             PickUp(playerController);
         }
 
-        public void PickUp(CrewMember playerController)
+        public override void PickUp(ControllableObject playerController)
         {
-            playerController.AddItemToInventory(item, itemQuantity);
+            (playerController as CrewMember).AddItemToInventory(item, itemQuantity);
 
             Destroy(gameObject);
             InfoToolTip.HideToolTip_Static();

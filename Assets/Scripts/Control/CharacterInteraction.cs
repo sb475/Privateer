@@ -14,8 +14,8 @@ namespace RPG.Control
     public class CharacterInteraction : Interactable
     {
         public Inventory inventory;
-        public delegate void SetDefaultAction(CrewMember callingController);
-        public SetDefaultAction defaultAction;
+        public delegate void DefaultAttack(ControllableObject controllable);
+        public DefaultAttack defaultAttack;
 
         private void Awake()
         {
@@ -23,61 +23,51 @@ namespace RPG.Control
             displayName = gameObject.name;
             interactionPoint = gameObject.transform;
             inventory = new Inventory(null);
-            SetDefaultBehavior();
             InitializeOutline();
         }
 
-        public override void DefaultInteract(CrewMember playerController)
-        {
-            base.DefaultInteract(playerController);
 
-            defaultAction(playerController);
-        }
-
-        private void SetDefaultBehavior()
+        public override void DefaultInteract()
         {
             if (GetComponent<AIController>() != null)
             {
                 if (GetComponent<AIController>().GetAttitude() == AttitudeType.Hostile)
                 {
-                    defaultAction = AttackNPC;
+                    defaultAttack = AttackNPC;
                     defaultCursorType = CursorType.Combat;
                 }
             }
             if (GetComponent<Shop>() != null)
             {
-                defaultAction = ShopMenu;
+                ShopMenu();
                 defaultCursorType = CursorType.Shop;
             }
             else if (GetComponent<DialogueSystemTrigger>() != null)
             {
-                defaultAction = TalkToNPC;
+                TalkToNPC();
                 defaultCursorType = CursorType.Dialogue;
             }
 
         }
 
-        public void ShopMenu (CrewMember playerController)
+        public override void AttackNPC (ControllableObject controllable)
+        {
+        }
+
+        public override void ShopMenu ()
         {
             Shop npcShop = GetComponent<Shop>();
             npcShop.OpenShopMenu();
         }
 
-        public void TalkToNPC(CrewMember playerController)
+        public override void TalkToNPC()
         {
             if (GetComponent<DialogueSystemTrigger>() == null)
             {
                 Debug.Log("I don't have anything to talk about");
                 return;
             }
-            GetComponent<DialogueSystemTrigger>().OnUse(playerController.transform);
-        }
-
-        public void AttackNPC (CrewMember playerController)
-        {
-            Debug.Log("AttackNPC");
-            interactRadius = playerController.GetComponent<Fighter>().currentWeaponConfig.GetRange() * 0.8f;
-            playerController.GetComponent<Fighter>().Attack(gameObject);
+            GetComponent<DialogueSystemTrigger>().OnUse();
         }
 
         internal void Scan(CrewMember callingController)

@@ -32,7 +32,7 @@ namespace RPG.Base
             objectOutline.enabled = false;
         }
 
-        public virtual void DefaultInteract(CrewMember callingController)
+        public virtual void DefaultInteract()
         {
             // This method is meant to be overwritten
             //Debug.Log("Interacting with " + transform.name);
@@ -44,29 +44,13 @@ namespace RPG.Base
              Gizmos.DrawWireSphere(interactionPoint.position, interactRadius);
          }
 
-        public virtual bool HandleRaycast(CrewController callingController)
+        public virtual bool HandleRaycast(PlayerController callingController)
         {
             return true;
         }
 
-        private void CanInteract(CrewMember callingController)
-        {
-            ActionMenu.HideMenuOptions_Static();
 
-            float distanceToItem = Vector3.Distance(callingController.transform.position, transform.position);
-            if (distanceToItem > interactRadius)
-            {
-                Debug.Log("You are too far away to interact with this item");
-                callingController.mov.MoveToInteract(this);
-                // callingController.MoveToTarget
-            }
-            else if (distanceToItem < interactRadius)
-
-                DefaultInteract(callingController);
-            //StartCoroutine(HideForSeconds(respawnTime));
-        }
-
-        public CursorType GetCursorType(CrewController callingController)
+        public CursorType GetCursorType(PlayerController callingController)
         {
             return defaultCursorType;
         }
@@ -82,5 +66,35 @@ namespace RPG.Base
             InfoToolTip.HideToolTip_Static();
             objectOutline.enabled = false;
         }
+
+#region InteractiveOptions
+
+
+        public virtual void ShopMenu()
+        {
+
+        }
+
+
+        public virtual void TalkToNPC()
+        {
+        }
+
+        public virtual void AttackNPC( ControllableObject controllable)
+        {
+
+        }
+
+        public virtual void Scan()
+        {
+            
+        }
+
+        public virtual void PickUp(ControllableObject controllable)
+        {
+
+        }
+
+    #endregion
     }
 }

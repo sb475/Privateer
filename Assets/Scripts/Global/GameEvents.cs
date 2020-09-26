@@ -47,7 +47,7 @@ namespace RPG.Global {
         public GameObject equippedItemSlots;
         public GameObject playerObject;
 
-        public CrewController crewController;
+        public PlayerController crewController;
         internal bool battleEventCalled;
 
         private void Awake() {
@@ -57,8 +57,7 @@ namespace RPG.Global {
         }
 
         private void Start() {
-            playerObject = crewController.GetSelectedCrewMember().gameObject;
-            UpdateSelectedCrew(playerObject.GetComponent<CrewMember>());
+            playerObject = crewController.GetCurrentControllable().gameObject;
 
         }
 
@@ -131,53 +130,7 @@ namespace RPG.Global {
 
 
 
-#region ActionMenu
-        public void SelectActionMenu(ActionMenuOptions selectedOptions, Interactable interactable)
-        {
 
-            //actions based on clicking from mouse. Most rely on Coroutine Act, which functionality 
-            //is changed by editing the delagate "interactableAction". See in PlayerController.cs. Some 
-            //actions require to be manually altered at this time.
-     
-            switch (selectedOptions)
-            {
-
-                case ActionMenuOptions.Attack:
-                    crewController.interactableAction = crewController.Attack;
-                    break;
-                case ActionMenuOptions.Trade:
-                    crewController.interactableAction = crewController.Trade;
-                    break;
-                case ActionMenuOptions.Talk:
-                    crewController.interactableAction = crewController.Talk;
-                    break;
-                case ActionMenuOptions.Move:
-                    crewController.interactableAction = crewController.Move;
-                    break;
-                case ActionMenuOptions.Open:
-                    crewController.interactableAction = crewController.Open;
-                    break;
-                case ActionMenuOptions.PickUp:
-                    crewController.interactableAction = crewController.PickUp;
-                    break;
-                case ActionMenuOptions.Inspect:
-                    crewController.interactableAction = crewController.Inspect;
-                    break;
-                case ActionMenuOptions.Scan:
-                    crewController.interactableAction = crewController.Scan;
-                    break;
-            }
-            StartCoroutine(crewController.Act(crewController));
-
-            ActionMenu.HideMenuOptions_Static();
-        }
-
-        public static void SelectActionMenu_Static(ActionMenuOptions selectedOptions, Interactable interactable)
-        {
-            instance.SelectActionMenu(selectedOptions, interactable);
-        }
-
-#endregion
 
 
 #region CharacterEvents
@@ -188,13 +141,13 @@ namespace RPG.Global {
             playerObject.GetComponent<CharacterStats>().AddPerk(Resources.Load<Perk>(perkButtonType.ToString()), perkLevel);
         }
 
-        public void UpdateSelectedCrew(CrewMember newSelectedCrew)
-        {
+        // public void UpdateSelectedCrew(CrewMember newSelectedCrew)
+        // {
 
-            playerObject = newSelectedCrew.gameObject;
-            selectCrewChanged?.Invoke(this, newSelectedCrew);
+        //     playerObject = newSelectedCrew.gameObject;
+        //     selectCrewChanged?.Invoke(this, newSelectedCrew);
 
-        }
+        // }
 
         public List<CrewMember> GetCrewRoster()
         {

@@ -111,14 +111,24 @@ namespace RPG.Movement
         public void StartMoveAction(Vector3 destination, float speedFraction)
         {
             GetComponent<ActionScheduler>().StartAction(this);
+            
             MoveTo(destination, speedFraction);
         }
 
-        public void MoveTo(Vector3 destination, float speedFraction)
+        public bool MoveTo(Vector3 destination, float speedFraction)
         {
+            
             navMeshAgent.destination = destination;
             navMeshAgent.speed = maxSpeed * Mathf.Clamp01(speedFraction);
             navMeshAgent.isStopped = false;
+
+            if (Vector3.Distance(transform.position, destination) > .02f)
+            {
+                return false;
+            }
+            else{
+                return true;
+            }
         }
 
         public void GracefullyStopAnimate ()
@@ -135,7 +145,8 @@ namespace RPG.Movement
             Vector3 velocity = navMeshAgent.velocity;
             Vector3 localVelocity = transform.InverseTransformDirection(velocity);
             float speed = localVelocity.z;
-            GetComponent<Animator>().SetFloat("forwardMovement", speed);
+            if (GetComponent<Animator>() == null) return;
+             GetComponent<Animator>().SetFloat("forwardMovement", speed);
         }
 
         public void FollowTarget (CrewMember newTarget)

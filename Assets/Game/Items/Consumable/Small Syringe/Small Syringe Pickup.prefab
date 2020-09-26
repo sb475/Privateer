@@ -59,13 +59,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 503d6ce01e5120b4fa0c13b56c37613c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actionMenuOptions: 050000000600000003000000
   interactRadius: 3
-  cursorType: 0
+  defaultCursorType: 0
   interactionPoint: {fileID: 3877365941397891612}
   displayName: 
   item: {fileID: 11400000, guid: 53b94dbc63c08c640b23c2343b8a83a0, type: 2}
   itemQuantity: 1
-  respawnTime: 5
 --- !u!114 &8325302879504552630
 MonoBehaviour:
   m_ObjectHideFlags: 0

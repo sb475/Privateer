@@ -6,11 +6,11 @@ namespace RPG.Control
 {
     public class CrewMove : MonoBehaviour
     {
-        private CrewController crewController;
+        private PlayerController crewController;
         private float moveSpeed = 10f;
 
         // Start is called before the first frame update
-        void Awake () => crewController = GetComponent<CrewController>();
+        void Awake () => crewController = GetComponent<PlayerController>();
 
         private void FixedUpdate() {
             

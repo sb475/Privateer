@@ -102,14 +102,30 @@ namespace RPG.UI
             GameEvents.instance.OnFightBrokeOut += ActivateBattleHud;
             GameEvents.instance.battleTacticChanged += OnBattleTacticChange;
             //SetTheme();
-            crewMembersInTeam = GameEvents.instance.GetCrewRoster();
+
         }
 
         private void Start() {
             SetCrewToDisplay(GameEvents.instance.GetPlayer());
+            crewMembersInTeam = GameEvents.instance.GetCrewRoster();
+            crewMembersOnShip = GameEvents.instance.GetShipRoster();
         }
 
-        
+
+        private void Update()
+        {
+            timeSinceLastEvent += Time.deltaTime;
+            if (timeSinceLastEvent > 3)
+            {
+                ResetDisplayMessage();
+            }
+        }
+
+        [SerializeField] float timeToAnimate;
+        internal Color pressedButtonColor;
+
+
+
 
         public bool UpdateItemsFromEquipped(List<ItemConfig> equippedItems)
         {
@@ -273,9 +289,15 @@ namespace RPG.UI
             return crewMembersInTeam;
         }
 
+        public List<CrewMember> GetCrewMembersOnSip()
+        {
+            return crewMembersOnShip;
+        }
+
         public IEnumerator SetCrewToDisplay(CrewMember crewToDisplay)
-        {   
+        {   Debug.Log("Error");
             yield return new WaitUntil(() => currentCrewDisplayed = crewToDisplay);
+            Debug.Log("Error");
             UpdateItemsFromEquipped(currentCrewDisplayed.equipment.GetEquippedItems());
             playerInventory.SetPlayerInventory(currentCrewDisplayed.gameObject);
             playerEquipmentStats.GenerateCharacterDisplay(currentCrewDisplayed.baseStats);
@@ -285,17 +307,6 @@ namespace RPG.UI
             
 
         }
-
-        private void Update() {
-            timeSinceLastEvent += Time.deltaTime;
-            if (timeSinceLastEvent > 3)
-            {
-                ResetDisplayMessage();
-            }
-        }
-
-        [SerializeField] float timeToAnimate;
-        internal Color pressedButtonColor;
 
         public void ShowShopMenu ()
         {

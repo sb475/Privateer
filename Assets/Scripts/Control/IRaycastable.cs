@@ -3,8 +3,8 @@
 {
     public interface IRaycastable
     {
-        CursorType GetCursorType(CrewController callingController);
-        bool HandleRaycast(CrewController callingController);
+        CursorType GetCursorType(PlayerController callingController);
+        bool HandleRaycast(PlayerController callingController);
     }
 
 }

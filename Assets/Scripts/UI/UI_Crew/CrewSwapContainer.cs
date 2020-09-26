@@ -17,6 +17,7 @@ namespace RPG.UI{
 
         public override void OnDrop(PointerEventData eventData)
         {
+            Debug.Log ("Item dropped");
             if (eventData.pointerDrag.GetComponent<CrewSwappableButton>() == null) return;
 
             Debug.Log("Item was dropped");
