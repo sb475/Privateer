@@ -8,14 +8,14 @@ using UnityEngine.EventSystems;
 
 namespace RPG.UI{
         
-    public class CrewSwap : MonoBehaviour, IDropHandler
+    public class CrewSwapContainer : DropContainer
     {
 
         public enum CrewListType { currentTeam, onShop}
 
         public CrewListType crewListType;
 
-        public void OnDrop(PointerEventData eventData)
+        public override void OnDrop(PointerEventData eventData)
         {
             if (eventData.pointerDrag.GetComponent<CrewSwappableButton>() == null) return;
 
@@ -23,7 +23,7 @@ namespace RPG.UI{
             CrewMember crewToSwap = eventData.pointerDrag.GetComponent<CrewSwappableButton>().GetCrewMemberOnObject(); 
             if (crewToSwap == null) return;
 
-            if (eventData.pointerDrag.GetComponentInParent<CrewSwap>().GetCrewListType() == CrewListType.currentTeam)
+            if (eventData.pointerDrag.GetComponentInParent<CrewSwapContainer>().GetCrewListType() == CrewListType.currentTeam)
             {
                 Debug.Log ("Move crew to ship");
                 GameEvents.instance.MoveCrewToShip(crewToSwap);

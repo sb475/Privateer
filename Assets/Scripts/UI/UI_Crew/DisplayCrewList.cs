@@ -33,15 +33,15 @@ namespace RPG.UI
         {
             List<CrewMember> crewToDisplay;
 
-            if(crewDisplayContainer.GetComponentInChildren<CrewSwap>().GetCrewListType() == CrewSwap.CrewListType.currentTeam)
+            if(crewDisplayContainer.GetComponentInChildren<CrewSwapContainer>().GetCrewListType() == CrewSwapContainer.CrewListType.currentTeam)
             {
-                Debug.Log(crewDisplayContainer.GetComponentInChildren<CrewSwap>().GetCrewListType());
+                Debug.Log(crewDisplayContainer.GetComponentInChildren<CrewSwapContainer>().GetCrewListType());
                 crewToDisplay = GameEvents.instance.GetCrewRoster();
                 if (crewToDisplay == null) return;
             }
             else
             {
-                Debug.Log(crewDisplayContainer.GetComponentInChildren<CrewSwap>().GetCrewListType());
+                Debug.Log(crewDisplayContainer.GetComponentInChildren<CrewSwapContainer>().GetCrewListType());
                 crewToDisplay = GameEvents.instance.GetShipRoster();
                 if (crewToDisplay == null) return;
             }
