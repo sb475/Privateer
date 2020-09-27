@@ -25,11 +25,13 @@ namespace RPG.Stats
         Luck 
     }
 
+    [System.Serializable]
     public class Attribute {
         
-        int baseValue;
-        string atttributeName;
-        string attribteDescription;
+        public int baseValue;
+        public int modifiedValue;
+        public string atttributeName;
+        public string attribteDescription;
 
         public Attribute (string atttributeName, int baseValue)
         {
@@ -48,10 +50,14 @@ namespace RPG.Stats
         }
         
     }
+
+    [System.Serializable]
     public class CharacterAttributes
     {
-        int Level;
-        List<Attribute> characterAttributes;
+       public Attribute strength = new Attribute("Stength", 10);
+       private void Awake() {
+           
+       }
     }
 
 }

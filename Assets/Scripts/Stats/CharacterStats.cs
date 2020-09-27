@@ -15,6 +15,8 @@ namespace RPG.Stats
         [SerializeField] int majorAttributePoints;
         [SerializeField] int minorAttributePoints;
 
+        public CharacterAttributes characterAttributes;
+
         public GenericModifier[] genericModifierItems;
 
 

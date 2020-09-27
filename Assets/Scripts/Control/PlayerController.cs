@@ -58,9 +58,11 @@ namespace RPG.Control
         
 
         bool isDraggingUI = false;
+        private bool isPaused;
 
         private void Awake()
         {
+            isPaused = false;
             cachePlayerObjects = null;
         }
 
@@ -71,6 +73,20 @@ namespace RPG.Control
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                if (isPaused)
+                {
+                    Time.timeScale = 1f;
+                    isPaused = false;
+                }
+                else
+                 {
+                     Time.timeScale = 0;
+                    isPaused = true;
+
+                }
+            }
 
             if (InteractWithUI()) return;
 
@@ -92,7 +108,7 @@ namespace RPG.Control
         private void DetermineShipControl ()
         {
             if (cameraControl.GetCameraZoom() < 16f)
-            {
+            {  //add pause when zooming in
                 if (controllingShip)
                 {
                     currentControllable = lastControlledCrew;
