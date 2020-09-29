@@ -16,7 +16,7 @@ namespace RPG.UI
         private CharacterStats characterStats;
 
         private void Awake() {
-            GameEvents.instance.uiController.UpdateCrewDisplayedChanged += OnEventDisplayCrewChange;
+            GameEvents.instance.uiController.OnDisplayValueChange += OnEventDisplayCrewChange;
         }
 
         private void OnEnable()

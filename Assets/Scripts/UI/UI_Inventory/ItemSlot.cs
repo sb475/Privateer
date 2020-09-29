@@ -54,6 +54,7 @@ namespace RPG.UI
                     {
                         case SlotType.characterEquipSlot:
                             uiItemInInventory.isEquipped = true;
+                            GameEvents.instance.uiController.UpdateDisplayValues();
                             GameEvents.instance.OnItemChanged();
                             break;
                         case SlotType.inventorySlot:

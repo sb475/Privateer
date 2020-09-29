@@ -30,10 +30,7 @@ namespace RPG.UI {
             RectTransformUtility.ScreenPointToLocalPointInRectangle(transform.parent.GetComponent<RectTransform>(), Input.mousePosition, uiCamera, out localpoint);
             transform.localPosition = localpoint;
 
-            Debug.Log(localpoint.y);
             Vector2 anchoredPosition = transform.GetComponent<RectTransform>().anchoredPosition;
-
-            Debug.Log(anchoredPosition.y);
 
             //X-Axis
             //if the tooltip goes past the edge of our canvas, change the anchored position so that it fits.

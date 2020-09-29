@@ -77,14 +77,14 @@ namespace RPG.Control
         public void FollowTheLeader(CrewMember leader)
         { 
             this.leader = leader;
-            if (turnManager.canMove) mov.FollowTarget(leader);
+            if (turnManager.canMove) GetComponent<CharacterEngine>().FollowTarget(leader);
             
         }
 
         public void StopFollowingTheLeader()
         {
             followLeader = false;
-            mov.StopFollowTarget();
+            GetComponent<CharacterEngine>().StopFollowTarget();
         }
 
         

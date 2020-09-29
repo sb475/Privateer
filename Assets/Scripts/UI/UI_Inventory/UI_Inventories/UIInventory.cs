@@ -17,18 +17,24 @@ namespace RPG.UI{
         [SerializeField] private GameObject itemSlotContainer;
         [SerializeField] private GameObject itemSlot;
         [SerializeField] public GameObject inventoryOwner;
-        [SerializeField] GameObject selectedSlot;
-        [SerializeField] TextMeshProUGUI displayCurrency;
+        public GameObject selectedSlot;
+        public TextMeshProUGUI displayCurrency;
         [SerializeField] ItemInInventory selectedItemInInventory;
 
         public virtual void Awake() {
             
-            inventory = inventoryOwner.GetComponent<Inventory>();
+            if (inventoryOwner != null)
+            {
+
+                inventory = inventoryOwner.GetComponent<Inventory>();
+
+            }
+            uIController = GetComponentInParent<UIController>();
         }
 
-        public virtual void Start() {
-            SetInventory(inventory);
-        }
+        // public virtual void Start() {
+        //     SetInventory(inventory);
+        // }
 
         public virtual void SetInventory (Inventory inventory)
         {
@@ -43,9 +49,9 @@ namespace RPG.UI{
             RefreshInventoryItems();
         }
 
-        private void RefreshCurrencyDisplay()
+        public virtual void RefreshCurrencyDisplay()
         {
-            displayCurrency.text = inventory.GetCurrency().ToString();
+            
         }
 
         public void RefreshInventoryItems ()
@@ -66,7 +72,7 @@ namespace RPG.UI{
             //cycles through inventory items and generates image in ineventory UI.
             foreach (ItemInInventory item in inventory.GetItemList())
             {
-                if (item.isEquipped == true) continue;
+                if (item.isEquipped == true || item == null) continue;
                 
                 RectTransform itemSlotRectTransform = Instantiate(itemSlot.transform, itemSlotContainer.transform).GetComponent<RectTransform>();
    
@@ -135,8 +141,6 @@ namespace RPG.UI{
         public void SelectItemInInventory(GameObject itemToSelect)
         {
            selectedSlot = itemToSelect;
-           //selectedItemInInventory = selectedSlot.GetComponents<UIItemData>().GetItemData();
-           //Debug.Log (selectedSlot + " item has been selected");
         }
 
 

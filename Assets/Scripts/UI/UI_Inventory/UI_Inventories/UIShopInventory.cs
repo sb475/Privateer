@@ -20,6 +20,12 @@ namespace RPG.UI
 
         public override void Awake()
         {
+            base.Awake();
+        }
+
+        private void OnEnable() {
+
+            Debug.Log(uIController.GetCrewToDisplay());
             if (inventoryName == InventoryName.Player)
             {
                 inventory = uIController.GetCrewToDisplay().GetComponent<Inventory>();
@@ -29,8 +35,16 @@ namespace RPG.UI
                 inventory = inventoryOwner.GetComponent<Inventory>();
             }
 
-            uIController.UpdateCrewDisplayedChanged += OnCrewDisplayChange;
+            uIController.OnCrewToDisplayChange += OnCrewDisplayChange;
         }
+        private void OnDisable() {
+            uIController.OnCrewToDisplayChange -= OnCrewDisplayChange;
+        }
+        public override void RefreshCurrencyDisplay()
+        {
+            displayCurrency.text = inventory.GetCurrency().ToString();
+        }
+
 
         private void OnCrewDisplayChange(object sender, EventArgs e)
         {

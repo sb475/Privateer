@@ -9,25 +9,25 @@ using UnityEngine.UI;
 
 namespace RPG.UI 
 {
-    public class ItemBehavior : DroppableObject
+    public class ItemBehavior : DroppableObject, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         public ItemSlot parentSlot;
         private UIInventory uIInventory;
 
         private UIItemData itemData;
 
-        private void Awake()
+        public override void Awake()
         {
-            rectTransform = GetComponent<RectTransform>();
-            canvasGroup = GetComponent<CanvasGroup>();
-            parentRectTransform = GetComponent<RectTransform>();
+            base.Awake();
+
             parentSlot = GetComponentInParent<ItemSlot>();
             itemData = GetComponent<UIItemData>();
             uIInventory = parentSlot.GetInventoryController();
+            uIController = GetComponentInParent<UIController>();
 
         }
 
-        public override void OnPointerClick(PointerEventData eventData)
+        public void OnPointerClick(PointerEventData eventData)
         {
             if (eventData.button == PointerEventData.InputButton.Left)
             {
@@ -71,14 +71,14 @@ namespace RPG.UI
             return lastPosition;
         }
 
-        public override void OnPointerEnter(PointerEventData eventData)
+        public void OnPointerEnter(PointerEventData eventData)
         {
 
             ItemToolTip.ShowToolTip_Static(GetComponent<UIItemData>(), uIInventory);
 
         }
 
-        public override void OnPointerExit(PointerEventData eventData)
+        public void OnPointerExit(PointerEventData eventData)
         {
             ItemToolTip.HideToolTip_Static();
         }

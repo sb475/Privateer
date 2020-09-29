@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace RPG.UI
 {
-    public class DroppableObject : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+    public class DroppableObject : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
     {
         public UIController uIController;
         public Canvas canvas;
@@ -14,7 +14,7 @@ namespace RPG.UI
         public RectTransform parentRectTransform;
         public DropContainer parentDropContainer;
 
-        private void Awake()
+        public virtual void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
             canvasGroup = GetComponent<CanvasGroup>();
@@ -50,27 +50,5 @@ namespace RPG.UI
             //sets item back to where it came from if not dropped on an ItemSlot
             transform.localPosition = Vector3.zero;
         }
-
-        public virtual void OnPointerClick(PointerEventData eventData)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public virtual void OnPointerDown(PointerEventData eventData)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public virtual void OnPointerEnter(PointerEventData eventData)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public virtual void OnPointerExit(PointerEventData eventData)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        
     }
 }

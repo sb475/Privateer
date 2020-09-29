@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
+using RPG.Control;
 
 namespace RPG.UI{
 
@@ -17,24 +18,33 @@ namespace RPG.UI{
 
         public override void Awake()
         { 
+            base.Awake();
             
-            //inventoryOwner = uIController.GetCrewToDisplay().gameObject;
         }
 
-        public override void Start() {
+        public void Start() {
 
             //SetPlayerInventory(inventoryOwner);
         }
+        public override void RefreshCurrencyDisplay()
+        {
+            displayCurrency.text = inventory.GetCurrency().ToString();
+        }
+
 
         private void OnEnable() {
-            //SetPlayerInventory(inventoryOwner);
+            uIController.OnCrewToDisplayChange += UpdateInvetoryDisplay;
+            SetPlayerInventory(uIController.GetCrewToDisplay().gameObject);
+        }
+        private void OnDisable() {
+            uIController.OnCrewToDisplayChange -= UpdateInvetoryDisplay;
         }
 
-        // private void OnCrewDisplayChange(object sender, EventArgs e)
-        // {
-        //     SetPlayerInventory(inventoryOwner);
+        private void UpdateInvetoryDisplay(object sender, EventArgs e)
+        {
+            SetPlayerInventory(uIController.GetCrewToDisplay().gameObject);
+        }
 
-        // }
         public bool SetPlayerInventory(GameObject inventoryOwnerObj)
         {
             if (inventoryOwnerObj == null) return false;

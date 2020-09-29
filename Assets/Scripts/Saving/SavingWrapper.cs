@@ -7,7 +7,7 @@ namespace RPG.Saving
         const string defaultSaveFile = "save";
 
         private void Update() {
-            if (Input.GetKeyDown(KeyCode.S))
+            if (Input.GetKeyDown(KeyCode.P))
             {
 
                 GetComponent<SavingSystem>().Save(defaultSaveFile);

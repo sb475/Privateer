@@ -19,7 +19,6 @@ namespace RPG.UI
             GameEvents.instance.UpdateCrewList += TriggerCrewListDisplayEvent;
         }
 
-
         private void TriggerCrewListDisplayEvent(object sender, EventArgs e)
         {
             GenerateOptionsDisplay();
@@ -34,21 +33,14 @@ namespace RPG.UI
             List<CrewMember> crewToDisplay;
 
             if(crewDisplayContainer.GetComponentInChildren<CrewSwapContainer>().GetCrewListType() == CrewSwapContainer.CrewListType.currentTeam)
-            {
-                Debug.Log(crewDisplayContainer.GetComponentInChildren<CrewSwapContainer>().GetCrewListType());
-                
-                crewToDisplay = uIController.GetCrewMembersInTeam();               
-                
+            {                
+                crewToDisplay = uIController.GetCrewMembersInTeam();             
             }
             else
             {
-                Debug.Log(crewDisplayContainer.GetComponentInChildren<CrewSwapContainer>().GetCrewListType());
-                
-                crewToDisplay = uIController.GetCrewMembersOnSip();
-                               
+               crewToDisplay = uIController.GetCrewMembersOnSip();              
             }
             
-                        
             RefreshItemDisplayStat();
             
             foreach (CrewMember crew in crewToDisplay)

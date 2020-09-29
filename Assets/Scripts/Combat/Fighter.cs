@@ -12,7 +12,7 @@ using RPG.Items;
 
 namespace RPG.Combat
 {
-    public class Fighter : MonoBehaviour, IAction, ISaveable
+    public class Fighter : MonoBehaviour, IAction, ISaveable, IAttack
     {
 
         [SerializeField] float timeBetweenAttacks = 1f;
@@ -77,7 +77,7 @@ namespace RPG.Combat
             }
             else
             {
-                GetComponent<Mover>().Cancel();
+                GetComponent<IEngine>().Cancel();
                 if (turnManager.GetCanAct() == true)
                 {
                     AttackBehavior();
@@ -88,7 +88,7 @@ namespace RPG.Combat
 
         public void MoveToTarget(GameObject target)
         {
-            GetComponent<Mover>().MoveTo(target.transform.position, 1f);
+            GetComponent<IEngine>().MoveToLocation(target.transform.position);
         }
 
         private Weapon SetupDefaultWeapon()
@@ -232,7 +232,7 @@ namespace RPG.Combat
         {
             StopAttack();
             target = null;
-            GetComponent<Mover>().Cancel();
+            GetComponent<IEngine>().Cancel();
         }
 
         private void StopAttack()

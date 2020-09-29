@@ -11,7 +11,7 @@ namespace RPG.Cinematic
         public Transform target;
 
         public Vector3 offset;
-        public float zoomSpeed = 4f;
+        public float zoomSpeed = 50f;
         public float minZoom = 5f;
         public float maxZoom = 25f;
         float timeSinceClick;
@@ -56,6 +56,10 @@ namespace RPG.Cinematic
         public void SetCameraMaxZoom(float value)
         {   
             maxZoom = value;
+        }
+        public void SetZoomSpeed(float value)
+        {
+            zoomSpeed = value;
         }
 
         

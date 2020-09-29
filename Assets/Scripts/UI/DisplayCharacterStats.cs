@@ -32,20 +32,34 @@ namespace RPG.UI{
         }
 
         private void OnEnable() {
-            GameEvents.instance.ItemChanged += EventGenerateDisplay;
-            player = uIController.GetCrewToDisplay().GetComponent<BaseStats>();
-            GenerateCharacterDisplay(player);
-        }
-        private void OnDisable() => GameEvents.instance.ItemChanged -= EventGenerateDisplay;
 
-        private void EventGenerateDisplay (object sender, System.EventArgs e)
-        {
-            player = uIController.GetCrewToDisplay().GetComponent<BaseStats>();
-            GenerateCharacterDisplay(player);
+            uIController.OnDisplayValueChange += UpdateDisplay;
+            uIController.OnCrewToDisplayChange += UpdateDisplay;
+
+            //when window is enabled, display results for the currently selected crew.
+            GenerateCharacterDisplay(uIController.GetCrewToDisplay());
         }
 
-        public bool GenerateCharacterDisplay(BaseStats playerToDisplay)
+        private void UpdateDisplay(object sender, EventArgs e)
         {
+            GenerateCharacterDisplay(uIController.GetCrewToDisplay());
+        }
+
+        //make sure to unsubscribe from any events
+        private void OnDisable() 
+        {
+            uIController.OnDisplayValueChange -= UpdateDisplay;
+        }
+
+        private void EventDisplayCrewChange (object sender, CrewMember e)
+        {
+            GenerateCharacterDisplay(e);
+        }
+
+        public bool GenerateCharacterDisplay(CrewMember player)
+        {
+            BaseStats playerToDisplay = player.GetComponent<BaseStats>();
+
             if (playerToDisplay == null) return false;
             RefreshCharacterDisplay();
 
@@ -53,7 +67,7 @@ namespace RPG.UI{
             currentHealth.text = playerToDisplay.GetComponent<Health>().GetHealthPoints().ToString();
             totalHealth.text = playerToDisplay.GetComponent<Health>().GetMaxHealthPoints().ToString();
             displayArmor.text = playerToDisplay.GetStat(Stat.Armor).ToString();
-            displayDamage.text = playerToDisplay.GetComponent<Fighter>().DamageAsString();
+            displayDamage.text = playerToDisplay.GetComponent<IAttack>().DamageAsString();
 
 
             foreach (Stat stat in statsToDisplay)

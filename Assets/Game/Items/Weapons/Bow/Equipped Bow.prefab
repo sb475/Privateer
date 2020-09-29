@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6689140295991655039}
-  - component: {fileID: 7735602739364651219}
+  - component: {fileID: 7932210841183916266}
   m_Layer: 0
   m_Name: Equipped Bow
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 56.808002, y: 136.791, z: 281.818}
---- !u!114 &7735602739364651219
+--- !u!114 &7932210841183916266
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,9 +41,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 5559837410016377522}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4d0a834ca5d4a24e92c048dec4feda0, type: 3}
+  m_Script: {fileID: 11500000, guid: d0605fd65041df944bcf5987f734a88c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &4740356914360464888
 PrefabInstance:
   m_ObjectHideFlags: 0

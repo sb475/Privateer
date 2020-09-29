@@ -27,6 +27,9 @@ namespace RPG.Control
 
         public bool canControlShip;
         public bool controllingShip;
+        public float zoomContolTransition;
+        public float maxZoomOnChar;
+        public float maxZoomOnShip;
 
         public ControllableObject currentControllable;
         public CrewMember lastControlledCrew;
@@ -68,7 +71,7 @@ namespace RPG.Control
 
         private void Start() {
             cameraControl.SetCameraTarget(currentControllable);
-            SetCameraMaxZoom();
+            SetCamera();
         }
 
         private void Update()
@@ -107,37 +110,44 @@ namespace RPG.Control
 
         private void DetermineShipControl ()
         {
-            if (cameraControl.GetCameraZoom() < 16f)
+            if (cameraControl.GetCameraZoom() < zoomContolTransition)
             {  //add pause when zooming in
                 if (controllingShip)
                 {
-                    currentControllable = lastControlledCrew;
+                    SetCamera();
+                    SetControllable(lastControlledCrew);
                     controllingShip = false;
+                    maxNavPathLength = 40f;
                 }
                 controllingShip = false;
                 MoveWithKeyPress();
             }
             else
             {
+                //need to add a performace modifier to control scale when zooming in and out.
                 controllingShip = true;
                 if (currentControllable != ship)
                 {
+                    SetCamera();
                     lastControlledCrew = (CrewMember)currentControllable;
-                    currentControllable = ship;
+                    SetControllable(ship);
+                    maxNavPathLength = 2000f;
                 }
+                currentControllable.mov.KeyMovement();
                 
             }
         }
 
-        private void SetCameraMaxZoom ()
+        private void SetCamera ()
         {
             if (canControlShip)
             {
-                cameraControl.SetCameraMaxZoom(50f);
+                cameraControl.SetZoomSpeed(100f);
+                cameraControl.SetCameraMaxZoom(maxZoomOnShip);
             }
             else
-            {
-                cameraControl.SetCameraMaxZoom(16f);
+            {   cameraControl.SetZoomSpeed(5f);
+                cameraControl.SetCameraMaxZoom(maxZoomOnChar);
             }
         }
         private void MoveWithKeyPress()
@@ -153,14 +163,27 @@ namespace RPG.Control
                        
         }
 
-        public void SetCrewMember(CrewMember calledCrew) 
+        public void SetControllable(ControllableObject calledObject) 
         {
-            if (currentControllable == calledCrew) return;
-            currentControllable = calledCrew;
+            //additional guard statement
+            if (currentControllable == calledObject) return;
+
+            if (calledObject is CrewMember)
+            {
+                
+                
+            }
+            else if (calledObject is Ship)
+            {
+
+            }
+            currentControllable = calledObject;
             cameraControl.SetCameraTarget(currentControllable);
             //let the world know you're selected character changed
             //GameEvents.instance.UpdateSelectedCrew(currentControllable);
         }
+
+        
 
         public void SelectControllable(ControllableObject selected)
         {
@@ -258,7 +281,8 @@ namespace RPG.Control
                                 interactable = hit.collider.GetComponent<Interactable>();
                                 if (interactable != null)
                                 {
-                                    currentControllable.DefaultAct(interactable);
+                                    RPG_TaskSystem.Task atkTask = new RPG_TaskSystem.Task.Default { interactable = interactable, controllable = currentControllable };
+                                    currentControllable.taskSystem.AddTask(atkTask);
                                 }
                             }                  
 
@@ -380,24 +404,25 @@ namespace RPG.Control
 #region InteractWithMovement
         private bool InteractWithMovement()
         {
-
             Vector3 target;
-            bool hasHit = RaycastNavMesh(out target);
-            if (hasHit)
-            {
-                if (Input.GetMouseButtonDown(0))
+                bool hasHit = RaycastNavMesh(out target);
+                if (hasHit)
                 {
-                    StopAllCoroutines();
-                    ActionMenu.HideMenuOptions_Static();
-                    Debug.Log(currentControllable.name);
-                    
-                    RPG_TaskSystem.Task task = new RPG_TaskSystem.Task.MoveToPosition{targetPoistion = target};
-                    currentControllable.taskSystem.AddTask(task);
+                    if (Input.GetMouseButtonDown(0))
+                    {
+
+                        StopAllCoroutines();
+                        ActionMenu.HideMenuOptions_Static();
+                        
+                        RPG_TaskSystem.Task task = new RPG_TaskSystem.Task.MoveToPosition{targetPoistion = target};
+                        currentControllable.taskSystem.AddTask(task);
+                        Debug.Log(target);
+                    }
+                    SetCursor(CursorType.Movement);
+                    return true;
                 }
-                SetCursor(CursorType.Movement);
-                return true;
-            }
-            return false;
+                return false;
+            //}
         }
 
     #endregion
@@ -425,6 +450,16 @@ namespace RPG.Control
             return hits;
         }
 
+        // private bool RayCastPlane(out Vector3 target)
+        // {
+        //     target = new Vector3();
+        //     RaycastHit hit;
+        //     bool hasHit = Physics.Raycast(GetMouseRay(), out hit);
+        //     if (!hasHit) return false;
+
+            
+        // }
+
         private bool RaycastNavMesh(out Vector3 target)
         {
             target = new Vector3();
@@ -438,6 +473,7 @@ namespace RPG.Control
             if (!hasCastToNavMesh) return false;
 
             target = navMeshHit.position;
+            
             //give caluclate an object that it can modify.
             NavMeshPath path = new NavMeshPath();
             bool hasPath = NavMesh.CalculatePath(currentControllable.transform.position, target, NavMesh.AllAreas, path);
@@ -510,6 +546,18 @@ namespace RPG.Control
         public ControllableObject GetCurrentControllable()
         {
             return currentControllable;
+        }
+
+        public CrewMember GetCurrentCrewMember()
+        {
+            if (GetCurrentControllable() as CrewMember != null)
+            {
+                return GetCurrentControllable() as CrewMember;
+            }
+            else {
+                return lastControlledCrew;
+            }
+            
         }
 
     }

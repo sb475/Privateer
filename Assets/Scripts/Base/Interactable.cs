@@ -21,7 +21,7 @@ namespace RPG.Base
 
         Outline objectOutline;
 
-        private void Awake()
+        public virtual void Awake()
         {
             InitializeOutline();
         }
@@ -32,7 +32,7 @@ namespace RPG.Base
             objectOutline.enabled = false;
         }
 
-        public virtual void DefaultInteract()
+        public virtual void DefaultInteract(ControllableObject callingController)
         {
             // This method is meant to be overwritten
             //Debug.Log("Interacting with " + transform.name);
@@ -70,13 +70,13 @@ namespace RPG.Base
 #region InteractiveOptions
 
 
-        public virtual void ShopMenu()
+        public virtual void ShopMenu(ControllableObject controllable)
         {
 
         }
 
 
-        public virtual void TalkToNPC()
+        public virtual void TalkToNPC(ControllableObject controllable)
         {
         }
 
@@ -85,7 +85,7 @@ namespace RPG.Base
 
         }
 
-        public virtual void Scan()
+        public virtual void Scan(ControllableObject controllable)
         {
             
         }

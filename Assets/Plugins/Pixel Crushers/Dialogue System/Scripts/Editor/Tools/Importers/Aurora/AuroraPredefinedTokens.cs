@@ -28,7 +28,7 @@ namespace PixelCrushers.DialogueSystem.Aurora
 			{ "<Lawful/Chaotic>", "Lawful_Chaotic" }, // Gives whether the PC is Neutral, lawful or chaotic.
 			{ "<Law/Chaos>", "Law_Chaos" }, // gives if the PC is to Law, Neutrality, or Chaos.
 			{ "<Good/Evil>", "Good_Evil" }, // gives the PC's Good/Neutral/Evil.
-			{ "<Class>", "Class" }, // Names the PC's class (Wizard, Fighter, Monk etc)
+			{ "<Class>", "Class" }, // Names the PC's class (Wizard, IAttack, Monk etc)
 			{ "<Race>", "Race" }, // Names the PC's Race (Elven, Gnome, Human, Half-Elven)
 			{ "<Man/Woman>", "Man_Woman" },
             { "<Male/Female>", "Male_Female" },

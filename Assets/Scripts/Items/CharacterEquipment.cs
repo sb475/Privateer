@@ -17,7 +17,7 @@ namespace RPG.Items
 
         private List<Modifier> modifiersToAdd = new List<Modifier>();
 
-        Fighter fighter;
+        IAttack IAttack;
 
         [Header("Equipped Items")]
         [SerializeField] private ItemConfig armor = null;
@@ -31,7 +31,7 @@ namespace RPG.Items
 
         private void Awake() {
 
-            fighter = GetComponent<Fighter>();
+            IAttack = GetComponent<IAttack>();
                     
         }
 
@@ -72,7 +72,7 @@ namespace RPG.Items
         private IEnumerator InitializeEquipmentInSlots()
         {
             yield return new WaitUntil(() => (LoadWeaponInSlots()));
-            EquipToFighter();
+            EquipToIAttack();
 
         }
 
@@ -132,14 +132,14 @@ namespace RPG.Items
                 LoadWeaponInSlots();
             }
 
-            EquipToFighter();
+            EquipToIAttack();
         }
 
-        private void EquipToFighter()
+        private void EquipToIAttack()
         {
             GetComponent<Fighter>().EquipWeapon(LoadWeapon(primaryWeapon));
             GetComponent<Fighter>().EquipArmor(LoadArmor(armor));
-            //GetComponent<Fighter>().EquipArmor(LoadAccesory(equippedItems[index])); // this has not been implimented yet.
+            //GetComponent<IAttack>().EquipArmor(LoadAccesory(equippedItems[index])); // this has not been implimented yet.
         }
 
         private bool LoadWeaponInSlots()

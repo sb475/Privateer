@@ -9,19 +9,22 @@ using UnityEngine;
 namespace RPG.Control
 {
 
-    
+    [RequireComponent(typeof(IEngine))]
+    [RequireComponent(typeof(StateManager))]
+    [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(IAttack))]
     public class ControllableObject: MonoBehaviour
     {
 
         private enum TaskState { waiting, acting, next }
 
-        public Mover mov;
+        public IEngine mov;
         public StateManager turnManager;
         public Health health;
-        public Fighter fighter;
+        public IAttack IAttack;
         public delegate void DefaultBehviour();
         public DefaultBehviour defaultBehviour;
-        private TaskState taskState;
+        [SerializeField] private TaskState taskState;
         public RPG_TaskSystem taskSystem;
         float waitingTimer;
         public delegate void InteractableAction(RPG_TaskSystem.Task task);
@@ -29,10 +32,10 @@ namespace RPG.Control
 
         public virtual void Awake()
         {
-            mov = GetComponent<Mover>();
+            mov = GetComponent<IEngine>();
             turnManager = GetComponent<StateManager>();
             health = GetComponent<Health>();
-            fighter = GetComponent<Fighter>();
+            IAttack = GetComponent<IAttack>();
         }
 
         public virtual void Start() {
@@ -41,7 +44,6 @@ namespace RPG.Control
 
         public virtual void Update() {
 
-            Debug.Log (taskState);
             switch (taskState)
             {
                 case TaskState.waiting:
@@ -67,6 +69,7 @@ namespace RPG.Control
                 taskState = TaskState.waiting;
             } else {
                 taskState = TaskState.acting;
+                //all though messy, this is the switch type that handles different types of actions.
                 if (task is RPG_TaskSystem.Task.MoveToPosition)
                 {
                     ExecuteTask_Move(task as RPG_TaskSystem.Task.MoveToPosition);
@@ -74,7 +77,7 @@ namespace RPG.Control
                 }
                 else if (task is RPG_TaskSystem.Task.Attack)
                 {
-                    StartCoroutine(MoveToAct(task, ()=> ExecuteTask_Attack(task as RPG_TaskSystem.Task.Attack)));
+                    ExecuteTask_Attack(task as RPG_TaskSystem.Task.Attack);
                     return;
                 }
                 else if (task is RPG_TaskSystem.Task.Talk)
@@ -107,6 +110,11 @@ namespace RPG.Control
                     StartCoroutine(MoveToAct(task, () => ExecuteTask_Scan(task as RPG_TaskSystem.Task.Scan)));
                     return;
                 }
+                else if (task is RPG_TaskSystem.Task.Default)
+                {
+                    StartCoroutine(MoveToAct(task, () => ExecuteTask_Default(task as RPG_TaskSystem.Task.Default)));
+                    return;
+                }
                
                
             }
@@ -119,6 +127,7 @@ namespace RPG.Control
             interactableAction?.Invoke();
         }
 
+        //This function immediately requests next task to minimize halty movement appearence.
         public void ExecuteTask_Move(RPG_TaskSystem.Task.MoveToPosition task)
         {
             MoveToTarget(task.targetPoistion,() =>{
@@ -126,74 +135,70 @@ namespace RPG.Control
              });
         }
 
+            //special function for just moving to a location
          public void MoveToTarget(Vector3 target, Action OnArrival)
          {
              if (turnManager.canMove) 
              {
 
-                 mov.MoveTo(target, 1f);
+                 mov.MoveToLocation(target);
                  OnArrival?.Invoke();
              }
          }
 
+        //special function that invokes IAttack's attack sequence versus a "MoveToInteract => Interact" type pattern.
         public void ExecuteTask_Attack(RPG_TaskSystem.Task.Attack task)
         {
-            task.controllable.GetComponent<Fighter>().Attack(task.interactable.gameObject);
+            task.controllable.GetComponent<IAttack>().Attack(task.interactable.gameObject);
             taskState = TaskState.waiting;
 
-
-            
         }
+
+        //standards interaction pattern functions.
         public void ExecuteTask_Trade(RPG_TaskSystem.Task.Trade task)
         {
-            task.interactable.ShopMenu();
+            task.interactable.ShopMenu(this);
+            
             taskState = TaskState.waiting;
         }
         public void ExecuteTask_Talk(RPG_TaskSystem.Task.Talk task)
         {
 
-
-            task.interactable.TalkToNPC();
+            task.interactable.TalkToNPC(this);
             taskState = TaskState.waiting;
         }
         public void ExecuteTask_Open(RPG_TaskSystem.Task.Open task)
         {
  
-            task.interactable.DefaultInteract();
+            task.interactable.DefaultInteract(this);
             taskState = TaskState.waiting;
         }
         public void ExecuteTask_PickUp(RPG_TaskSystem.Task.Pickup task)
         {
 
-            task.interactable.PickUp(task.controllable);
+            task.interactable.PickUp(this);
             taskState = TaskState.waiting;
         }
         public void ExecuteTask_Inspect(RPG_TaskSystem.Task.Inspect task)
         {
 
             //add some kind of functionality
-            task.interactable.DefaultInteract();
+            task.interactable.DefaultInteract(this);
             taskState = TaskState.waiting;
         }
         public void ExecuteTask_Scan(RPG_TaskSystem.Task.Scan task)
         {
 
             Debug.Log("Scanning ... beep...boop");
-            task.interactable.Scan();
+            task.interactable.Scan(this);
             taskState = TaskState.waiting;
         }
-
-
-        public IEnumerator MoveToAct(Interactable interactable, RPG_TaskSystem.Task task)
+        public void ExecuteTask_Default(RPG_TaskSystem.Task.Default task)
         {
-            //Move into range for action
-            yield return new WaitUntil(() => (InRangeToInteract(interactable)));
-            interactableAction(task);
-        }
 
-        public void DefaultAct(Interactable interactable) => interactable.DefaultInteract();
-
-        
+            task.interactable.DefaultInteract(this);
+            taskState = TaskState.waiting;
+        }   
 
         bool InRangeToInteract(Interactable interactable)
         {

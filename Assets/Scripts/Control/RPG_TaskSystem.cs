@@ -9,6 +9,7 @@ namespace RPG.Control
     {
         public abstract class Task {
             public Interactable interactable;
+            public ControllableObject controllable;
 
             public class MoveToPosition : Task {
                 public Vector3 targetPoistion;
@@ -20,7 +21,7 @@ namespace RPG.Control
             public class Attack : Task
             {
 
-                public ControllableObject controllable;
+                
             }
             public class Trade : Task
             {
@@ -33,7 +34,6 @@ namespace RPG.Control
             public class Pickup : Task
             {
   
-                public ControllableObject controllable;
             }
             public class Inspect : Task
             {
@@ -42,6 +42,10 @@ namespace RPG.Control
             public class Scan : Task
             {
 
+            }
+            public class Default : Task
+            {
+                
             }
            
 

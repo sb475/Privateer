@@ -8,6 +8,7 @@ using RPG.Global;
 
 namespace RPG.Attributes
 {
+    [RequireComponent(typeof(BaseStats))]
     public class Health : MonoBehaviour, ISaveable
     {
         [SerializeField] float regeneratePercentage = 70;
@@ -20,7 +21,7 @@ namespace RPG.Attributes
         {
         }
 
-        LazyValue<float> healthPoints;
+        public LazyValue<float> healthPoints;
 
         bool isDead = false;
         

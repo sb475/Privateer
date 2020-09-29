@@ -24,11 +24,10 @@ namespace RPG.Control
             [SerializeField] GameObject battleController;
             [SerializeField] AttitudeType attitude;
 
-            Fighter fighter;
+            IAttack IAttack;
             public List<CrewMember> playerTeam;
             Health health;
-            Mover mover;
-            CombatTarget combatTarget;
+            IEngine mover;
             StateManager turnManager;
             CharacterFaction characterFaction;
             GameObject target;
@@ -42,10 +41,10 @@ namespace RPG.Control
             int currentWayointIndex = 0;
 
             private void Awake() {
-                fighter = GetComponent<Fighter>();
+                IAttack = GetComponent<IAttack>();
                 health = GetComponent<Health>();
                 
-                mover = GetComponent<Mover>();
+                mover = GetComponent<IEngine>();
                 guardPosition = new LazyValue<Vector3>(GetGuardPosition);
                 turnManager = GetComponent<StateManager>();
                 characterFaction = GetComponent<CharacterFaction>();
@@ -59,7 +58,7 @@ namespace RPG.Control
             private void Start() {      
 
                 guardPosition.ForceInit();
-                
+
        
             }
 
@@ -71,7 +70,7 @@ namespace RPG.Control
                         return;
                     }
 
-                    if (IsAggrevated() && fighter.CanAttack(target))
+                    if (IsAggrevated() && IAttack.CanAttack(target))
                     {
 
                             if (GameEvents.instance.battleEventCalled == false)
@@ -168,7 +167,7 @@ namespace RPG.Control
             private void CombatBehavior()
             {
                             
-                fighter.Attack(target);
+                IAttack.Attack(target);
                 timeSinceLastSawPlayer = 0;
 
             }

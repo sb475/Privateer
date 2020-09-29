@@ -28,7 +28,7 @@ namespace RPG.Combat
 
         [Header("In battle variables")]
         public GameObject activeCombatant;
-        Fighter fighter;
+        IAttack IAttack;
         StateManager turnManager;
         public bool battle;
         Vector3 lastLocation;
@@ -286,7 +286,7 @@ namespace RPG.Combat
                     {
                         turnManager.SetCanMove(false);
                         //  Makes sure that cached commands are stopped once CanMove is over.
-                        currentCombatant.GetComponent<Fighter>().Cancel();
+                        currentCombatant.GetComponent<IAttack>().Cancel();
                         Debug.Log(currentCombatant + " can no longer move.");
                         stopMoveCheck = true;
                     }
@@ -312,12 +312,12 @@ namespace RPG.Combat
         {
             if (setCombatant.GetComponent<CrewMember>() != null)
             {
-                crewController.SetCrewMember(setCombatant.GetComponent<CrewMember>());
+                crewController.SetControllable(setCombatant.GetComponent<CrewMember>());
             }
 
             turnManager = setCombatant.GetComponent<StateManager>();
             moveDistance = setCombatant.GetComponent<BaseStats>().GetStat(Stat.Speed);
-            fighter = setCombatant.GetComponent<Fighter>();
+            IAttack = setCombatant.GetComponent<IAttack>();
             
             //set combant to active turn
             turnManager.SetActiveTurn(true);
@@ -326,8 +326,8 @@ namespace RPG.Combat
 
         private void RestoreActiveCombatantAP(GameObject currentCombatant)
         {
-            Fighter inCombatFighter = currentCombatant.GetComponent<Fighter>();
-            inCombatFighter.RestoreActionPoints();
+            IAttack inCombatIAttack = currentCombatant.GetComponent<IAttack>();
+            inCombatIAttack.RestoreActionPoints();
         }
 
 

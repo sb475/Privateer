@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8160058627589932407}
   - component: {fileID: 791727752}
   - component: {fileID: 8794682922555505250}
-  - component: {fileID: 1503263511}
   - component: {fileID: 4745335455681684525}
   - component: {fileID: 114812628671522832}
   - component: {fileID: 3792121976832051725}
@@ -26,6 +25,7 @@ GameObject:
   - component: {fileID: 7809468138049954309}
   - component: {fileID: -6857418748001824829}
   - component: {fileID: -5999181605297448534}
+  - component: {fileID: 636990846516812732}
   m_Layer: 0
   m_Name: Character
   m_TagString: Player
@@ -123,22 +123,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &1503263511
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3306818609460779085}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d8b924b1e339474eaca7fc07b6fb5b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  followTarget: {fileID: 0}
-  maxSpeed: 6
-  followDistance: 4
 --- !u!114 &4745335455681684525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -335,14 +319,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044a1fdc63c85f445928196a9e900667, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  equippedItems: []
   armor: {fileID: 0}
   primaryWeapon: {fileID: 0}
   secondaryWeapon: {fileID: 0}
   accessory: {fileID: 0}
-  armorSlot: {fileID: 0}
-  primaryWeaponSlot: {fileID: 0}
-  secondaryWeaponSlot: {fileID: 0}
-  accessorySlot: {fileID: 0}
+  equippedItemsObject: {fileID: 0}
 --- !u!114 &7809468138049954309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -378,6 +360,7 @@ MonoBehaviour:
   patrolSpeedFraction: 0.2
   battleController: {fileID: 0}
   attitude: 0
+  playerTeam: []
 --- !u!114 &-5999181605297448534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396,6 +379,26 @@ MonoBehaviour:
   interactionPoint: {fileID: 0}
   displayName: 
   inventory: {fileID: 0}
+--- !u!114 &636990846516812732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3306818609460779085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d771479e73034e429f6bc84cda0c2da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 0}
+  controller: {fileID: 0}
+  target: {fileID: 0}
+  followTarget: {fileID: 0}
+  maxSpeed: 6
+  followDistance: 4
+  isFollowing: 0
+  moveSpeed: 0
 --- !u!1001 &3024920243511531315
 PrefabInstance:
   m_ObjectHideFlags: 0

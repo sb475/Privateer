@@ -222,6 +222,31 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
+    - target: {fileID: -5999181605297448534, guid: 3f042d4d94b810347b46eb68eccc8522,
+        type: 3}
+      propertyPath: actionMenuOptions.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -5999181605297448534, guid: 3f042d4d94b810347b46eb68eccc8522,
+        type: 3}
+      propertyPath: actionMenuOptions.Array.data[0]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -5999181605297448534, guid: 3f042d4d94b810347b46eb68eccc8522,
+        type: 3}
+      propertyPath: actionMenuOptions.Array.data[1]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5999181605297448534, guid: 3f042d4d94b810347b46eb68eccc8522,
+        type: 3}
+      propertyPath: actionMenuOptions.Array.data[2]
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -5999181605297448534, guid: 3f042d4d94b810347b46eb68eccc8522,
+        type: 3}
+      propertyPath: actionMenuOptions.Array.data[3]
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 9062531063164463511, guid: 3f042d4d94b810347b46eb68eccc8522,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -277,36 +302,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6549980475366319404, guid: 3f042d4d94b810347b46eb68eccc8522,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6549980475366319404, guid: 3f042d4d94b810347b46eb68eccc8522,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 2.18
-      objectReference: {fileID: 0}
-    - target: {fileID: 8794682922555505250, guid: 3f042d4d94b810347b46eb68eccc8522,
-        type: 3}
-      propertyPath: outlineColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8794682922555505250, guid: 3f042d4d94b810347b46eb68eccc8522,
-        type: 3}
-      propertyPath: outlineColor.g
-      value: 0.08962262
-      objectReference: {fileID: 0}
-    - target: {fileID: 8794682922555505250, guid: 3f042d4d94b810347b46eb68eccc8522,
-        type: 3}
-      propertyPath: outlineColor.b
-      value: 0.08962262
-      objectReference: {fileID: 0}
-    - target: {fileID: 8794682922555505250, guid: 3f042d4d94b810347b46eb68eccc8522,
-        type: 3}
-      propertyPath: outlineWidth
-      value: 3.04
-      objectReference: {fileID: 0}
     - target: {fileID: 4745335455681684525, guid: 3f042d4d94b810347b46eb68eccc8522,
         type: 3}
       propertyPath: handTransform
@@ -340,6 +335,36 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 16ff9519f857fd548adf3193caf2d587,
         type: 2}
+    - target: {fileID: 6549980475366319404, guid: 3f042d4d94b810347b46eb68eccc8522,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6549980475366319404, guid: 3f042d4d94b810347b46eb68eccc8522,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 2.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794682922555505250, guid: 3f042d4d94b810347b46eb68eccc8522,
+        type: 3}
+      propertyPath: outlineColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794682922555505250, guid: 3f042d4d94b810347b46eb68eccc8522,
+        type: 3}
+      propertyPath: outlineColor.g
+      value: 0.08962262
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794682922555505250, guid: 3f042d4d94b810347b46eb68eccc8522,
+        type: 3}
+      propertyPath: outlineColor.b
+      value: 0.08962262
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794682922555505250, guid: 3f042d4d94b810347b46eb68eccc8522,
+        type: 3}
+      propertyPath: outlineWidth
+      value: 3.04
+      objectReference: {fileID: 0}
     - target: {fileID: 4420102153959506198, guid: 3f042d4d94b810347b46eb68eccc8522,
         type: 3}
       propertyPath: takeDamage.m_PersistentCalls.m_Calls.Array.size

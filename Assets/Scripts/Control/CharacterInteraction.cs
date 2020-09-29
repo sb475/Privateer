@@ -14,37 +14,44 @@ namespace RPG.Control
     public class CharacterInteraction : Interactable
     {
         public Inventory inventory;
-        public delegate void DefaultAttack(ControllableObject controllable);
-        public DefaultAttack defaultAttack;
+        public delegate void DefaultInteraction(ControllableObject controllable);
+        public DefaultInteraction defaultInteraction;
 
-        private void Awake()
+        public override void Awake()
         {
-            
+            base.Awake();
+        
             displayName = gameObject.name;
             interactionPoint = gameObject.transform;
             inventory = new Inventory(null);
-            InitializeOutline();
+            InitializeDefaultBehaviour();
+
         }
 
 
-        public override void DefaultInteract()
+        public override void DefaultInteract(ControllableObject controllable)
         {
-            if (GetComponent<AIController>() != null)
+            defaultInteraction(controllable);
+        }
+        public void InitializeDefaultBehaviour()
+        {
+            
+               if (GetComponent<AIController>() != null)
             {
                 if (GetComponent<AIController>().GetAttitude() == AttitudeType.Hostile)
                 {
-                    defaultAttack = AttackNPC;
+                    defaultInteraction = AttackNPC;
                     defaultCursorType = CursorType.Combat;
                 }
             }
             if (GetComponent<Shop>() != null)
             {
-                ShopMenu();
+                defaultInteraction = ShopMenu;
                 defaultCursorType = CursorType.Shop;
             }
             else if (GetComponent<DialogueSystemTrigger>() != null)
             {
-                TalkToNPC();
+                defaultInteraction = TalkToNPC;
                 defaultCursorType = CursorType.Dialogue;
             }
 
@@ -52,15 +59,16 @@ namespace RPG.Control
 
         public override void AttackNPC (ControllableObject controllable)
         {
+            controllable.GetComponent<IAttack>().Attack(this.gameObject);
         }
 
-        public override void ShopMenu ()
+        public override void ShopMenu (ControllableObject controllable)
         {
             Shop npcShop = GetComponent<Shop>();
             npcShop.OpenShopMenu();
         }
 
-        public override void TalkToNPC()
+        public override void TalkToNPC(ControllableObject controllable)
         {
             if (GetComponent<DialogueSystemTrigger>() == null)
             {
@@ -79,14 +87,6 @@ namespace RPG.Control
             Debug.Log(combatTargetStat.GetStat(Stat.Health));
             Debug.Log(combatTargetStat.GetLevel());
         }
-
-            //     {
-            // Fighter rayCaster = callingController.GetComponent<Fighter>();
-
-            // if (!rayCaster.CanAttack(gameObject))
-            // {
-            //     return false;
-            // }
 
     }
 }

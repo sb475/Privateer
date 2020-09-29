@@ -25,7 +25,6 @@ namespace RPG.Global {
         [SerializeField] GameObject battleController;
 
         private void Awake() {
-            GameEvents.instance.OnGameStateChange += UpdateGameState;
         }
 
         private void UpdateGameState(object sender, GameState e)
@@ -35,7 +34,7 @@ namespace RPG.Global {
         }
         // Start is called before the first frame update
         void Start() {
-            
+            GameEvents.instance.OnGameStateChange += UpdateGameState;
             state = GameState.OUTOFCOMBAT;
             announce = true;
         }

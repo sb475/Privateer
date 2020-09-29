@@ -79,11 +79,12 @@ namespace RPG.UI
         [SerializeField] float timeSinceLastEvent = Mathf.Infinity;
 
         [Header("Crew Data")]
-        [SerializeField] CrewMember currentCrewDisplayed;
+        [SerializeField] CrewMember currentCrewToDisplay;
         [SerializeField] List<CrewMember> crewMembersInTeam;
         [SerializeField] List<CrewMember> crewMembersOnShip;
 
-        public event EventHandler<EventArgs> UpdateCrewDisplayedChanged;
+        public event EventHandler<EventArgs> OnCrewToDisplayChange;
+        public event EventHandler<EventArgs> OnDisplayValueChange;
 
         [Header("Theme Manager")]
 
@@ -93,20 +94,24 @@ namespace RPG.UI
         public Color tabHover;
         public Color TabActive;
 
+
+        [SerializeField] float timeToAnimate;
+        internal Color pressedButtonColor;
+
+
         //public List<Button> buttons;
 
 
         private void Awake()
         {
-            GameEvents.instance.selectCrewChanged += OnUpdateSelectedCrewMember;
-            GameEvents.instance.OnFightBrokeOut += ActivateBattleHud;
-            GameEvents.instance.battleTacticChanged += OnBattleTacticChange;
+//            GameEvents.instance.OnFightBrokeOut += ActivateBattleHud;
+//            GameEvents.instance.battleTacticChanged += OnBattleTacticChange;
             //SetTheme();
 
         }
 
         private void Start() {
-            SetCrewToDisplay(GameEvents.instance.GetPlayer());
+            StartCoroutine(SetCrewToDisplay(GameEvents.instance.crewController.GetCurrentCrewMember()));
             crewMembersInTeam = GameEvents.instance.GetCrewRoster();
             crewMembersOnShip = GameEvents.instance.GetShipRoster();
         }
@@ -120,41 +125,6 @@ namespace RPG.UI
                 ResetDisplayMessage();
             }
         }
-
-        [SerializeField] float timeToAnimate;
-        internal Color pressedButtonColor;
-
-
-
-
-        public bool UpdateItemsFromEquipped(List<ItemConfig> equippedItems)
-        {
-            int itemSlotIndex = 0;
-            if (itemSlotIndex < equippedItems.Count)
-            {
-                foreach (ItemSlot itemSlot in equippedItemSlots)
-                {
-                    if (itemSlot.GetComponentInChildren<UIItemData>() != null)
-                    {
-                        Destroy(itemSlot.GetComponentInChildren<UIItemData>().gameObject);
-                    }
-                    
-                        if (equippedItems[itemSlotIndex] != null)
-                        {
-                            RectTransform newObjectInSlot = Instantiate(UI_item.transform, itemSlot.transform).GetComponent<RectTransform>();
-                            ItemInInventory newItemInSlot = newObjectInSlot.GetComponentInChildren<UIItemData>().uiItemInInventory = new ItemInInventory { itemObject = Resources.Load<ItemConfig>(equippedItems[itemSlotIndex].name), itemQuantity = 1};
-                            Sprite newItemSprite = newObjectInSlot.GetComponentInChildren<Image>().sprite = newItemInSlot.itemObject.itemIcon;
-                            newItemInSlot.isEquipped = true;
-
-                        }
-                    itemSlotIndex ++;
-                }
-
-            }
-            return true;
-        }
-
-
 
         #region BattleHud Options
         private void OnBattleTacticChange(object sender, GameEvents.BattleTacticOptions e)
@@ -274,14 +244,10 @@ namespace RPG.UI
             }
         }
 
-        private void OnUpdateSelectedCrewMember(object sender, CrewMember e)
-        {
-            StartCoroutine(SetCrewToDisplay(e));
-        }
-
+#region Character Displays
         public CrewMember GetCrewToDisplay()
         {
-            return currentCrewDisplayed;
+            return currentCrewToDisplay;
         }
 
         public List<CrewMember> GetCrewMembersInTeam ()
@@ -295,19 +261,53 @@ namespace RPG.UI
         }
 
         public IEnumerator SetCrewToDisplay(CrewMember crewToDisplay)
-        {   Debug.Log("Error");
-            yield return new WaitUntil(() => currentCrewDisplayed = crewToDisplay);
-            Debug.Log("Error");
-            UpdateItemsFromEquipped(currentCrewDisplayed.equipment.GetEquippedItems());
-            playerInventory.SetPlayerInventory(currentCrewDisplayed.gameObject);
-            playerEquipmentStats.GenerateCharacterDisplay(currentCrewDisplayed.baseStats);
-            currentTeamDisplay.GenerateOptionsDisplay();
-            onShipDisplay.GenerateOptionsDisplay();
-            
-            
+        {  
+            currentCrewToDisplay = crewToDisplay; 
+
+            Debug.Log(currentCrewToDisplay);
+            OnCrewToDisplayChange?.Invoke(this, EventArgs.Empty);
+
+            yield return new WaitUntil(() => UpdateItemsFromEquipped(currentCrewToDisplay.equipment.GetEquippedItems()));
+
 
         }
 
+        //Alert other UI elements that display values need to be updated.
+        public void UpdateDisplayValues()
+        {
+            OnDisplayValueChange?.Invoke(this, EventArgs.Empty);
+        }
+
+        //when characterToDisplay changes, find that characters equipment and populate display with it
+        public bool UpdateItemsFromEquipped(List<ItemConfig> equippedItems)
+        {
+            int itemSlotIndex = 0;
+            if (itemSlotIndex < equippedItems.Count)
+            {
+                foreach (ItemSlot itemSlot in equippedItemSlots)
+                {
+                    if (itemSlot.GetComponentInChildren<UIItemData>() != null)
+                    {
+                        Destroy(itemSlot.GetComponentInChildren<UIItemData>().gameObject);
+                    }
+
+                    if (equippedItems[itemSlotIndex] != null)
+                    {
+                        RectTransform newObjectInSlot = Instantiate(UI_item.transform, itemSlot.transform).GetComponent<RectTransform>();
+                        ItemInInventory newItemInSlot = newObjectInSlot.GetComponentInChildren<UIItemData>().uiItemInInventory = new ItemInInventory { itemObject = Resources.Load<ItemConfig>(equippedItems[itemSlotIndex].name), itemQuantity = 1 };
+                        Sprite newItemSprite = newObjectInSlot.GetComponentInChildren<Image>().sprite = newItemInSlot.itemObject.itemIcon;
+                        newItemInSlot.isEquipped = true;
+
+                    }
+                    itemSlotIndex++;
+                }
+
+            }
+            return true;
+        }
+#endregion
+
+#region General windows manipulation
         public void ShowShopMenu ()
         {
             shopHud.SetActive(true);
@@ -390,5 +390,6 @@ namespace RPG.UI
             messageText.text = null;
             messageWindow.SetActive(false);
         }
+        #endregion
     }
 }

@@ -7,18 +7,18 @@ namespace RPG.Combat
     public class Projectile : MonoBehaviour
     {
 
-        [SerializeField] float projectileSpeed = 1f;
-        [SerializeField] bool isHomingProjectile = false;
-        [SerializeField] GameObject hitEffect = null;
-        [SerializeField] float maxLifeTime = 10f;
-        [SerializeField] GameObject[] destroyOnHit = null;
-        [SerializeField] float lifeAfterImpact = 2;
-        Health target = null;
-        float damage = 0;
-        GameObject instigator = null;
+        public float projectileSpeed = 1f;
+        public bool isHomingProjectile = false;
+        public GameObject hitEffect = null;
+        public float maxLifeTime = 10f;
+        public GameObject[] destroyOnHit = null;
+        public float lifeAfterImpact = 2;
+        public Health target = null;
+        public float damage = 0;
+        public GameObject instigator = null;
 
 
-        private void Start()
+        public virtual void Start()
         {
             transform.LookAt(GetAimLocation());
 
@@ -26,7 +26,7 @@ namespace RPG.Combat
 
 
         // Update is called once per frame
-        void Update()
+        public virtual void Update()
         {
             if (target == null) return;
 
@@ -46,7 +46,7 @@ namespace RPG.Combat
             Destroy(gameObject, maxLifeTime);
         }
 
-        private Vector3 GetAimLocation()
+        public Vector3 GetAimLocation()
         {
             CapsuleCollider targetCapsule = target.GetComponent<CapsuleCollider>();
             if (targetCapsule == null)
@@ -58,7 +58,7 @@ namespace RPG.Combat
             // (Vector3.right * targetCapsule.radius) +
         }
 
-        private void OnTriggerEnter(Collider other)
+        public void OnTriggerEnter(Collider other)
         {
             if (other.GetComponent<Health>() != target) return;
 

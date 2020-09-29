@@ -14,7 +14,8 @@ namespace RPG.Items
         [SerializeField] ItemConfig item = null;
         [SerializeField] int itemQuantity = 1;
 
-        private void Awake() {
+        public override void Awake() {
+            base.Awake();
             defaultCursorType = CursorType.Pickup;
             displayName = item.name;
             interactionPoint = gameObject.transform;
@@ -41,7 +42,7 @@ namespace RPG.Items
         //         }
         // }
 
-        public void DefaultInteract(ControllableObject playerController)
+        public override void DefaultInteract(ControllableObject playerController)
         {
 
             PickUp(playerController);
