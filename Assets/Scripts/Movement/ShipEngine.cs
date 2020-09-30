@@ -20,7 +20,7 @@ namespace RPG.Movement
         [SerializeField] Transform followTarget;
 
         [Header("Engine Attributes")]
-        [SerializeField] float maxSpeed = 6f;
+        public float maxSpeed = 6f;
         public float turningSpeed = 6f;
         public float thrust = 6f;
         Vector3 acceleration;
@@ -60,6 +60,9 @@ namespace RPG.Movement
             isFollowing = false;
             body = GetComponent<Rigidbody>();
             navMeshAgent =GetComponent<NavMeshAgent>();
+
+            storeMaxSpeed = maxSpeed;
+            targetSpeed = storeMaxSpeed;
            
 
             cam = Camera.main.transform;
@@ -109,18 +112,9 @@ namespace RPG.Movement
 
             shipBody.AddForce(transform.forward * thrust * vertical, ForceMode.Force);  
 
-
-
             shipBody.AddTorque(transform.up * turningSpeed * horizontal, ForceMode.Force);
 
             Debug.Log(Vector3.forward * thrust * vertical);
-
-
-            // transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, Time.deltaTime * 3);
-            // shipBody.AddRelativeTorque(Vector3.up * turningSpeed * horizontal);
-
-            // Quaternion desiredRotation = Quaternion.Euler(velocity);
-            // transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, Time.deltaTime * turningSpeed * horizontal);
 
         }
 
@@ -149,10 +143,12 @@ namespace RPG.Movement
 
         public bool MoveTo(Vector3 destination, float speedFraction)
         {
-            Vector3 targetDirection = (destination - transform.position).normalized;
+
+
+            Vector3 forces = GetTargetDistance(destination);
+            
+            acceleration = forces;
             //Debug.Log(targetDirection);
-
-
 
             velocity += 2 * acceleration * Time.deltaTime;
 
@@ -160,23 +156,11 @@ namespace RPG.Movement
             {
                 velocity = velocity.normalized * maxSpeed;
             }
-            // Debug.Log(velocity);
+            
+            shipBody.velocity = velocity;
 
-            float targetAngle = Mathf.Atan2(targetDirection.x, targetDirection.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref angleSmoothVelocity, angleSmoothTime);
-            transform.rotation = Quaternion.Euler(0f, angle, 0f);
-
-            shipBody.AddForce(transform.forward + velocity * Time.deltaTime);
-
-
-          
-
-            // targetDirection.Normalize();
-
-            // float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg; 
-            // rotateToTarget = Quaternion.AngleAxis(angle, Vector3.forward);
-
-            // transform.rotation = Quaternion.Slerp(transform.rotation, rotateToTarget, Time.deltaTime * turningSpeed);
+            Quaternion desiredRotation = Quaternion.LookRotation(velocity);
+            transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, Time.deltaTime * turningSpeed);
                             
             
 
@@ -217,7 +201,7 @@ namespace RPG.Movement
         public void KeyMovement()
         {
 
-            Debug.Log(gameObject.name);
+//            Debug.Log(gameObject.name);
 
             horizontal = Input.GetAxisRaw("Horizontal");
 
