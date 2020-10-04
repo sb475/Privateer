@@ -13,6 +13,11 @@ namespace RPG.Control
     [RequireComponent(typeof(AIShipController))]
     public class ShipInteractable : CharacterInteraction
     {
+
+        public override void Awake() {
+            base.Awake();
+            
+        }
         public override void InitializeDefaultBehaviour()
         {
         if (GetComponent<AIShipController>() != null)

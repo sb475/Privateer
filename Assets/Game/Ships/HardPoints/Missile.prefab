@@ -4860,12 +4860,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tracking: 0
   trackingSpeed: 0.5
-  rateOfFire: 10
+  rateOfFire: 30
   currentWeaponConfig: {fileID: 0}
   hardPointType: 2
   hardPoint: {fileID: 5089960477826736342}
   defaultWeapon: {fileID: 11400000, guid: 6a1416ea1224a324ea110d0b0ca24a08, type: 2}
-  launchPosition: {fileID: 0}
+  launchPosition: {fileID: 5094238232179495185}
+  bufferValue: 0
+  shotSpeed: 0
+  targetObject: {fileID: 0}
 --- !u!95 &5089960477826736171
 Animator:
   serializedVersion: 3
@@ -4876,7 +4879,7 @@ Animator:
   m_GameObject: {fileID: 5089960477826736343}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0038469f32016984da32d71d7cd03ddf, type: 2}
+  m_Controller: {fileID: 9100000, guid: 55aa1c2241d535447a10b0a09702b50a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -4908,7 +4911,8 @@ MonoBehaviour:
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   isDead: 0
-  durability: 20
+  maxDurability: 0
+  currentDurability: 0
 --- !u!1001 &5089960477251915625
 PrefabInstance:
   m_ObjectHideFlags: 0

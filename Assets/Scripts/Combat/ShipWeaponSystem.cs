@@ -1,4 +1,5 @@
-    using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using GameDevTV.Utils;
 using RPG.Attributes;
 using RPG.Base;
@@ -46,11 +47,18 @@ namespace RPG.Combat
         [SerializeField] ShipWeaponConfig defaultWeapon = null;
         bool outOfRangeAnnounced = false;
         public Transform launchPosition;
+
+        public float bufferValue;
         
 
         public IDamagable target;
+        
         StateManager turnManager;
 
+
+        public float shotSpeed;
+        public GameObject targetObject;
+        //objects
         // mathf.infitity allows to attack right away
         float timeSinceLastAttack = Mathf.Infinity;
         
@@ -62,6 +70,7 @@ namespace RPG.Combat
             currentWeapon = new LazyValue<ShipWeapon>(SetupDefaultWeapon);
             turnManager = GetComponent<StateManager>();
             rateOfFire = currentWeaponConfig.GetRateOfFire();
+            shotSpeed = currentWeaponConfig.projectile.projectileSpeed;
         }
 
         private void Start()
@@ -82,12 +91,64 @@ namespace RPG.Combat
             // if system is dead, do nothing
             if (gameObject.GetComponent<IDamagable>().IsDead()) return;
 
-            if (target != null) AttackBehavior();
+            AttackBehavior();
 
         }
 
-        private void LateUpdate() {
-            if (target != null) AttackBehavior();
+        private void AttackBehavior()
+        {
+            //guard gheck
+            if (target == null) return;
+            //reset flag so that next time in range resets.
+            if (GetIsInRange(target))
+            {
+
+                outOfRangeAnnounced = false;
+
+
+                if (tracking)
+                {
+
+                    Transform targetTransform = target.gameObject.transform;
+
+                    float targetSpeed = target.gameObject.GetComponent<Projectile>().projectileSpeed;
+
+                    Vector3 targetDir = target.gameObject.transform.position - this.transform.position;
+
+                    float leadTime = targetDir.magnitude / shotSpeed + targetSpeed;
+
+                    Vector3 direction = targetDir + targetTransform.forward * leadTime;
+
+                    Quaternion lookRotation = Quaternion.LookRotation(direction - this.transform.position);
+
+
+                    //targetTransform.position + Vector3.forward * targetSpeed   + targetTransform.forward * leadTime;
+
+
+
+
+
+                    // transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, trackingSpeed * Time.deltaTime);
+
+                    this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * trackingSpeed);
+
+                    Debug.DrawRay(this.transform.position, transform.forward * shotSpeed, Color.red);
+
+                    Debug.DrawRay(this.transform.position,targetDir, Color.red);
+
+
+                }
+
+                if (timeSinceLastAttack > rateOfFire)
+                {
+                    //This will trigger the Hit() event.
+                    TriggerAttack();
+                    timeSinceLastAttack = 0;
+                }
+
+            }
+
+
         }
 
         private ShipWeapon SetupDefaultWeapon()
@@ -125,35 +186,22 @@ namespace RPG.Combat
         public void SetTarget(IDamagable target)
         {
             this.target = target;
+            targetObject = target.gameObject;
         }
 
         public void CeaseFire()
         {
             target = null;
+            ResetTurretPosition();
         }
 
-        private void AttackBehavior()
+        private void ResetTurretPosition()
         {
-            //reset flag so that next time in range resets.
-            if (Vector3.Distance(target.gameObject.transform.position, transform.position) > currentWeaponConfig.GetRange()) return;
-       
-            outOfRangeAnnounced = false;
-
-            Vector3 direction = target.gameObject.transform.position -this.transform.position;
-            if (tracking)
-            {
-                this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime*trackingSpeed);
-            }
-            
-            if (timeSinceLastAttack > rateOfFire)
-            {
-                //This will trigger the Hit() event.
-                TriggerAttack();
-                timeSinceLastAttack = 0;
-            }
-
-
+            Vector3 direction = GetComponentInParent<ShipWeaponControl>().transform.forward;
+            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * trackingSpeed);
         }
+
+       
 
         private void TriggerAttack()
         {
@@ -175,7 +223,7 @@ namespace RPG.Combat
             {
                 currentWeapon.value.OnHit();
             }
-            print(gameObject + "'s damage is: " + damage);
+
             if (currentWeaponConfig.HasProjectile()) // check to see if it's prjectile weapon
             {
                 currentWeaponConfig.LaunchProjectile(launchPosition, target, gameObject, damage);
@@ -194,24 +242,30 @@ namespace RPG.Combat
         }
 
 
-        private bool GetIsInRange(GameObject combatTarget)
+        private bool GetIsInRange(IDamagable combatTarget)
         {
-            return Vector3.Distance(transform.position, combatTarget.transform.position) < currentWeaponConfig.GetRange();
+
+                return Vector3.Distance(transform.position, combatTarget.gameObject.transform.position) < currentWeaponConfig.GetRange();          
+           
         }
 
         public bool CanAttack(GameObject combatTarget)
         {
             if (combatTarget == null) { return false; }
 
-            Health targetToTest = combatTarget.GetComponent<Health>();
+            IDamagable targetToTest = combatTarget.GetComponent<IDamagable>();
             return targetToTest != null && !targetToTest.IsDead();
         }
 
-        public void Attack(GameObject combatTarget)
+        public void Attack(IDamagable combatTarget)
         {
-            combatTarget.GetComponent<Health>();
+            if (combatTarget == null) return;
 
-            if (!GetIsInRange(combatTarget))
+            if (GetIsInRange(combatTarget))
+            {
+                target = combatTarget;
+            }
+            else
             {
                 print(combatTarget.gameObject.name + " is out of range");
                 return;
@@ -268,6 +322,17 @@ namespace RPG.Combat
             }
             
         }
+
+        public float GetWeaponDamage()
+        {
+            return currentWeaponConfig.GetDamage() + currentWeaponConfig.GetDamageBonus();
+        }
+
+        public float GetWeaponRange()
+        {
+            return currentWeaponConfig.GetRange();
+        }
+
 
     }
         
