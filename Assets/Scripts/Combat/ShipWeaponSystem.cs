@@ -110,33 +110,15 @@ namespace RPG.Combat
                 {
 
                     Transform targetTransform = target.gameObject.transform;
-
                     float targetSpeed = target.gameObject.GetComponent<Projectile>().projectileSpeed;
-
                     Vector3 targetDir = target.gameObject.transform.position - this.transform.position;
-
                     float leadTime = targetDir.magnitude / shotSpeed + targetSpeed;
-
                     Vector3 direction = targetDir + targetTransform.forward * leadTime;
 
-                    Quaternion lookRotation = Quaternion.LookRotation(direction - this.transform.position);
-
-
-                    //targetTransform.position + Vector3.forward * targetSpeed   + targetTransform.forward * leadTime;
-
-
-
-
-
-                    // transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, trackingSpeed * Time.deltaTime);
 
                     this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * trackingSpeed);
 
                     Debug.DrawRay(this.transform.position, transform.forward * shotSpeed, Color.red);
-
-                    Debug.DrawRay(this.transform.position,targetDir, Color.red);
-
-
                 }
 
                 if (timeSinceLastAttack > rateOfFire)

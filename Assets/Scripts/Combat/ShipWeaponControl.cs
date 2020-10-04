@@ -77,27 +77,17 @@ namespace RPG.Combat
             {
                 if (missile == null)
                 {
-                    for (int i = 0; i < incomingMissiles.Count; i ++)
-                        {
-                            foreach (ShipWeaponSystem weapon in defenseWeapons)
-                            {
-                                //work in a dps calculation to determine targets. If dps of weapon will not defeat durability of missile before time of impact, add secondary target.
-                                if (weapon.target == null)
-                                {
-                                    weapon.CeaseFire();
-                                }
-                            }
-                        }
-                   
-
+                    incomingMissiles.Remove(missile);
+                    continue;
                 }
+
                 else if (Vector3.Distance(missile.transform.position, transform.position) <= GetAverageWeaponRange(defenseWeapons))
                 {
                     Debug.Log("Missile is in range");
                     foreach (ShipWeaponSystem weapon in defenseWeapons)
                     {
                         //work in a dps calculation to determine targets. If dps of weapon will not defeat durability of missile before time of impact, add secondary target.
-                        if (weapon.target == null)
+                        if (weapon.target == null && weapon.target != missile)
                         {
                             weapon.SetTarget(missile.GetComponent<IDamagable>());
                         }

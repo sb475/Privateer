@@ -18,6 +18,7 @@ namespace RPG.Control
             base.Awake();
             
         }
+        
         public override void InitializeDefaultBehaviour()
         {
         if (GetComponent<AIShipController>() != null)
