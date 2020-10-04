@@ -26,10 +26,11 @@ MonoBehaviour:
   animatorOverride: {fileID: 0}
   equippedPrefab: {fileID: 5409181791976686694, guid: 4b03e4552f3d3c14e9d25f24c645c6df,
     type: 3}
-  weaponDamage: 100
+  weaponDamage: 5
   damageBonus: 0
-  weaponRange: 100
+  weaponRange: 500
   actionPointCost: 0
+  rateOfFire: 30
   projectile: {fileID: 7278496815475724841, guid: 6d1e1975b8e2b6049842d62d5f5e404b,
     type: 3}
   hardPointType: 2

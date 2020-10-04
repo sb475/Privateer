@@ -28,8 +28,9 @@ MonoBehaviour:
     type: 3}
   weaponDamage: 20
   damageBonus: 0
-  weaponRange: 10000
+  weaponRange: 80
   actionPointCost: 0
-  isRightHanded: 1
+  rateOfFire: 0
   projectile: {fileID: 1700606204100941100, guid: c76cd6c67b377534681f715a62494699,
     type: 3}
+  hardPointType: 0

@@ -1,144 +1,229 @@
-using System;
-using System.Collections.Generic;
-using RPG.Control;
-using RPG.Global;
+﻿using GameDevTV.Utils;
 using UnityEngine;
+using System;
+using Random = UnityEngine.Random;
+using RPG.Combat;
+using RPG.Items;
+using RPG.Control;
+using System.Collections.Generic;
+using RPG.Global;
 
 namespace RPG.Stats
 {
-    public class CharacterStats : MonoBehaviour, IModifierProvider
+    public class CharacterStats : MonoBehaviour, IStat
     {
-        [SerializeField] private List<Perk> characterPerks;
-        [SerializeField] private List<Modifier> attributeModifiers;
+        [Header("Progression")]
+        [Range(1, 10)]
+        [SerializeField] int startingLevel = 1;
+        [SerializeField] GameObject levelUpParticleEffect = null;
 
-        [SerializeField] int perkPoints;
+        [Header("Character")]
+        [SerializeField] CharacterClass characterClass;
+        [SerializeField] CharacterRace characterRace;
+
+
+
+        [Header("Character Stats")]
+
         [SerializeField] int majorAttributePoints;
         [SerializeField] int minorAttributePoints;
+        public List<Stat> characterBaseStat;
+        public StatList characterBaseStatData;
 
-        public CharacterAttributes characterAttributes;
+        public event Action onLevelUp;
 
-        public GenericModifier[] genericModifierItems;
+       LazyValue<int> currentLevel;
 
+        Experience experience;
 
-        public void AddPerk (Perk perkToAdd, int newPerkLevel)
+        private void Awake() 
         {
-           
-                foreach (Perk perks in characterPerks)
-                {
-                    //if the level of perk that is trying to be added is a different level then return this level.
-                    if (perkToAdd == perks)
-                    {
-                        perks.perkLevel = newPerkLevel;
-                        Debug.Log (perks.name + " is now at level " + perks.perkLevel + ". And the description says: " + perks.GetPerkData().perkDescription);
-                        return;
-                    }
-                }
-                characterPerks.Add(perkToAdd);
+            experience = GetComponent<Experience>();
+            characterBaseStat = characterBaseStatData.statList;
+            currentLevel = new LazyValue<int>(CalculateLevel);
         }
 
-        internal void AddAttribute(Stat statToDisplay)
+       private void Start() 
+       {
+            currentLevel.ForceInit();
+       }
+        public float GetStat(StatType stat)
         {
-            foreach (Modifier mod in attributeModifiers)
+            return (GetBaseStatValue(stat) + GetAdditiveModifier(stat)) * (1 + GetPercetangeModifier(stat)/100);
+        }
+
+        public float CalculateDamage(StatType stat, WeaponConfig weaponConfig)
+        {
+            return ((GameEvents.instance.GetRollValue((int)weaponConfig.GetDamage()) + GetBaseStatValue(stat) + GetAdditiveModifier(stat)) * (1 + GetPercetangeModifier(stat) / 100)) + weaponConfig.GetDamageBonus();
+        }
+
+        public float GetDamage(StatType stat, WeaponConfig weaponConfig)
+        {
+            return (weaponConfig.GetDamage() + GetBaseStatValue(stat) + GetAdditiveModifier(stat)) * (1 + GetPercetangeModifier(stat) / 100);
+        }
+        
+
+        private float GetBaseStatValue(StatType stat)
+         {
+            foreach (Stat baseStat in characterBaseStat)
             {
-                //if the level of perk that is trying to be added is a different level then return this level.
-                if (statToDisplay == mod.statType)
+                if (baseStat.statType == stat)
                 {
-                    mod.statValue ++;
-                    return;
+                    return baseStat.baseValue;
                 }
             }
-            attributeModifiers.Add(new Modifier {statType = statToDisplay, statValue = 1});
+            
+            return 0;
+        }
+        private Stat GetBaseStat(StatType stat)
+        {
+            foreach(Stat baseStat in characterBaseStat)
+            {
+                if (baseStat.statType == stat)
+                {
+                    return baseStat;
+                }
+              
+            }
+            return null;
         }
 
-        public bool SpendFromMajor(Stat stat)
+
+        public int GetLevel()
+       {
+           return currentLevel.value;
+       }
+
+       public void spendMinor(int value, StatType stat)
+       {
+           if (minorAttributePoints > 0)
+           {
+               minorAttributePoints -= value;
+
+               //GetBaseStat(stat).AddToBaseStat(value);
+               GameEvents.instance.OnMinorAttribPoolChange(minorAttributePoints);
+
+            }
+            else
+            {
+                GameEvents.instance.SendMessage("You do not have enough points to spend");
+            }
+
+       }
+
+        public void spendMajor(int value, StatType stat)
         {
             if (majorAttributePoints > 0)
             {
-                AddAttribute(stat);
-                majorAttributePoints -= 1;
+                majorAttributePoints -= value;
+
+                //GetBaseStat(stat).AddToBaseStat(value);
                 GameEvents.instance.OnMajorAttribPoolChange(majorAttributePoints);
-                return true;
             }
             else
             {
                 GameEvents.instance.SendMessage("You do not have enough points to spend");
-                return false;
-            }
-           
-        }
-        public bool SpendFromMinor(Stat stat)
-        {
-            if (minorAttributePoints > 0)
-            {
-                AddAttribute(stat);
-                minorAttributePoints -= 1;
-                GameEvents.instance.OnMajorAttribPoolChange(minorAttributePoints);
-                return true;
-            }
-            else
-            {
-                GameEvents.instance.SendMessage("You do not have enough points to spend");
-                return false;
             }
         }
-        public bool SpendFromPerk(Perk perkToAdd, int newPerkLevel)
+
+
+        private float GetAdditiveModifier(StatType stat)
         {
-            if (perkPoints > 0)
+            float total = 0;
+            
+
+            //local stats from armor
+
+            if (GetComponent<CharacterEquipment>() != null)
             {
-                AddPerk(perkToAdd, newPerkLevel);
-                perkPoints -= 1;
-                return true;
-            }
-            else 
-            {
-                GameEvents.instance.SendMessage("You do not have enough points to spend");
-                return false;
-            }
+                CharacterEquipment characterEquipment = GetComponent<CharacterEquipment>();
 
-        }
-
-        public IEnumerable<float> GetAdditiveModifiers(Stat stat)
-        {
-            float totalStatValue = 0;
-
-            foreach (var perk in characterPerks)
-            {
-                if (perk == null) continue;
-
-                foreach (var modifier in perk.GetPerkAddMod())
+                foreach (float modifier in characterEquipment.GetAdditiveModifiers(stat))
                 {
-
-                    if (modifier.statType == stat)
-                    {
-                        totalStatValue += modifier.statValue;
-                    }
+                    total += modifier;
                 }
             }
-            foreach (Modifier am in attributeModifiers)
+            //local stats from perks
+
+            if (GetComponent<CharacterPerks>() != null)
             {
-                if (stat == am.statType) totalStatValue +=  am.statValue;
+                CharacterPerks perkStats = GetComponent<CharacterPerks>();
+
+                foreach (float modifier in perkStats.GetAdditiveModifiers(stat))
+                {
+                    total += modifier;
+                }
+
             }
 
-            yield return totalStatValue;
-        }
-
-        public IEnumerable<float> GetPercentageModifiers(Stat stat)
-        {
-
-            foreach (var perk in characterPerks)
+            //global stats like group buffs
+            
+            foreach(IModifierProvider provider in GetComponents<IModifierProvider>())
             {
-                if (perk == null) continue;
-
-                foreach (var modifier in perk.GetPerkPercentMod())
+                foreach (float modifier in provider.GetAdditiveModifiers(stat))
                 {
-
-                    if (modifier.statType == stat)
-                    {
-                        yield return modifier.statValue;
-                    }
+                    total += modifier;
                 }
             }
+            return total;
         }
+
+
+        private float GetPercetangeModifier(StatType stat)
+        {
+            float total = 0;
+            foreach (IModifierProvider provider in GetComponents<IModifierProvider>())
+            {
+                foreach (float modifier in provider.GetPercentageModifiers(stat))
+                {
+                    Debug.Log (provider + " stat is " + stat + " and value is " + modifier);
+                    total += modifier;
+                }
+            }
+//            Debug.Log("Total is: " + total + " stat is " +stat);
+            return total;
+        }
+
+        private void OnEnable()
+        {
+            if (experience != null)
+            {
+                experience.onExperiencedGained += UpdateLevel;
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (experience != null)
+            {
+                experience.onExperiencedGained -= UpdateLevel;
+            }
+        }
+
+        private void UpdateLevel()
+        {
+            int newLevel = CalculateLevel();
+            if (newLevel > currentLevel.value)
+            {
+                currentLevel.value = newLevel;
+                LevelUpEffect();
+                onLevelUp();
+            }
+        }
+
+        private void LevelUpEffect()
+        {
+            Instantiate(levelUpParticleEffect, transform);
+        }
+      
+
+       public int CalculateLevel()
+       {
+            return 1;
+            //int penultimateLevel = progression.GetLevels(Stat.ExperienceToLevelUp, characterClass); find this somewhere else
+          
+       }
 
     }
+
 }

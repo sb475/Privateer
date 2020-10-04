@@ -6,6 +6,7 @@ TagManager:
   tags:
   - BattleController
   - StateHandler
+  - CoverObject
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - Obstacle
   - DragItemOnTop
   - Characters
-  - 
+  - Map
   - 
   - 
   - 

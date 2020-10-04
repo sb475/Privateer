@@ -15,10 +15,10 @@ namespace RPG.UI{
     public class DisplayCharacterStats : MonoBehaviour
     {
         [SerializeField] UIController uIController;
-        [SerializeField] private BaseStats player;
+        [SerializeField] private CharacterStats player;
         public GameObject container;
         public GameObject displayTemplate;
-        public List<Stat> statsToDisplay;
+        public List<StatType> statsToDisplay;
         
 
         [SerializeField] TextMeshProUGUI currentHealth;
@@ -58,7 +58,7 @@ namespace RPG.UI{
 
         public bool GenerateCharacterDisplay(CrewMember player)
         {
-            BaseStats playerToDisplay = player.GetComponent<BaseStats>();
+            CharacterStats playerToDisplay = player.GetComponent<CharacterStats>();
 
             if (playerToDisplay == null) return false;
             RefreshCharacterDisplay();
@@ -66,11 +66,11 @@ namespace RPG.UI{
             //look at decoupling this in the future
             currentHealth.text = playerToDisplay.GetComponent<Health>().GetHealthPoints().ToString();
             totalHealth.text = playerToDisplay.GetComponent<Health>().GetMaxHealthPoints().ToString();
-            displayArmor.text = playerToDisplay.GetStat(Stat.Armor).ToString();
+            displayArmor.text = playerToDisplay.GetStat(StatType.Armor).ToString();
             displayDamage.text = playerToDisplay.GetComponent<IAttack>().DamageAsString();
 
 
-            foreach (Stat stat in statsToDisplay)
+            foreach (StatType stat in statsToDisplay)
             {
            
                 RectTransform statToDisplayTransform = Instantiate(displayTemplate.transform, container.transform).GetComponent<RectTransform>();

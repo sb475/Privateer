@@ -1,3 +1,4 @@
+using RPG.Attributes;
 using UnityEngine;
 
 namespace RPG.Combat
@@ -6,8 +7,10 @@ namespace RPG.Combat
     {
          void Cancel();
          void RestoreActionPoints();
-         void Attack(GameObject target);
-         bool CanAttack(GameObject target);
+         void Attack(IDamagable target);
+         bool CanAttack(IDamagable target);
+         float GetWeaponDamage();
+         float GetWeaponRange();
          string DamageAsString();
     }
 }

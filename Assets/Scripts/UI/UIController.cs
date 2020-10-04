@@ -84,6 +84,20 @@ namespace RPG.UI
         [SerializeField] List<CrewMember> crewMembersOnShip;
 
         public event EventHandler<EventArgs> OnCrewToDisplayChange;
+
+        internal void DisplayBattleHud()
+        {
+            if (battleHud.activeSelf == false)
+            {
+                battleHud.SetActive(true);
+            }
+            else
+            {
+                battleHud.SetActive(false);
+            }
+            
+        }
+
         public event EventHandler<EventArgs> OnDisplayValueChange;
 
         [Header("Theme Manager")]
@@ -335,6 +349,7 @@ namespace RPG.UI
         public void CloseMenu(GameObject menu)
         {
             menu.SetActive(false);
+            ItemToolTip.HideToolTip_Static();
         }
 
         public void ToggleMenu (GameObject menu)

@@ -79,6 +79,7 @@ namespace RPG.Control
         public void AddTask (Task task)
         {
             taskList.Add(task);
+            Debug.Log("task added");
         }
     }
 }

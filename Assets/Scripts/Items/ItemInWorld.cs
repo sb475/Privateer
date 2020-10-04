@@ -20,6 +20,7 @@ namespace RPG.Items
             displayName = item.name;
             interactionPoint = gameObject.transform;
             InitializeOutline();
+            defaultInteraction = PickUp;
 
         }
 
@@ -41,12 +42,6 @@ namespace RPG.Items
                     
         //         }
         // }
-
-        public override void DefaultInteract(ControllableObject playerController)
-        {
-
-            PickUp(playerController);
-        }
 
         public override void PickUp(ControllableObject playerController)
         {

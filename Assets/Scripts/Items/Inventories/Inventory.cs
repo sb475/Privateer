@@ -27,19 +27,17 @@ namespace RPG.Items{
     public class Inventory : MonoBehaviour
     {
         [SerializeField] public List<ItemInInventory> itemList;
+        public List<ItemInInventory> inventoryData;
         [SerializeField] int currency;
         public event EventHandler OnInventoryChanged;
 
-        public Inventory(List<ItemInInventory> inventoryData) 
-        {
-            if (inventoryData == null)
-            {
-                itemList = new List<ItemInInventory>();
-            }
-            else {
-                itemList = inventoryData;
-            }
-        }
+        // public Inventory(List<ItemInInventory> inventoryData) 
+        // {
+        //     if (inventoryData != null)
+        //     {
+        //         itemList = inventoryData;
+        //     }
+        // }
 
         public void AddItem(ItemInInventory itemToAdd)
         {

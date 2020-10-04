@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using RPG.Base;
-using RPG.Combat;
 using RPG.Control;
-using RPG.Core;
 using RPG.Stats;
 using RPG.UI;
 using UnityEngine;
-using UnityEngine.UI;
+using Random = UnityEngine.Random;
 //This script controls a majority of game functionality and works as reference in order to easily call functions from many
 //different components.
 
 //When it comes to making ships, look at this video again: https://www.youtube.com/watch?v=mJRc9kLxFSk ~11min
-namespace RPG.Global {
+namespace RPG.Global
+{
     public class GameEvents : MonoBehaviour
     {
 
@@ -96,9 +93,9 @@ namespace RPG.Global {
             {
                 OnFightBrokeOut?.Invoke(this, fightLocation);
                 Debug.Log("OnFightBreakOutt");
-
+                uiController.DisplayBattleHud();
             }
-                }
+        }
 
         public void OnCombatEnd()
         {
@@ -125,6 +122,20 @@ namespace RPG.Global {
             uiController.DisplayMessage(message);
         }
 
+        public float GetRollValue(int rollValue)
+        {
+            int randomValue = Random.Range(1, rollValue);
+            float rolledFloatValue = ConvertRollToFloat(randomValue);
+            return rolledFloatValue;
+            //lightd6, medium d8, heavy d10
+        }
+
+        private float ConvertRollToFloat(int roll)
+        {
+            float convertedRoll;
+            convertedRoll = (int)roll;
+            return convertedRoll;
+        }
 #endregion
 
 
@@ -138,16 +149,8 @@ namespace RPG.Global {
         internal void BuyPerk(PerkType perkButtonType, int perkLevel)
         {
             Debug.Log("Adding perk " + perkButtonType);
-            playerObject.GetComponent<CharacterStats>().AddPerk(Resources.Load<Perk>(perkButtonType.ToString()), perkLevel);
+            playerObject.GetComponent<CharacterPerks>().AddPerk(Resources.Load<Perk>(perkButtonType.ToString()), perkLevel);
         }
-
-        // public void UpdateSelectedCrew(CrewMember newSelectedCrew)
-        // {
-
-        //     playerObject = newSelectedCrew.gameObject;
-        //     selectCrewChanged?.Invoke(this, newSelectedCrew);
-
-        // }
 
         public List<CrewMember> GetCrewRoster()
         {
@@ -204,6 +207,8 @@ namespace RPG.Global {
 
             if (UpdateCrewList != null) UpdateCrewList?.Invoke(this, EventArgs.Empty);
         }
+
+
 
 #endregion
  

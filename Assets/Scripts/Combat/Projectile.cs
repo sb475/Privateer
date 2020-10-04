@@ -8,36 +8,30 @@ namespace RPG.Combat
     {
 
         public float projectileSpeed = 1f;
-        public bool isHomingProjectile = false;
         public GameObject hitEffect = null;
         public float maxLifeTime = 10f;
         public GameObject[] destroyOnHit = null;
         public float lifeAfterImpact = 2;
-        public Health target = null;
+        public IDamagable target = null;
         public float damage = 0;
         public GameObject instigator = null;
 
 
         public virtual void Start()
         {
-            transform.LookAt(GetAimLocation());
-
+           transform.LookAt(GetAimLocation());
         }
 
 
         // Update is called once per frame
-        public virtual void Update()
+        public virtual void FixedUpdate()
         {
             if (target == null) return;
 
-            if (isHomingProjectile && !target.IsDead())
-            {
-                transform.LookAt(GetAimLocation());
-            }
-            transform.Translate(Vector3.forward * projectileSpeed * Time.deltaTime);
+            transform.Translate(0, 0, projectileSpeed * Time.deltaTime);
         }
 
-        public void SetTarget(Health target, GameObject instigator, float damage)
+        public void SetTarget(IDamagable target, GameObject instigator, float damage)
         {
             this.target = target;
             this.damage = damage;
@@ -48,19 +42,19 @@ namespace RPG.Combat
 
         public Vector3 GetAimLocation()
         {
-            CapsuleCollider targetCapsule = target.GetComponent<CapsuleCollider>();
-            if (targetCapsule == null)
+            Collider targetCollider = target.gameObject.GetComponent<Collider>();
+            if (targetCollider == null)
             {
-                return target.transform.position;
+                return target.gameObject.transform.position;
             }
-            return target.transform.position + Vector3.up * targetCapsule.height / 2;
+            return targetCollider.bounds.center;
 
             // (Vector3.right * targetCapsule.radius) +
         }
 
         public void OnTriggerEnter(Collider other)
         {
-            if (other.GetComponent<Health>() != target) return;
+            if (other.GetComponent<IDamagable>() != target) return;
 
             if (target.IsDead()) return;
             

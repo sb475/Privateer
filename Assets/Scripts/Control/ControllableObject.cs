@@ -11,7 +11,7 @@ namespace RPG.Control
 
     [RequireComponent(typeof(IEngine))]
     [RequireComponent(typeof(StateManager))]
-    [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(IDamagable))]
     [RequireComponent(typeof(IAttack))]
     public class ControllableObject: MonoBehaviour
     {
@@ -20,7 +20,7 @@ namespace RPG.Control
 
         public IEngine mov;
         public StateManager turnManager;
-        public Health health;
+        public IDamagable health;
         public IAttack IAttack;
         public delegate void DefaultBehviour();
         public DefaultBehviour defaultBehviour;
@@ -34,11 +34,8 @@ namespace RPG.Control
         {
             mov = GetComponent<IEngine>();
             turnManager = GetComponent<StateManager>();
-            health = GetComponent<Health>();
+            health = GetComponent<IDamagable>();
             IAttack = GetComponent<IAttack>();
-        }
-
-        public virtual void Start() {
             taskSystem = new RPG_TaskSystem();
         }
 
@@ -112,7 +109,7 @@ namespace RPG.Control
                 }
                 else if (task is RPG_TaskSystem.Task.Default)
                 {
-                    StartCoroutine(MoveToAct(task, () => ExecuteTask_Default(task as RPG_TaskSystem.Task.Default)));
+                    ExecuteTask_Default(task as RPG_TaskSystem.Task.Default);
                     return;
                 }
                
@@ -127,6 +124,21 @@ namespace RPG.Control
             interactableAction?.Invoke();
         }
 
+        bool InRangeToInteract(Interactable interactable)
+        {
+            float distanceToInteractable = Vector3.Distance(transform.position, interactable.transform.position);
+            if (distanceToInteractable > interactable.interactRadius)
+            {
+                mov.MoveToInteract(interactable);
+                return false;
+                // callingController.MoveToTarget
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         //This function immediately requests next task to minimize halty movement appearence.
         public void ExecuteTask_Move(RPG_TaskSystem.Task.MoveToPosition task)
         {
@@ -138,9 +150,9 @@ namespace RPG.Control
             //special function for just moving to a location
          public void MoveToTarget(Vector3 target, Action OnArrival)
          {
+             Debug.Log("MoveToTarget invoked");
              if (turnManager.canMove) 
              {
-
                  mov.MoveToLocation(target);
                  OnArrival?.Invoke();
              }
@@ -149,7 +161,7 @@ namespace RPG.Control
         //special function that invokes IAttack's attack sequence versus a "MoveToInteract => Interact" type pattern.
         public void ExecuteTask_Attack(RPG_TaskSystem.Task.Attack task)
         {
-            task.controllable.GetComponent<IAttack>().Attack(task.interactable.gameObject);
+            task.controllable.GetComponent<IAttack>().Attack(task.interactable.GetComponent<IDamagable>());
             taskState = TaskState.waiting;
 
         }
@@ -199,22 +211,6 @@ namespace RPG.Control
             task.interactable.DefaultInteract(this);
             taskState = TaskState.waiting;
         }   
-
-        bool InRangeToInteract(Interactable interactable)
-        {
-            float distanceToItem = Vector3.Distance(transform.position, interactable.transform.position);
-            if (distanceToItem > interactable.interactRadius)
-            {
-
-                mov.MoveToInteract(interactable);
-                return false;
-                // callingController.MoveToTarget
-            }
-            else
-            {
-                return true;
-            }
-        }
 
     }
 }

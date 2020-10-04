@@ -17,8 +17,9 @@ namespace RPG.Control
         public Inventory inventory;
         public CharacterEquipment equipment;
         public CharacterStats stats;
-        public BaseStats baseStats;
+        public CharacterStats baseStats;
         public Rigidbody body;
+        public Animator animator;
         private string crewName;
         
         float armor;
@@ -32,7 +33,8 @@ namespace RPG.Control
             inventory = GetComponent<Inventory>();
             equipment = GetComponent<CharacterEquipment>();
             stats = GetComponent<CharacterStats>();
-            baseStats = GetComponent<BaseStats>();
+            baseStats = GetComponent<CharacterStats>();
+            animator = GetComponent<Animator>();
             
 
             crewName = gameObject.name;
@@ -85,6 +87,11 @@ namespace RPG.Control
         {
             followLeader = false;
             GetComponent<CharacterEngine>().StopFollowTarget();
+        }
+
+        public void GetWeaponOut()
+        {
+            animator.SetTrigger("readyWeapons");
         }
 
         

@@ -7,6 +7,7 @@ using System.Linq;
 using RPG.Attributes;
 using RPG.Control;
 using RPG.Global;
+using RPG.Movement;
 
 namespace RPG.Combat
 {
@@ -286,7 +287,7 @@ namespace RPG.Combat
                     {
                         turnManager.SetCanMove(false);
                         //  Makes sure that cached commands are stopped once CanMove is over.
-                        currentCombatant.GetComponent<IAttack>().Cancel();
+                        currentCombatant.GetComponent<IEngine>().Cancel();
                         Debug.Log(currentCombatant + " can no longer move.");
                         stopMoveCheck = true;
                     }
@@ -316,7 +317,7 @@ namespace RPG.Combat
             }
 
             turnManager = setCombatant.GetComponent<StateManager>();
-            moveDistance = setCombatant.GetComponent<BaseStats>().GetStat(Stat.Speed);
+            moveDistance = setCombatant.GetComponent<CharacterStats>().GetStat(StatType.Speed);
             IAttack = setCombatant.GetComponent<IAttack>();
             
             //set combant to active turn
@@ -351,7 +352,7 @@ namespace RPG.Combat
                 combatantIndex = 0;
                 BeginTurn(combatantIndex);
             }
-            else if (combatantsInRange[combatantIndex + 1].GetComponent<Health>().IsDead())
+            else if (combatantsInRange[combatantIndex + 1].GetComponent<IDamagable>().IsDead())
             {
                 BringOutYourDead(combatantsInRange[combatantIndex + 1]);
                 //Events for end of round
@@ -391,7 +392,7 @@ namespace RPG.Combat
         private bool SortByTurn()
         {
             //Compares combatants speed variable. If it's tied it will favor the player.
-            combatantsInRange = combatantsInRange.OrderByDescending(x => x.GetComponent<BaseStats>().GetStat(Stat.Speed)).ThenByDescending(x => x.GetComponent<PlayerController>()).ToList();
+            combatantsInRange = combatantsInRange.OrderByDescending(x => x.GetComponent<CharacterStats>().GetStat(StatType.Speed)).ThenByDescending(x => x.GetComponent<PlayerController>()).ToList();
             return true;
         }
 #endregion

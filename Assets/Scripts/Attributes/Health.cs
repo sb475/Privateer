@@ -8,57 +8,41 @@ using RPG.Global;
 
 namespace RPG.Attributes
 {
-    [RequireComponent(typeof(BaseStats))]
-    public class Health : MonoBehaviour, ISaveable
+    public class Health : MonoBehaviour, ISaveable, IDamagable
     {
-        [SerializeField] float regeneratePercentage = 70;
         [SerializeField] TakeDamageEvent takeDamage;
         [SerializeField] UnityEvent onDie;
         [SerializeField] UnityEvent hasBeenAttacked;
-
         [System.Serializable]
         public class TakeDamageEvent : UnityEvent<float>
         {
         }
 
-        public LazyValue<float> healthPoints;
+        LazyValue<Health> health;
 
-        bool isDead = false;
         
-        private void Awake() 
-        {
-            healthPoints = new LazyValue<float>(GetInitialHealth);
+        public float maxHealth;
+        public float currentHealth;
+        public bool isDead = false;
+        
+        private void Start() {
+                maxHealth = GetInitialHealth();
+                currentHealth = maxHealth;
         }
-
         private float GetInitialHealth()
         {
-            return GetComponent<BaseStats>().GetStat(Stat.Health);
+            return GetComponent<IStat>().GetStat(StatType.Health);
         }
         public bool IsDead()
         {
             return isDead;
         }
 
-        private void Start() 
-        {
-            healthPoints.ForceInit();
-
-        }
-        private void OnEnable() 
-        {
-            GetComponent<BaseStats>().onLevelUp += RegenerateHealth;
-        }
-        private void OnDisable()
-        {
-            GetComponent<BaseStats>().onLevelUp -= RegenerateHealth;
-        }
-
-
         public bool RollToHit(GameObject instigator)
         {
-            float targetArmorClass = GetComponent<BaseStats>().GetStat(Stat.Armor);
+            float targetArmorClass = GetComponent<IStat>().GetStat(StatType.Armor);
             //add base stats to combat
-            float hitRollValue = GetComponent<BaseStats>().GetRollValue(20);
+            float hitRollValue = GameEvents.instance.GetRollValue(20);
             print(hitRollValue);
 
             print("Roll to hit was: " + hitRollValue + ", " + instigator + " needed: " + targetArmorClass);
@@ -81,14 +65,14 @@ namespace RPG.Attributes
 //this may also be where we impliment the roll for damage
         public void TakeDamage(GameObject instigator, float damage)
         {
-            BeenAttacked();
+            GetAttacked();
 
             if (!RollToHit(instigator)) return;
 
             print(gameObject.name + " took damage: " + damage);
-            healthPoints.value = Mathf.Max(healthPoints.value - damage, 0);
+            currentHealth = Mathf.Max(currentHealth - damage, 0);
                 // takeDamage.Invoke(damage);
-                if (healthPoints.value == 0) 
+                if (currentHealth == 0) 
                 {
                     onDie.Invoke();
                     GameEvents.instance.CharacterDied(this.gameObject);
@@ -100,7 +84,7 @@ namespace RPG.Attributes
                     takeDamage.Invoke(damage);
                 }                     
         }
-        public void BeenAttacked ()
+        public void GetAttacked ()
         {
             hasBeenAttacked.Invoke();
             Debug.Log(gameObject + " has been attacked");
@@ -108,12 +92,12 @@ namespace RPG.Attributes
 
         public float GetHealthPoints()
         {
-            return healthPoints.value;
+            return currentHealth;
         }
 
         public float GetMaxHealthPoints()
         {
-            return GetComponent<BaseStats>().GetStat(Stat.Health);
+            return GetComponent<CharacterStats>().GetStat(StatType.Health);
         }
 
         public float GetPercentage()
@@ -124,10 +108,10 @@ namespace RPG.Attributes
 
         public float GetFraction()
         {
-            return healthPoints.value / GetComponent<BaseStats>().GetStat(Stat.Health);
+            return currentHealth / maxHealth;
         }
 
-        private void Die()
+        public void Die()
         {
              if (isDead) return;
 
@@ -142,25 +126,19 @@ namespace RPG.Attributes
             Experience experience = instigator.GetComponent<Experience>();
             if (experience == null) return;
 
-            experience.GainExperience(GetComponent<BaseStats>().GetStat(Stat.ExperienceReward));
-        }
-
-        private void RegenerateHealth()
-        {
-            float regenHealthPoints = GetComponent<BaseStats>().GetStat(Stat.Health) * (regeneratePercentage / 100);
-            healthPoints.value = Mathf.Max(healthPoints.value, regenHealthPoints); // compares two numbers and picks the highest.
+            experience.GainExperience(GetComponent<CharacterStats>().GetStat(StatType.ExperienceReward));
         }
 
         public void Heal (int x)
         {
-            float amountHealed = healthPoints.value + (float)x;
+            float amountHealed = currentHealth + (float)x;
 
             Debug.Log (x);
-            Debug.Log (healthPoints.value);
+            Debug.Log (currentHealth);
             if (amountHealed > GetInitialHealth())
             {
-                amountHealed = GetInitialHealth() - healthPoints.value;
-                healthPoints.value = GetInitialHealth();
+                amountHealed = GetInitialHealth() - currentHealth;
+                currentHealth = GetInitialHealth();
             }
             else
             {
@@ -173,23 +151,18 @@ namespace RPG.Attributes
 
         public object CaptureState()
         {
-            return healthPoints.value;
+            return currentHealth;
         }
 
         public void RestoreState(object state)
         {
-            healthPoints.value = (float)state;
+            currentHealth = (float)state;
 
-            if (healthPoints.value == 0)
+            if (currentHealth == 0)
             {
                 Die();
 
             }
-        }
-
-        public bool GetDeathStatus()
-        {
-            return isDead;
         }
     }
 }

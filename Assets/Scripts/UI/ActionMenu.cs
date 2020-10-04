@@ -53,7 +53,6 @@ namespace RPG.UI {
             }
 
             transform.GetComponent<RectTransform>().anchoredPosition = anchoredPosition;
-            Debug.Log(anchoredPosition.y);
         }
 
         // Start is called before the first frame update

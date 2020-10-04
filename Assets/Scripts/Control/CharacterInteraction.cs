@@ -9,13 +9,13 @@ using UnityEngine;
 
 namespace RPG.Control
 {
-    [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(IDamagable))]
     [RequireComponent(typeof(AIController))]
     public class CharacterInteraction : Interactable
     {
         public Inventory inventory;
-        public delegate void DefaultInteraction(ControllableObject controllable);
-        public DefaultInteraction defaultInteraction;
+        public IDamagable health;
+
 
         public override void Awake()
         {
@@ -23,17 +23,29 @@ namespace RPG.Control
         
             displayName = gameObject.name;
             interactionPoint = gameObject.transform;
-            inventory = new Inventory(null);
+            inventory = GetComponent<Inventory>();
+            health = GetComponent<IDamagable>();
+
             InitializeDefaultBehaviour();
 
         }
 
-
-        public override void DefaultInteract(ControllableObject controllable)
+        public override void DefaultInteract(ControllableObject callingController)
         {
-            defaultInteraction(controllable);
+                if (defaultInteraction == AttackNPC)
+                {
+                    Debug.Log ("Default was to attack!");
+                    interactRadius = callingController.GetComponent<Fighter>().currentWeaponConfig.GetRange();
+                    base.DefaultInteract(callingController);
+                }
+                else
+                {
+                    base.DefaultInteract(callingController);
+                }
+
         }
-        public void InitializeDefaultBehaviour()
+
+        public virtual void InitializeDefaultBehaviour()
         {
             
                if (GetComponent<AIController>() != null)
@@ -59,7 +71,7 @@ namespace RPG.Control
 
         public override void AttackNPC (ControllableObject controllable)
         {
-            controllable.GetComponent<IAttack>().Attack(this.gameObject);
+            controllable.GetComponent<IAttack>().Attack(this.health);
         }
 
         public override void ShopMenu (ControllableObject controllable)
@@ -80,11 +92,11 @@ namespace RPG.Control
 
         internal void Scan(CrewMember callingController)
         {
-            BaseStats combatTargetStat = GetComponent<BaseStats>();
+            CharacterStats combatTargetStat = GetComponent<CharacterStats>();
             Debug.Log(gameObject.name);
 
-            Debug.Log(combatTargetStat.GetStat(Stat.Armor));
-            Debug.Log(combatTargetStat.GetStat(Stat.Health));
+            // Debug.Log(combatTargetStat.GetStat(Stat.Armor));
+            // Debug.Log(combatTargetStat.GetStat(Stat.Health));
             Debug.Log(combatTargetStat.GetLevel());
         }
 

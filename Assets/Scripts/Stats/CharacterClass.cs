@@ -5,7 +5,10 @@ namespace RPG.Stats
         Player,
         Enemy,
         Merchant,
-        ArtificialIntelligence
+        ArtificialIntelligence,
+        Ship,
+        EnemyShip,
+        Missile
     }
 
 

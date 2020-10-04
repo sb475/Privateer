@@ -153,7 +153,7 @@ namespace RPG.Items
 
         //Load commands can be sequenced better in the future
 
-        private WeaponConfig LoadWeapon(ItemConfig item)
+        public WeaponConfig LoadWeapon(ItemConfig item)
         {
             WeaponConfig newItem;
 
@@ -166,7 +166,7 @@ namespace RPG.Items
 
         }
 
-        private ArmorConfig LoadArmor(ItemConfig item)
+        public ArmorConfig LoadArmor(ItemConfig item)
         {
 
             if (item != null)
@@ -179,7 +179,7 @@ namespace RPG.Items
             
         }
 
-        public IEnumerable GetAdditiveModifiers(Stat stat)
+        public IEnumerable GetAdditiveModifiers(StatType stat)
         {
            foreach (var item in equippedItems)
             {
@@ -201,7 +201,7 @@ namespace RPG.Items
             }
         }
 
-        public IEnumerable GetPercentageModifiers(Stat stat)
+        public IEnumerable GetPercentageModifiers(StatType stat)
         {
             foreach (var item in equippedItems)
             {   

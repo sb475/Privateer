@@ -1,6 +1,7 @@
     using System.Collections.Generic;
 using GameDevTV.Utils;
 using RPG.Attributes;
+using RPG.Base;
 using RPG.Core;
 using RPG.Items;
 using RPG.Movement;
@@ -31,20 +32,28 @@ namespace RPG.Combat
 
         public enum WeaponSystemState { waiting, firing, acquire};
 
+
+        [Header("Weapon Attributes")]
         public bool tracking;
+        public float trackingSpeed = 0.5f;
+        public float rateOfFire = 3;
+        public ShipWeaponConfig currentWeaponConfig;
+
+
         public HardPointType hardPointType;
-        [SerializeField] float timeBetweenAttacks = 1f;
+        
         [SerializeField] Transform hardPoint = null;
         [SerializeField] ShipWeaponConfig defaultWeapon = null;
         bool outOfRangeAnnounced = false;
         public Transform launchPosition;
+        
 
-        Health target;
+        public IDamagable target;
         StateManager turnManager;
 
         // mathf.infitity allows to attack right away
         float timeSinceLastAttack = Mathf.Infinity;
-        public ShipWeaponConfig currentWeaponConfig;
+        
         LazyValue<ShipWeapon> currentWeapon;
 
         private void Awake()
@@ -52,6 +61,7 @@ namespace RPG.Combat
             currentWeaponConfig = defaultWeapon;
             currentWeapon = new LazyValue<ShipWeapon>(SetupDefaultWeapon);
             turnManager = GetComponent<StateManager>();
+            rateOfFire = currentWeaponConfig.GetRateOfFire();
         }
 
         private void Start()
@@ -70,10 +80,14 @@ namespace RPG.Combat
             if (target.IsDead()) return;
 
             // if system is dead, do nothing
-            if (gameObject.GetComponent<Health>().IsDead()) return;
+            if (gameObject.GetComponent<IDamagable>().IsDead()) return;
 
             if (target != null) AttackBehavior();
 
+        }
+
+        private void LateUpdate() {
+            if (target != null) AttackBehavior();
         }
 
         private ShipWeapon SetupDefaultWeapon()
@@ -96,21 +110,21 @@ namespace RPG.Combat
             return turret.Spawn(hardPoint.transform, animator);
         }
 
-        public Health GetTarget()
+        public IDamagable GetTarget()
         {
             return target;
         }
 
         public void FireOnce( GameObject target)
         {
-            this.target = target.GetComponent<Health>(); 
+            this.target = target.GetComponent<IDamagable>(); 
             AttackBehavior();
             this.target = null;
         }
 
-        public void FireAtWill(GameObject target)
+        public void SetTarget(IDamagable target)
         {
-            this.target = target.GetComponent<Health>();
+            this.target = target;
         }
 
         public void CeaseFire()
@@ -121,13 +135,17 @@ namespace RPG.Combat
         private void AttackBehavior()
         {
             //reset flag so that next time in range resets.
+            if (Vector3.Distance(target.gameObject.transform.position, transform.position) > currentWeaponConfig.GetRange()) return;
+       
             outOfRangeAnnounced = false;
+
+            Vector3 direction = target.gameObject.transform.position -this.transform.position;
             if (tracking)
             {
-                transform.LookAt(target.transform);
+                this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime*trackingSpeed);
             }
             
-            if (timeSinceLastAttack > timeBetweenAttacks)
+            if (timeSinceLastAttack > rateOfFire)
             {
                 //This will trigger the Hit() event.
                 TriggerAttack();
@@ -239,6 +257,16 @@ namespace RPG.Combat
         public string DamageAsString()
         {
             return currentWeaponConfig.GetDamageBonus().ToString();
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (currentWeaponConfig != null)
+            {
+                Gizmos.color = Color.magenta;
+                Gizmos.DrawWireSphere(transform.position, currentWeaponConfig.GetRange());
+            }
+            
         }
 
     }

@@ -15,6 +15,7 @@ namespace RPG.Items
         [SerializeField] float damageBonus = 0;
         [SerializeField] float weaponRange = 100f;
         [SerializeField] float actionPointCost = 0f;
+        public float rateOfFire;
         [SerializeField] Projectile projectile = null;
         public HardPointType hardPointType;
         const string weaponName = "ShipSystem";
@@ -62,7 +63,7 @@ namespace RPG.Items
         }
         
         //this where we will be able to add specific details for targetting. Also need to update location for tip of barrel.
-        public void LaunchProjectile(Transform hardPoint, Health target, GameObject instigator, float calculatedDamage)
+        public void LaunchProjectile(Transform hardPoint, IDamagable target, GameObject instigator, float calculatedDamage)
         {
             
             Projectile projectileInstance =  projectileInstance = Instantiate(projectile, hardPoint.position, Quaternion.LookRotation(hardPoint.forward));                       
@@ -85,6 +86,11 @@ namespace RPG.Items
         public float GetDamageBonus()
         {
             return damageBonus;
+        }
+
+        public float GetRateOfFire()
+        {
+            return rateOfFire;
         }
 
         private void OnDrawGizmos()

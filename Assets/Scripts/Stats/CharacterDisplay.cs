@@ -15,13 +15,13 @@ namespace RPG.Stats
         
         Health health;
         Experience experience;
-        BaseStats baseStats;
+        CharacterStats baseStats;
 
         private void Awake() 
         {
             health = GameObject.FindWithTag("Player").GetComponent<Health>(); //this will find gameobject with tag and look at health component.
             experience = GameObject.FindWithTag("Player").GetComponent<Experience>();
-            baseStats = GameObject.FindWithTag("Player").GetComponent<BaseStats>();
+            baseStats = GameObject.FindWithTag("Player").GetComponent<CharacterStats>();
             
         }
         private void Update() 

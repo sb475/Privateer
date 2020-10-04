@@ -24,7 +24,7 @@ namespace RPG.Movement
         [SerializeField] bool isFollowing;
         private Rigidbody body;
         NavMeshAgent navMeshAgent;
-        Health health;
+        IDamagable health;
         public float moveSpeed = 0f;
         private float speedSmoothVelocity = 0f;
         private float speedSmoothTime = 0.1f;
@@ -36,11 +36,15 @@ namespace RPG.Movement
         private void Awake() 
         {
             navMeshAgent = GetComponent<NavMeshAgent>();
-            health = GetComponent<Health>();
+            health = GetComponent<IDamagable>();
             isFollowing = false;
             body = GetComponent<Rigidbody>();
             controller = GetComponent<CharacterController>();
             cam = Camera.main.transform;
+        }
+
+        private void Start() {
+            navMeshAgent.Warp(transform.position);
         }
         // Update is called once per frame
         void Update()
@@ -111,7 +115,6 @@ namespace RPG.Movement
         public void StartMoveAction(Vector3 destination, float speedFraction)
         {
             GetComponent<ActionScheduler>().StartAction(this);
-            
             MoveTo(destination, speedFraction);
         }
 

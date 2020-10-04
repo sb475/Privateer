@@ -241,3 +241,113 @@ MonoBehaviour:
       - 10
     - stat: 0
       levels: []
+  - characterClass: 6
+    stats:
+    - stat: 0
+      levels:
+      - 10
+    - stat: 4
+      levels:
+      - 2
+  - characterClass: 2
+    stats:
+    - stat: 0
+      levels:
+      - 10
+      - 10
+      - 10
+      - 10
+    - stat: 4
+      levels:
+      - 10
+      - 10
+      - 10
+      - 10
+    - stat: 5
+      levels:
+      - 10
+      - 10
+      - 10
+      - 10
+    - stat: 1
+      levels:
+      - 10
+      - 10
+      - 10
+      - 10
+    - stat: 11
+      levels:
+      - 10
+      - 10
+      - 10
+      - 10
+    - stat: 0
+      levels: []
+  - characterClass: 2
+    stats:
+    - stat: 0
+      levels:
+      - 10
+      - 10
+      - 10
+      - 10
+    - stat: 4
+      levels:
+      - 10
+      - 10
+      - 10
+      - 10
+    - stat: 5
+      levels:
+      - 10
+      - 10
+      - 10
+      - 10
+    - stat: 1
+      levels:
+      - 10
+      - 10
+      - 10
+      - 10
+    - stat: 11
+      levels:
+      - 10
+      - 10
+      - 10
+      - 10
+    - stat: 0
+      levels: []
+  - characterClass: 2
+    stats:
+    - stat: 0
+      levels:
+      - 10
+      - 10
+      - 10
+      - 10
+    - stat: 4
+      levels:
+      - 10
+      - 10
+      - 10
+      - 10
+    - stat: 5
+      levels:
+      - 10
+      - 10
+      - 10
+      - 10
+    - stat: 1
+      levels:
+      - 10
+      - 10
+      - 10
+      - 10
+    - stat: 11
+      levels:
+      - 10
+      - 10
+      - 10
+      - 10
+    - stat: 0
+      levels: []

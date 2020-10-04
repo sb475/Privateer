@@ -24,12 +24,15 @@ namespace RPG.Combat
         [SerializeField] Transform knifeHolsterTransform = null;
         [SerializeField] WeaponConfig defaultWeapon = null;
         [SerializeField] ArmorConfig defaultArmor = null;
-        LazyValue<float> totalActionPoints;
-        [SerializeField] private float actionPoints;
+        public LazyValue<float> maxAP;
+        public float currentAP;
         bool outOfRangeAnnounced = false;
-        
-        Health target;
+        public bool attacking;
+
+        public GameObject currentTarget;
+        public IDamagable target;
         StateManager turnManager;
+        CharacterEquipment equipment;
         
         // mathf.infitity allows to attack right away
         float timeSinceLastAttack = Mathf.Infinity;
@@ -44,20 +47,23 @@ namespace RPG.Combat
             currentWeaponConfig = defaultWeapon;
             currentWeapon = new LazyValue<Weapon>(SetupDefaultWeapon);
             currentArmor = new LazyValue<Armor>(SetupDefaultArmor);
-            totalActionPoints = new LazyValue<float>(GetInitalActionPoints);
+            maxAP = new LazyValue<float>(GetInitalActionPoints);
             turnManager = GetComponent<StateManager>();
+            attacking = false;
+            equipment = GetComponent<CharacterEquipment>();
+
         }
 
         private float GetInitalActionPoints()
         {
-            return GetComponent<BaseStats>().GetStat(Stat.ActionPoints);
+            return GetComponent<CharacterStats>().GetStat(StatType.ActionPoints);
         }
 
         private void Start() 
         {
             currentWeapon.ForceInit();
-            totalActionPoints.ForceInit();
-            actionPoints = totalActionPoints.value;
+            maxAP.ForceInit();
+            currentAP = maxAP.value;
         }
 
        
@@ -68,38 +74,57 @@ namespace RPG.Combat
             // guard conditions
             if (target == null) return;
             if (target.IsDead()) return;
-            if (gameObject.GetComponent<Health>().IsDead()) return;
-        
-            if(turnManager.GetCanMove())
+            if (GetComponent<IDamagable>().IsDead()) return;
+        }
+
+        private void AttackBehavior(IDamagable target)
+        {
+            if (!GetIsInRange(target))
             {
+                if (turnManager.GetCanMove())
+                {
+                    GetComponent<IEngine>().StartMoveAction(target.gameObject.transform.position, 1f);
+                }
+                else
+                {
+                    print(target.gameObject.name + " is out of range");
+
+                    if ((GetComponent<AIController>() != null))
+                    {
+                        turnManager.SetCanAct(false);
+                    }
+
+                }
                 //leave in place for moving to cover
-                MoveToTarget(target.gameObject);
             }
             else
             {
                 GetComponent<IEngine>().Cancel();
-                if (turnManager.GetCanAct() == true)
+                    //reset flag so that next time in range resets.
+                outOfRangeAnnounced = false;
+
+                transform.LookAt(target.gameObject.transform);
+
+                //This will trigger the Hit() event.
+
+
+                if (timeSinceLastAttack > timeBetweenAttacks)
                 {
-                    AttackBehavior();
+                    TriggerAttack();
+                    timeSinceLastAttack = 0;
                 }
-                
             }
         }
 
-        public void MoveToTarget(GameObject target)
-        {
-            GetComponent<IEngine>().MoveToLocation(target.transform.position);
-        }
+#region WeaponConfigurations
 
         private Weapon SetupDefaultWeapon()
         {
-            
             return AttachWeapon(defaultWeapon);
         }
 
         private Armor SetupDefaultArmor()
         {
-
             return AttachArmor(defaultArmor);
         }
         
@@ -109,7 +134,15 @@ namespace RPG.Combat
 
             currentWeaponConfig = weapon;
             currentWeapon.value = AttachWeapon(weapon);
-            
+        }
+
+        public void SwitchToSecondary()
+        {
+            EquipWeapon(equipment.LoadWeapon(equipment.GetEquippedItems()[0]));
+        }
+        public void SwitchToPrimary()
+        {
+            EquipWeapon(equipment.LoadWeapon(equipment.GetEquippedItems()[1]));
         }
 
         public void EquipArmor(ArmorConfig armor)
@@ -131,25 +164,23 @@ namespace RPG.Combat
             return weapon.Spawn(rightHandTransform, leftHandTransform, animator);
         }
 
-        public Health GetTarget()
+    #endregion
+
+
+#region Animations
+        public IDamagable GetTarget()
         {
             return target;
         }
 
-        private void AttackBehavior()
+        public void PresentRifle()
         {
-                //reset flag so that next time in range resets.
-                outOfRangeAnnounced = false;
+            GetComponent<Animator>().SetTrigger("alertReady");
+        }
 
-                            transform.LookAt(target.transform);
-                if (timeSinceLastAttack > timeBetweenAttacks)
-                {
-                    //This will trigger the Hit() event.
-                    TriggerAttack();
-                    timeSinceLastAttack = 0;
-                }
-               
-
+        public void PutWeaponAway()
+        {
+            GetComponent<Animator>().SetTrigger("weaponAway");
         }
 
         private void TriggerAttack()
@@ -157,15 +188,17 @@ namespace RPG.Combat
             GetComponent<Animator>().ResetTrigger("stopAttack");
             GetComponent<Animator>().SetTrigger("attack");
         }
+#endregion
 
-        // Animation Event
+
+#region AnimationEvent
         void Hit()
         {
 
             if (target == null) return; // guard statement
                   
     //this rolls based on the Damage of the weapon + Base damage of the weapon. Weapon damage = 6f, it's a D6 roll.
-            float damage = GetComponent<BaseStats>().CalculateDamage(Stat.Damage, currentWeaponConfig);
+            float damage = GetComponent<CharacterStats>().CalculateDamage(StatType.Damage, currentWeaponConfig);
             
             if (currentWeapon.value != null)
             {
@@ -182,6 +215,7 @@ namespace RPG.Combat
             }
             //resets target to avoid auto attacking same target next round.
             UpdateActionPoints(2);
+            target = null;
 
         }
 
@@ -190,42 +224,38 @@ namespace RPG.Combat
             Hit();
         }
 
+#endregion
 
-        private bool GetIsInRange(GameObject combatTarget)
+
+        private bool GetIsInRange(IDamagable combatTarget)
         {
-            return Vector3.Distance(transform.position, combatTarget.transform.position) < currentWeaponConfig.GetRange();
+            return Vector3.Distance(transform.position, combatTarget.gameObject.transform.position) < currentWeaponConfig.GetRange();
         }
 
-        public bool CanAttack(GameObject combatTarget)
+        public bool CanAttack(IDamagable combatTarget)
         {
             if (combatTarget == null) { return false; }
-            if (actionPoints <= 0) { return false; }
-            Health targetToTest = combatTarget.GetComponent<Health>();
+            if (currentAP <= 0) { return false; }
+            IDamagable targetToTest = combatTarget;
             return targetToTest != null && !targetToTest.IsDead();
         }
 
-        public void Attack(GameObject combatTarget)
+        public void Attack(IDamagable combatTarget)
         {
-            combatTarget.GetComponent<Health>();
-
-            if (actionPoints <= 0)
+            if (!turnManager.GetCanAct()) 
             {
-                turnManager.SetCanAct(false);
-            } 
-            if (!GetIsInRange(combatTarget) && turnManager.GetCanMove() == false)
-            {
-                    print(combatTarget.gameObject.name + " is out of range");
-                if ((GetComponent<AIController>() != null))
-                {
-                    turnManager.SetCanAct(false);
-                    }   
-                    return;
+                Debug.Log("You cannot attack");
             }
+            else
+            {
             //assigns target for dealing damage
+            target = combatTarget;
+            currentTarget = combatTarget.gameObject;
             GetComponent<ActionScheduler>().StartAction(this);
-        }
-          
+            AttackBehavior(combatTarget);
+            }
 
+        }
             //  print ("take that you weasel");
         
         public void Cancel()
@@ -258,18 +288,18 @@ namespace RPG.Combat
         //Action Points
         public void RestoreActionPoints()
         {
-            actionPoints = totalActionPoints.value;
+            currentAP = maxAP.value;
             turnManager.SetCanAct(true);
         }
         public float GetActionPoints()
         {
-            return actionPoints;
+            return currentAP;
         }
 
         private float UpdateActionPoints(float costActionPoints)
         {
-            actionPoints -= costActionPoints;
-            if (actionPoints <= currentWeaponConfig.GetActionPointCost())
+            currentAP -= costActionPoints;
+            if (currentAP <= currentWeaponConfig.GetActionPointCost())
             {
                 turnManager.SetCanAct(false);
             }
@@ -277,19 +307,29 @@ namespace RPG.Combat
             {
                 turnManager.SetCanAct(true);
             }
-            return actionPoints;
+            return currentAP;
 
-        }
-        public void ClearTarget()
-        {
-            target = null;
         }
 
         public string DamageAsString()
         {
-            return (GetComponent<BaseStats>().GetDamage(Stat.Damage, currentWeaponConfig) + " " + currentWeaponConfig.GetDamageBonus()).ToString();
+            return (GetComponent<CharacterStats>().GetDamage(StatType.Damage, currentWeaponConfig) + " " + currentWeaponConfig.GetDamageBonus()).ToString();
         }
 
+        private void OnDrawGizmos() {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position, currentWeaponConfig.GetRange());
+        }
+
+        public float GetWeaponDamage()
+        {
+            return currentWeaponConfig.GetDamage() + currentWeaponConfig.GetDamageBonus();
+        }
+
+        public float GetWeaponRange()
+        {
+            return currentWeaponConfig.GetRange();
+        }
     }
         
 

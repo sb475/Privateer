@@ -6,6 +6,8 @@
     using GameDevTV.Utils;
     using System.Collections.Generic;
     using RPG.Global;
+using System;
+using RPG.Items;
 
 namespace RPG.Control
     {
@@ -20,17 +22,22 @@ namespace RPG.Control
             [SerializeField] float waypointTolerance = 1f ;
             [Range(0,1)]
             [SerializeField] float patrolSpeedFraction = 0.2f;
-
-            [SerializeField] GameObject battleController;
             [SerializeField] AttitudeType attitude;
 
-            IAttack IAttack;
+            public IAttack fighter;
             public List<CrewMember> playerTeam;
-            Health health;
-            IEngine mover;
+            IDamagable health;
+            CharacterEngine mover;
             StateManager turnManager;
-            CharacterFaction characterFaction;
-            GameObject target;
+            
+            public Transform boardingLocation;
+            public CoverObject chosenCover;
+
+            public float closeCombatRange = 10f;
+
+            public CharacterFaction characterFaction;
+
+            public IDamagable target;
         
 
         //AI memory
@@ -39,17 +46,18 @@ namespace RPG.Control
             float timeSinceLastWaypoint = Mathf.Infinity;
             float timeSinceAggrevated = Mathf.Infinity;
             int currentWayointIndex = 0;
+        
+            [SerializeField] private bool atBoardingLocation = false;
 
-            private void Awake() {
-                IAttack = GetComponent<IAttack>();
-                health = GetComponent<Health>();
-                
-                mover = GetComponent<IEngine>();
+        private void Awake() {
+                fighter = GetComponent<IAttack>();
+                health = GetComponent<IDamagable>();
+                mover = GetComponent<CharacterEngine>();
                 guardPosition = new LazyValue<Vector3>(GetGuardPosition);
                 turnManager = GetComponent<StateManager>();
                 characterFaction = GetComponent<CharacterFaction>();
-                
             }
+
             private Vector3 GetGuardPosition()
             {
                 return transform.position;
@@ -57,60 +65,93 @@ namespace RPG.Control
    
             private void Start() {      
 
-                guardPosition.ForceInit();
-
+                //guardPosition.ForceInit();
+                playerTeam = GameEvents.instance.GetCrewRoster();
+               
        
             }
 
             private void Update()
-                {
-                    if (health.IsDead()) 
-                    {
-                        turnManager.SetToNonCombat();
-                        return;
-                    }
-
-                    if (IsAggrevated() && IAttack.CanAttack(target))
-                    {
-
-                            if (GameEvents.instance.battleEventCalled == false)
-                            {
-
-                                GameEvents.instance.FightBreakOut(gameObject.transform.position);
-                            }
-            
-                            //If enemy can act will attempt to crry out CombatBehvior (run and hit at you)
-                            if (turnManager.GetCanAct() == true)
-                            {
-
-                                CombatBehavior();
-                            }
-                            else return;
-                        }
-
-                    else if (turnManager.isInCombat == false)
-                    {
-                        if (timeSinceLastSawPlayer < suspicionTime)
-                        {
-                            SuspicionBehavior();
-                        }
-                        else
-                        {
-                            PatrolBehavior();
-                        }
-                    }
-                    else
-                    {
-                return;
-            }
-
-                    UpdateTimers();
-                }
-
-            public void Aggrevate()
             {
-                turnManager.isInCombat = true;
+            // if (health.IsDead()) 
+            // {
+            //     turnManager.SetToNonCombat();
+            //     return;
+            // }
+
+            mover.MoveTo(target.gameObject.transform.position, 1f);
+
+
+            // if (InCloseCombatRange()) return;
+
+
+            // if (isInRange()) return;
+
+            // if (HostileBehavior()) return;
+
+            // //if (OnGuardDuty()) return;
+
+            UpdateTimers();
+        }
+
+        private bool InCloseCombatRange()
+        {
+            if (target == null) return false;
+            if (Vector3.Distance(transform.position, target.gameObject.transform.position) < 10)
+            {
+                mover.MoveTo(target.gameObject.transform.position, 1f);
+                return true;
             }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool isInRange()
+        {
+            if (Vector3.Distance(transform.position, boardingLocation.position) > fighter.GetWeaponRange())
+            {
+                mover.MoveTo(boardingLocation.position, 1f);
+                return false;
+            }
+            else
+            {
+
+                UseCover();
+                return true;
+
+            }
+        }
+
+        private bool OnGuardDuty()
+        {
+            if (turnManager.isInCombat == false)
+            {
+
+
+                if (timeSinceLastSawPlayer < suspicionTime)
+                {
+                    SuspicionBehavior();
+                }
+                else
+                {
+                    PatrolBehavior();
+                    
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        public void Aggrevate()
+        {
+            turnManager.isInCombat = true;
+        }
 
         private void UpdateTimers()
             {
@@ -118,6 +159,7 @@ namespace RPG.Control
                 timeSinceLastWaypoint += Time.deltaTime;
                 timeSinceAggrevated += Time.deltaTime;
             }
+#region Patrol Behaviour
 
             private void PatrolBehavior()
             {
@@ -163,35 +205,111 @@ namespace RPG.Control
                 GetComponent<ActionScheduler>().CancelCurrectAction();
                 //take object out of combat
             }
+        #endregion
 
-            private void CombatBehavior()
+#region TriggerAggresiveAction
+        public bool HostileBehavior()
+        {
+            if (attitude == AttitudeType.Hostile)
             {
-                            
-                IAttack.Attack(target);
-                timeSinceLastSawPlayer = 0;
+                float closetTarget = Mathf.Infinity;
+               foreach (CrewMember crew in playerTeam)
+               {
+                   
+                float distanceToPlayer = Vector3.Distance(crew.transform.position, transform.position);
 
+                    if (distanceToPlayer < chaseDistance || turnManager.isInCombat)
+                    {
+                        //determine decision on what to target
+                        if (distanceToPlayer < closetTarget)
+                        {
+                            target = crew.GetComponent<IDamagable>();
+                            closetTarget = distanceToPlayer;
+                        }
+                        
+                        CombatBehavior();
+                        
+                        return true;
+                    }
+
+                return false;
+               }
+            }
+            else if (attitude == AttitudeType.Friendly)
+            {
+                //friends join in the fight
+                return true;
             }
 
-            public bool IsAggrevated()
-            {
-                if (attitude == AttitudeType.Hostile)
-                {    CrewMember crew = GameEvents.instance.GetPlayer();
-                        // if (crew ))
-                        // {
-                            //get real angry if anyone from player party is in range and hostile
-                            float distanceToPlayer = Vector3.Distance(crew.transform.position, transform.position);
-                            
-                            if (distanceToPlayer < chaseDistance || turnManager.isInCombat) 
-                            {
-                                target = crew.gameObject;
-                                return true;
-                            }                 
-                        // }
 
-                    return false;
-                }
             return false;
+        }
+
+#endregion
+
+#region CombatBehvaiour
+
+        private void CombatBehavior()
+        {
+
+            if (fighter.CanAttack(target))
+                {
+
+                if (GameEvents.instance.battleEventCalled == false)
+                {
+
+                    GameEvents.instance.FightBreakOut(gameObject.transform.position);
+                }
+
+                //If enemy can act will attempt to crry out CombatBehvior (run and hit at you)
+                if (turnManager.GetCanAct() == true)
+                {
+
+                    fighter.Attack(target);
+
+
+                    // if (Vector3.Distance(target.transform.position, transform.position) < closeCombatRange)
+                    // {
+                    //     CloseIn(target.GetComponent<IDamagable>());
+                    // }
+                    // else
+                    // {
+                    //     fighter.Attack(target.GetComponent<IDamagable>());
+                    // }
+                    
+                    timeSinceLastSawPlayer = 0;
+                }
             }
+            else
+            {
+                Debug.Log ("Cannot attack target");
+            }
+            
+        }
+
+        private void UseCover()
+        {
+            float dist = Mathf.Infinity;
+            Vector3 chosenSpot = Vector3.zero;
+
+            for (int i = 0; i < WorldController.instance.GetCoverSpots().Length; i++)
+            {   
+                //if someone is already using cover don't use it.
+                if (WorldController.instance.GetCoverSpots()[i].inUse) continue;
+
+                Vector3 hideDir = WorldController.instance.GetCoverSpots()[i].transform.position;
+                Vector3 hidePos = WorldController.instance.GetCoverSpots()[i].transform.position + hideDir.normalized * 5;
+
+                if (Vector3.Distance(this.transform.position, hidePos) < dist)
+                {
+                    chosenSpot = hidePos;
+                    dist = Vector3.Distance(this.transform.position, hidePos);
+                }
+            }
+
+            mover.StartMoveAction(chosenSpot, 1f);
+
+        }
         
             private void OnDrawGizmos()
             {
@@ -207,11 +325,10 @@ namespace RPG.Control
             { 
                 return attitude;
             }
+#endregion
             
 
         }
 
     }
-
-
 

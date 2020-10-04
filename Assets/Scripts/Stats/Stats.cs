@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace RPG.Stats
 {
 //need to find a better way to organize these 
-    public enum Stat
+    public enum StatType
     {
         Health,
         ExperienceReward,
@@ -26,38 +26,12 @@ namespace RPG.Stats
     }
 
     [System.Serializable]
-    public class Attribute {
-        
-        public int baseValue;
-        public int modifiedValue;
-        public string atttributeName;
-        public string attribteDescription;
+    public class Stat {
 
-        public Attribute (string atttributeName, int baseValue)
-        {
-            this.atttributeName = atttributeName;
-            this.baseValue = baseValue;
+        public StatType statType;
+        public float baseValue;
+        public string statDescription;
 
-        }
-
-        public void OneUpAttribute()
-        {
-            baseValue ++;
-        }
-        public void OneDownAttribute()
-        {
-            baseValue --;
         }
         
-    }
-
-    [System.Serializable]
-    public class CharacterAttributes
-    {
-       public Attribute strength = new Attribute("Stength", 10);
-       private void Awake() {
-           
-       }
-    }
-
 }

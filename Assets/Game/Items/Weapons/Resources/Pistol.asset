@@ -24,7 +24,7 @@ MonoBehaviour:
   genericModifier:
     additiveModifiers: []
     percentageModifiers: []
-  animatorOverride: {fileID: 0}
+  animatorOverride: {fileID: 22100000, guid: e7f593f1defeade41afd98fccf1dd10f, type: 2}
   equippedPrefab: {fileID: 1577051005696433616, guid: bb31dadef6cc50149ba48aa4e32fa996,
     type: 3}
   weaponDamage: 6

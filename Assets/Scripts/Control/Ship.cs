@@ -27,6 +27,13 @@ namespace RPG.Control
             
         }
 
+
+        public override void Update() {
+            base.Update();
+            if (target != null)
+            mov.StartMoveAction(target.transform.position, 1f);
+        }
+
         public void KeepAtRange (float range)
         {
             float rangeToTarget = Vector3.Distance(target.transform.position, transform.position);

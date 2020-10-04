@@ -70,13 +70,14 @@ namespace RPG.Movement
         // Update is called once per frame
 
         private void Start() {
+            navMeshAgent.Warp(transform.position);
             storeMaxSpeed = maxSpeed;
             targetSpeed = storeMaxSpeed;
         }
 
         void FixedUpdate()
         {
-            Debug.Log(aIMovement);
+            
             if (horizontal != 0 || vertical != 0)
             {
                 ManualOverride();
@@ -89,9 +90,6 @@ namespace RPG.Movement
                     MoveTo(moveToLocation, 1f);
                 }
             }
-
-            
-
         }
 
         private void ManualOverride()
@@ -135,8 +133,7 @@ namespace RPG.Movement
         public void StartMoveAction(Vector3 destination, float speedFraction)
         {
             GetComponent<ActionScheduler>().StartAction(this);
-            moveToLocation = destination;
-            aIMovement = true;
+            MoveTo(destination, 1f);
 
         }
 
@@ -144,32 +141,20 @@ namespace RPG.Movement
         public bool MoveTo(Vector3 destination, float speedFraction)
         {
 
+            if (Vector3.Distance(transform.position, destination) < .5f) return true;
 
-            Vector3 forces = GetTargetDistance(destination);
-            
-            acceleration = forces;
-            //Debug.Log(targetDirection);
-
-            velocity += 2 * acceleration * Time.deltaTime;
-
-            if (velocity.magnitude > maxSpeed)
-            {
-                velocity = velocity.normalized * maxSpeed;
-            }
-            
-            shipBody.velocity = velocity;
-
-            Quaternion desiredRotation = Quaternion.LookRotation(velocity);
-            transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, Time.deltaTime * turningSpeed);
-                            
-            
-
+            Debug.DrawRay(transform.position, destination, Color.yellow);
+            navMeshAgent.destination = destination;
+            navMeshAgent.speed = maxSpeed * Mathf.Clamp01(speedFraction);
+            navMeshAgent.isStopped = false;
             return false;
+
+
         }
 
         public void Cancel()
         {
-            //navMeshAgent.isStopped = true;
+            navMeshAgent.isStopped = true;
 
         }
         private void NavMeshAnimator()
@@ -220,7 +205,7 @@ namespace RPG.Movement
 
         public void MoveToLocation(Vector3 newTarget)
         {
-           // navMeshAgent.stoppingDistance = 0f;
+            navMeshAgent.stoppingDistance = 0f;
             StartMoveAction(newTarget, 1f);
         }
 

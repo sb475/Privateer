@@ -18,7 +18,6 @@ GameObject:
   - component: {fileID: 4420102153959506198}
   - component: {fileID: 6742760884462094681}
   - component: {fileID: 2050627298109224152}
-  - component: {fileID: 4833127877274240262}
   - component: {fileID: 8912045929951192526}
   - component: {fileID: 623257239738016921}
   - component: {fileID: 114245881929482112}
@@ -26,6 +25,7 @@ GameObject:
   - component: {fileID: -6857418748001824829}
   - component: {fileID: -5999181605297448534}
   - component: {fileID: 636990846516812732}
+  - component: {fileID: 2316309059195888670}
   m_Layer: 0
   m_Name: Character
   m_TagString: Player
@@ -182,7 +182,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40f99fe6bad35c3499710ad252cdd5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  regeneratePercentage: 70
   takeDamage:
     m_PersistentCalls:
       m_Calls:
@@ -220,6 +219,8 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  maxHealth: 0
+  currentHealth: 0
 --- !u!54 &6742760884462094681
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -250,24 +251,6 @@ CapsuleCollider:
   m_Height: 2.13
   m_Direction: 1
   m_Center: {x: 0, y: 0.99, z: 0}
---- !u!114 &4833127877274240262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3306818609460779085}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97ded570cca2f4c4da54cf5eb771437a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startingLevel: 1
-  progression: {fileID: 11400000, guid: 8edbb313d8f670e4f8b4d4c3b22b82da, type: 2}
-  levelUpParticleEffect: {fileID: 0}
-  characterClass: 0
-  characterRace: 0
-  shouldUseModifier: 0
 --- !u!195 &8912045929951192526
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -338,6 +321,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemList: []
+  inventoryData: []
   currency: 0
 --- !u!114 &-6857418748001824829
 MonoBehaviour:
@@ -399,6 +383,27 @@ MonoBehaviour:
   followDistance: 4
   isFollowing: 0
   moveSpeed: 0
+--- !u!114 &2316309059195888670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3306818609460779085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66124e84bfa8118428bec30b3ee3a367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingLevel: 1
+  levelUpParticleEffect: {fileID: 0}
+  characterClass: 0
+  characterRace: 0
+  majorAttributePoints: 0
+  minorAttributePoints: 0
+  characterBaseStat: []
+  characterBaseStatData: {fileID: 11400000, guid: 84080f5acb7e6a546b6e076e7c33a5cc,
+    type: 2}
 --- !u!1001 &3024920243511531315
 PrefabInstance:
   m_ObjectHideFlags: 0

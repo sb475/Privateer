@@ -11,7 +11,7 @@ namespace RPG.Items
         [SerializeField] AnimatorOverrideController animatorOverride = null;
         [SerializeField] Armor equippedPrefab = null;
         [SerializeField] ArmorType armorType;
-        const string weaponName = "Armor";
+        const string armorName = "Armor";
 
         private void Awake()
         {
@@ -31,7 +31,7 @@ namespace RPG.Items
                 //This should be the armor location or slot. Potential better to use a mesh rendered change. Not sure.
                 Transform handTransform = GetTransform(rightHand, leftHand);
                 armor = Instantiate(equippedPrefab, handTransform);
-                armor.gameObject.name = weaponName;
+                armor.gameObject.name = armorName;
 
             }
 
@@ -40,10 +40,10 @@ namespace RPG.Items
 
         private void DestroyOld(Transform rightHand, Transform leftHand)
         {
-            Transform oldWeapon = rightHand.Find(weaponName);
+            Transform oldWeapon = rightHand.Find(armorName);
             if (oldWeapon == null)
             {
-                oldWeapon = leftHand.Find(weaponName);
+                oldWeapon = leftHand.Find(armorName);
             }
             if (oldWeapon == null) return;
 

@@ -10,7 +10,7 @@ namespace RPG.Attributes
         [SerializeField] RectTransform foreground = null;
         [SerializeField] Canvas rootCanvas = null;
 
-        void Update()
+        void LateUpdate()
         {
             if (Mathf.Approximately(healthComponent.GetFraction(), 0) || Mathf.Approximately(healthComponent.GetFraction(), 1 ))
             {

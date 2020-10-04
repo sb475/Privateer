@@ -4822,8 +4822,7 @@ GameObject:
   - component: {fileID: 5089960477826736342}
   - component: {fileID: 5089960477826736170}
   - component: {fileID: 5089960477826736171}
-  - component: {fileID: 5089960477826736340}
-  - component: {fileID: 5089960477826736341}
+  - component: {fileID: 1263296253343626816}
   m_Layer: 0
   m_Name: Missile
   m_TagString: Untagged
@@ -4860,12 +4859,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tracking: 0
+  trackingSpeed: 0.5
+  rateOfFire: 10
+  currentWeaponConfig: {fileID: 0}
   hardPointType: 2
-  timeBetweenAttacks: 1
   hardPoint: {fileID: 5089960477826736342}
   defaultWeapon: {fileID: 11400000, guid: 6a1416ea1224a324ea110d0b0ca24a08, type: 2}
   launchPosition: {fileID: 0}
-  currentWeaponConfig: {fileID: 0}
 --- !u!95 &5089960477826736171
 Animator:
   serializedVersion: 3
@@ -4885,7 +4885,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &5089960477826736340
+--- !u!114 &1263296253343626816
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4894,43 +4894,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 5089960477826736343}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97ded570cca2f4c4da54cf5eb771437a, type: 3}
+  m_Script: {fileID: 11500000, guid: 0a2a263a07bf8034d9c5415d859c93f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingLevel: 1
-  progression: {fileID: 11400000, guid: 8edbb313d8f670e4f8b4d4c3b22b82da, type: 2}
-  levelUpParticleEffect: {fileID: 0}
-  characterClass: 0
-  characterRace: 0
-  shouldUseModifier: 0
---- !u!114 &5089960477826736341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5089960477826736343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40f99fe6bad35c3499710ad252cdd5df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  regeneratePercentage: 70
   takeDamage:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: RPG.Attributes.Health+TakeDamageEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+    m_TypeName: RPG.Attributes.ObjectAttributes+TakeDamageEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   onDie:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  hasBeenAttacked:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  isDead: 0
+  durability: 20
 --- !u!1001 &5089960477251915625
 PrefabInstance:
   m_ObjectHideFlags: 0

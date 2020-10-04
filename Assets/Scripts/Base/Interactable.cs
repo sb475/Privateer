@@ -1,25 +1,29 @@
 using RPG.Base;
 using RPG.Control;
 using RPG.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPG.Base
 {
+
+    [RequireComponent(typeof(Outline))]
     public class Interactable : MonoBehaviour, IRaycastable
     {
+
+        public delegate void DefaultInteraction(ControllableObject controllable);
+        public DefaultInteraction defaultInteraction;
 
         public List<ActionMenuOptions> actionMenuOptions;
         public float interactRadius = 3f;
         bool hasInteracted = false;
         public CursorType defaultCursorType;
-
         public Transform interactionPoint;
-
         public string displayName;
-
         Outline objectOutline;
+        
 
         public virtual void Awake()
         {
@@ -34,14 +38,37 @@ namespace RPG.Base
 
         public virtual void DefaultInteract(ControllableObject callingController)
         {
-            // This method is meant to be overwritten
-            //Debug.Log("Interacting with " + transform.name);
+            StartCoroutine(MoveToDefault(callingController, () => defaultInteraction(callingController)));
         
         }
 
-         private void OnDrawGizmosSelected() {
+        public IEnumerator MoveToDefault(ControllableObject callingController, Action interactableAction)
+        {
+            //Move into range for action
+            yield return new WaitUntil(() => (InRangeToInteract(callingController)));
+            interactableAction?.Invoke();
+        }
+
+
+        bool InRangeToInteract(ControllableObject callingController)
+        {
+            float distanceToInteractable = Vector3.Distance(transform.position, callingController.transform.position);
+            if (distanceToInteractable > interactRadius)
+            {
+                callingController.mov.MoveToInteract(this);
+                return false;
+                // callingController.MoveToTarget
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+
+        private void OnDrawGizmosSelected() {
              Gizmos.color = Color.yellow;
-             Gizmos.DrawWireSphere(interactionPoint.position, interactRadius);
+             Gizmos.DrawWireSphere(transform.position, interactRadius);
          }
 
         public virtual bool HandleRaycast(PlayerController callingController)

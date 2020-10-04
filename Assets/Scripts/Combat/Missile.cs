@@ -7,38 +7,45 @@ namespace RPG.Combat
     {
         public float intializeTime= 3f;
         Rigidbody missileBody;
-        public float turn;
+        [SerializeField] Vector3 direction;
+        public Vector3 launchDirection;
+        public float turnSpeed;
         float timer;
+        IDamagable missileHealth;
 
         private void Awake() {
-            missileBody = GetComponent<Rigidbody>();
+            missileHealth = GetComponent<IDamagable>();
+        }
+        private void Update() {
+            timer += Time.deltaTime;
         }
 
         public override void Start()
         {
             
+
+            if (missileHealth.IsDead())
+            {
+                Destroy(this);
+            }
+
+            transform.LookAt(launchDirection);
         }
 
-        public override void Update() {
-            timer += Time.deltaTime;
-            
-        }
 
-        
 
-        float friction = 0.985f; // applied each frame 
-        float accel = 40.0f; // meters/second. This might be way off
-
-        private void FixedUpdate()
+        public override void FixedUpdate()
         {
-
-            missileBody.velocity = transform.forward * projectileSpeed;
-            var rocketTargetRotation = Quaternion.LookRotation(GetAimLocation() - transform.position);
+            base.FixedUpdate();
 
             if (timer > intializeTime)
             {
-            missileBody.MoveRotation(Quaternion.RotateTowards(transform.rotation, rocketTargetRotation, turn));
+            direction = GetAimLocation() - this.transform.position;
+            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * turnSpeed);
             }
+
+            
+            
             
         }
     }

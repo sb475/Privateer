@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using RPG.Control;
+using RPG.Items;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,8 +13,11 @@ namespace RPG.Global {
     public class WorldController : MonoBehaviour
     {
 
+        public static WorldController instance;
+
         [SerializeField] public GameState state;
         bool announce;
+        public CoverObject [] coverObjects;
 
         [SerializeField] StateChangeEvent stateChangeEvent;
         [System.Serializable]
@@ -25,6 +29,7 @@ namespace RPG.Global {
         [SerializeField] GameObject battleController;
 
         private void Awake() {
+            instance = this;
         }
 
         private void UpdateGameState(object sender, GameState e)
@@ -37,6 +42,8 @@ namespace RPG.Global {
             GameEvents.instance.OnGameStateChange += UpdateGameState;
             state = GameState.OUTOFCOMBAT;
             announce = true;
+
+            coverObjects = GameObject.FindObjectsOfType<CoverObject>();
         }
 
         // Update is called once per frame
@@ -55,6 +62,11 @@ namespace RPG.Global {
                 break;
             }
 
+        }
+
+        public CoverObject [] GetCoverSpots()
+        {
+            return coverObjects;
         }
        
         private string ChangeStateText(GameState gameState)

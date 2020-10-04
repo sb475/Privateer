@@ -9,10 +9,10 @@ namespace RPG.UI
 {
     public class DisplayStatSlider: MonoBehaviour
     {
-        public Stat statToDisplay;
+        public StatType statToDisplay;
         Slider statSlider;
         [SerializeField] bool isMajorAttribute;
-        private BaseStats characterBastStats;
+        private CharacterStats characterBastStats;
         private CharacterStats characterStats;
 
         private void Awake() {
@@ -33,7 +33,7 @@ namespace RPG.UI
 
         public void DisplayAttributeSlider()
         {
-            characterBastStats = GameEvents.instance.uiController.GetCrewToDisplay().GetComponent<BaseStats>();
+            characterBastStats = GameEvents.instance.uiController.GetCrewToDisplay().GetComponent<CharacterStats>();
             GetComponent<Slider>().value = characterBastStats.GetStat(statToDisplay);
         }
 
@@ -42,25 +42,25 @@ namespace RPG.UI
             Debug.Log ("button pushed");
             if (slider.isMajorAttribute)
             {
-                if (GameEvents.instance.uiController.GetCrewToDisplay().GetComponent<CharacterStats>().SpendFromMajor(slider.statToDisplay))
-                {
+            //     if (GameEvents.instance.uiController.GetCrewToDisplay().GetComponent<CharacterStats>().SpendFromMajor(slider.statToDisplay))
+            //     {
 
-                }
-                else
-                {
-                    return;
-                }
-            }
-            else{
+            //     }
+            //     else
+            //     {
+            //         return;
+            //     }
+            // }
+            // else{
 
-                if (GameEvents.instance.uiController.GetCrewToDisplay().GetComponent<CharacterStats>().SpendFromMinor(slider.statToDisplay))
-                {
+            //     if (GameEvents.instance.uiController.GetCrewToDisplay().GetComponent<CharacterStats>().SpendFromMinor(slider.statToDisplay))
+            //     {
 
-                }
-                else
-                {
-                    return;
-                }
+            //     }
+            //     else
+            //     {
+            //         return;
+            //     }
             }
                 slider.DisplayAttributeSlider();
         }

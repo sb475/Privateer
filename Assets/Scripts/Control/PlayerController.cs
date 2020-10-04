@@ -52,7 +52,7 @@ namespace RPG.Control
         }
 
         [SerializeField] CursorMapping[] cursorMappings = null;
-        [SerializeField] float maxNavMeshProjectionDistance = 1f;
+        [SerializeField] float maxNavMeshProjectionDistance;
         [SerializeField] float maxNavPathLength = 40;
 
         [SerializeField] private UIPlayerInventory uIInventory;
@@ -76,6 +76,7 @@ namespace RPG.Control
 
         private void Update()
         {
+            maxNavMeshProjectionDistance = cameraControl.GetCameraZoom();
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 if (isPaused)
@@ -89,6 +90,11 @@ namespace RPG.Control
                     isPaused = true;
 
                 }
+            }
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                currentControllable.GetComponent<CrewMember>().GetWeaponOut();
             }
 
             if (InteractWithUI()) return;
@@ -109,32 +115,35 @@ namespace RPG.Control
 #region DeterminePlaterControl
 
         private void DetermineShipControl ()
-        {
-            if (cameraControl.GetCameraZoom() < zoomContolTransition)
-            {  //add pause when zooming in
-                if (controllingShip)
-                {
-                    SetCamera();
-                    SetControllable(lastControlledCrew);
-                    controllingShip = false;
-                    maxNavPathLength = 40f;
-                }
-                controllingShip = false;
-                MoveWithKeyPress();
-            }
-            else
+        { if (canControlShip)
             {
-                //need to add a performace modifier to control scale when zooming in and out.
-                controllingShip = true;
-                if (currentControllable != ship)
-                {
-                    SetCamera();
-                    lastControlledCrew = (CrewMember)currentControllable;
-                    SetControllable(ship);
-                    maxNavPathLength = 2000f;
-                }
-                currentControllable.mov.KeyMovement();
                 
+                if (cameraControl.GetCameraZoom() < zoomContolTransition)
+                {  //add pause when zooming in
+                    if (controllingShip)
+                    {
+                        SetCamera();
+                        SetControllable(lastControlledCrew);
+                        controllingShip = false;
+                        maxNavPathLength = 40f;
+                    }
+                    controllingShip = false;
+                    MoveWithKeyPress();
+                }
+                else
+                {
+                    //need to add a performace modifier to control scale when zooming in and out.
+                    controllingShip = true;
+                    if (currentControllable != ship)
+                    {
+                        SetCamera();
+                        lastControlledCrew = (CrewMember)currentControllable;
+                        SetControllable(ship);
+                        maxNavPathLength = 2000f;
+                    }
+                    currentControllable.mov.KeyMovement();
+                    
+                }
             }
         }
 
@@ -281,8 +290,8 @@ namespace RPG.Control
                                 interactable = hit.collider.GetComponent<Interactable>();
                                 if (interactable != null)
                                 {
-                                    RPG_TaskSystem.Task atkTask = new RPG_TaskSystem.Task.Default { interactable = interactable, controllable = currentControllable };
-                                    currentControllable.taskSystem.AddTask(atkTask);
+                                    RPG_TaskSystem.Task defaultTask = new RPG_TaskSystem.Task.Default { interactable = interactable, controllable = currentControllable };
+                                    currentControllable.taskSystem.AddTask(defaultTask);
                                 }
                             }                  
 
@@ -406,17 +415,19 @@ namespace RPG.Control
         {
             Vector3 target;
                 bool hasHit = RaycastNavMesh(out target);
+
                 if (hasHit)
                 {
                     if (Input.GetMouseButtonDown(0))
                     {
-
+                        Debug.Log("Mouse clicked");
+                        
+                        
                         StopAllCoroutines();
                         ActionMenu.HideMenuOptions_Static();
-                        
-                        RPG_TaskSystem.Task task = new RPG_TaskSystem.Task.MoveToPosition{targetPoistion = target};
-                        currentControllable.taskSystem.AddTask(task);
-                        Debug.Log(target);
+
+                        RPG_TaskSystem.Task.MoveToPosition task = new RPG_TaskSystem.Task.MoveToPosition{targetPoistion = target};
+                        currentControllable.taskSystem.AddTask(task);                  
                     }
                     SetCursor(CursorType.Movement);
                     return true;
