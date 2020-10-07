@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using RPG.Base;
+using RPG.Items;
 using UnityEngine;
 
 namespace RPG.Control
@@ -20,7 +22,6 @@ namespace RPG.Control
             }
             public class Attack : Task
             {
-
                 
             }
             public class Trade : Task
@@ -33,6 +34,7 @@ namespace RPG.Control
             }
             public class Pickup : Task
             {
+                public ItemInInventory item;
   
             }
             public class Inspect : Task
@@ -45,7 +47,10 @@ namespace RPG.Control
             }
             public class Default : Task
             {
-                
+                public Task task;
+
+
+
             }
            
 

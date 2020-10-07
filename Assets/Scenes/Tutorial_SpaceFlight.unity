@@ -2037,6 +2037,12 @@ PrefabInstance:
       propertyPath: startingLevel
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8619467894135620381, guid: a8697d8b67507044e8939d47e3903b86,
+        type: 3}
+      propertyPath: characterBaseStatData
+      value: 
+      objectReference: {fileID: 11400000, guid: 84080f5acb7e6a546b6e076e7c33a5cc,
+        type: 2}
     m_RemovedComponents:
     - {fileID: 0}
     - {fileID: 1830737791875620432, guid: a8697d8b67507044e8939d47e3903b86, type: 3}
@@ -5805,6 +5811,12 @@ PrefabInstance:
       propertyPath: characterAttributes.characterAttributes.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8619467894135620381, guid: a8697d8b67507044e8939d47e3903b86,
+        type: 3}
+      propertyPath: characterBaseStatData
+      value: 
+      objectReference: {fileID: 11400000, guid: 84080f5acb7e6a546b6e076e7c33a5cc,
+        type: 2}
     m_RemovedComponents:
     - {fileID: 1830737791875620432, guid: a8697d8b67507044e8939d47e3903b86, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a8697d8b67507044e8939d47e3903b86, type: 3}
@@ -94973,6 +94985,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+  coverObjects: []
   stateChangeEvent:
     m_PersistentCalls:
       m_Calls:

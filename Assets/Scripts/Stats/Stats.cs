@@ -32,6 +32,21 @@ namespace RPG.Stats
         public float baseValue;
         public string statDescription;
 
-        }
+    }
+
+    [System.Serializable]
+    public class Stat_Test
+    {
+        public StatType statType;
+        public float baseValue;
+        public string statDescription;
+
+        /* void statType(StatType statType, float value, string statDescription)
+        {
+
+        } */
+    }
+
+    
         
 }

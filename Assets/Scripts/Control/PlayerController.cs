@@ -290,7 +290,8 @@ namespace RPG.Control
                                 interactable = hit.collider.GetComponent<Interactable>();
                                 if (interactable != null)
                                 {
-                                    RPG_TaskSystem.Task defaultTask = new RPG_TaskSystem.Task.Default { interactable = interactable, controllable = currentControllable };
+                                    RPG_TaskSystem.Task defaultTask = interactable.GetDefaultAction();
+                                    //new RPG_TaskSystem.Task.Default { interactable = interactable, task = , controllable = currentControllable };
                                     currentControllable.taskSystem.AddTask(defaultTask);
                                 }
                             }                  
