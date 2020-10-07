@@ -15,11 +15,12 @@ namespace RPG.Combat
         public IDamagable target = null;
         public float damage = 0;
         public GameObject instigator = null;
+        public float currentSpeed;
 
 
         public virtual void Start()
         {
-           transform.LookAt(GetAimLocation());
+           //transform.LookAt(GetAimLocation());
         }
 
 
@@ -27,7 +28,7 @@ namespace RPG.Combat
         public virtual void FixedUpdate()
         {
             if (target == null) return;
-
+            currentSpeed = projectileSpeed * Time.deltaTime;
             transform.Translate(0, 0, projectileSpeed * Time.deltaTime);
         }
 
@@ -37,7 +38,12 @@ namespace RPG.Combat
             this.damage = damage;
             this.instigator = instigator;
 
-            Destroy(gameObject, maxLifeTime);
+            DestroyProjectile(gameObject, maxLifeTime);
+        }
+
+        public float GetCurrentSpeed ()
+        {
+            return currentSpeed;
         }
 
         public Vector3 GetAimLocation()
@@ -52,12 +58,14 @@ namespace RPG.Combat
             // (Vector3.right * targetCapsule.radius) +
         }
 
-        public void OnTriggerEnter(Collider other)
+        public virtual void OnTriggerEnter(Collider other)
         {
+            Debug.Log("Hit " + other.gameObject.name);
             if (other.GetComponent<IDamagable>() != target) return;
 
             if (target.IsDead()) return;
-            
+
+            print(instigator + "hit " + target.gameObject.name + " for " + damage);
             target.TakeDamage(instigator, damage);
 
             projectileSpeed = 0;
@@ -66,13 +74,19 @@ namespace RPG.Combat
             {
                 Instantiate(hitEffect, GetAimLocation(), transform.rotation);
             }
+
             foreach (GameObject toDestroy in destroyOnHit)
             {
-                Destroy(toDestroy);
+                //the zero in this case just refers to destroy immediately.
+                DestroyProjectile(toDestroy, 0f);
             }
-            Destroy(gameObject, lifeAfterImpact);
+            DestroyProjectile(gameObject, 0f);
 
+        }
 
+        public virtual void DestroyProjectile(Object obj, float t)
+        {
+            Destroy(obj, t);
         }
     }
 

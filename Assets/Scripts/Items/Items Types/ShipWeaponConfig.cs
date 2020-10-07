@@ -16,7 +16,7 @@ namespace RPG.Items
         [SerializeField] float weaponRange = 100f;
         [SerializeField] float actionPointCost = 0f;
         public float rateOfFire;
-        [SerializeField] Projectile projectile = null;
+        public Projectile projectile = null;
         public HardPointType hardPointType;
         const string weaponName = "ShipSystem";
 
@@ -35,7 +35,7 @@ namespace RPG.Items
             if (equippedPrefab != null)
             {
 
-                weapon = Instantiate(equippedPrefab, hardPoint.transform);
+                weapon = Instantiate(equippedPrefab, hardPoint.transform.position, Quaternion.identity, hardPoint);
                 weapon.gameObject.name = weaponName;
             }
 
@@ -65,9 +65,15 @@ namespace RPG.Items
         //this where we will be able to add specific details for targetting. Also need to update location for tip of barrel.
         public void LaunchProjectile(Transform hardPoint, IDamagable target, GameObject instigator, float calculatedDamage)
         {
+
             
-            Projectile projectileInstance =  projectileInstance = Instantiate(projectile, hardPoint.position, Quaternion.LookRotation(hardPoint.forward));                       
+            Projectile projectileInstance = Instantiate(projectile, hardPoint.position, hardPoint.rotation);                       
             projectileInstance.SetTarget(target, instigator, calculatedDamage);
+
+            if (hardPointType == HardPointType.Missile)
+            {
+                target.TargetLocked((Missile)projectileInstance);
+            }
         }
 
         public bool HasProjectile()

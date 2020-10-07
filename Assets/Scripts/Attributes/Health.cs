@@ -5,6 +5,7 @@ using RPG.Stats;
 using GameDevTV.Utils;
 using UnityEngine.Events;
 using RPG.Global;
+using RPG.Combat;
 
 namespace RPG.Attributes
 {
@@ -163,6 +164,11 @@ namespace RPG.Attributes
                 Die();
 
             }
+        }
+
+        public void TargetLocked(Missile missile)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

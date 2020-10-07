@@ -317,8 +317,12 @@ namespace RPG.Combat
         }
 
         private void OnDrawGizmos() {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position, currentWeaponConfig.GetRange());
+            if (currentWeaponConfig != null)
+            {
+                Gizmos.color = Color.green;
+                Gizmos.DrawWireSphere(transform.position, currentWeaponConfig.GetRange());
+            }
+
         }
 
         public float GetWeaponDamage()
