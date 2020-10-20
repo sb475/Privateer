@@ -22,19 +22,21 @@ public class Guard : GAgent
       //hostile = GWorld.Instance.GetList("hostiles").GetResource(0);
 
        Invoke("LookForHostiles", statusCheck);
-
     }
 
     void LookForHostiles()
     {
         if (hostile == null) return;
-        if (Vector3.Distance(hostile.transform.position, this.transform.position) < 15)
+        if (Vector3.Distance(hostile.transform.position, this.transform.position) < 50)
         {
-           beliefs.ModifyState("threatened", 1);
+            if (Vector3.Distance(hostile.transform.position, this.transform.position) < 10)
+            {
+                beliefs.ModifyState("tooClose", 1);
+            }
+            beliefs.ModifyState("threatened", 1);
            CancelCurrentGoal();
         }
         Invoke("LookForHostiles", statusCheck);
     }
-
 
 }

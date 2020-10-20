@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UIElements;
 using RPG.Control;
+using RPG.Combat;
 
 namespace RPG.AI
 {
@@ -36,6 +37,9 @@ namespace RPG.AI
 
         public IEnumerator startAction;
 
+        public Fighter fighter;
+
+
         GPlanner planner;
         Queue<GAction> actionQueue;
         public GAction currentAction;
@@ -44,6 +48,11 @@ namespace RPG.AI
         bool actionStarted = false;
 
         Vector3 destination = Vector3.zero;
+
+        private void Awake()
+        {
+            fighter = GetComponent<Fighter>();
+        }
 
         // Start is called before the first frame update
         public void Start()

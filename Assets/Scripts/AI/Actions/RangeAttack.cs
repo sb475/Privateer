@@ -1,5 +1,6 @@
 ﻿using RPG.AI;
 using RPG.Combat;
+using RPG.Items;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,8 +11,6 @@ namespace RPG.AI
 
     public class RangeAttack: GAction
     {
-        Fighter fighter;
-        float weaponRange;
         public RangeAttack()
         {
             actionName = "Range Attack";
@@ -20,12 +19,26 @@ namespace RPG.AI
 
         public override bool PrePerform()
         {
+            
             target = GWorld.Instance.GetList("hostiles").GetResource(0);
+            if (target == null) return false;
 
-            fighter = GetComponent<Fighter>();
+            //if the current weapon does not have projectiles, look to see if secondary does, if not cannot range attack.
+            if (!agent.fighter.currentWeaponConfig.HasProjectile())
+            {
+                if ((agent.fighter.equipment.secondaryWeapon as WeaponConfig).HasProjectile())
+                {
+                    if (agent.fighter.currentWeaponConfig == agent.fighter.equipment.secondaryWeapon) return false;
+                    agent.fighter.EquipWeapon(agent.fighter.equipment.LoadWeapon(agent.fighter.equipment.secondaryWeapon));
+                }
+                else
+                {
+                    return false;
+                }
+            }
 
-            weaponRange = fighter.GetWeaponRange();
-            if (Vector3.Distance(target.transform.position, this.transform.position) <= weaponRange)
+            float weaponRange = agent.fighter.GetWeaponRange();
+            if (Vector3.Distance(target.transform.position, this.transform.position) < weaponRange)
             {
                 actionDestination = this.transform.position;
                 return true;
@@ -35,12 +48,8 @@ namespace RPG.AI
                 Vector3 targetDir = this.transform.position - target.transform.position;
                 Vector3 inRangeForAttackPos = target.transform.position + targetDir.normalized * weaponRange;
                 actionDestination = inRangeForAttackPos;
-                return false;
-            }    
-           
-
-            
-
+                return true;
+            }  
         }
 
         public override bool PerformAction()
@@ -56,6 +65,7 @@ namespace RPG.AI
             //Debug.Log(this + " PostPerform");
 
             beliefs.RemoveState("threatened");
+            //beliefs.RemoveState("readyToEngage");
             target = null;
             timesInterrupted = 0;
             ResetAction();

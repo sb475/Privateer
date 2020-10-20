@@ -20,10 +20,10 @@ namespace RPG.Items
         IAttack IAttack;
 
         [Header("Equipped Items")]
-        [SerializeField] private ItemConfig armor = null;
-        [SerializeField] private ItemConfig primaryWeapon = null;
-        [SerializeField] private ItemConfig secondaryWeapon = null;
-        [SerializeField] private ItemConfig accessory = null;
+        public ItemConfig armor = null;
+        public ItemConfig primaryWeapon = null;
+        public ItemConfig secondaryWeapon = null;
+        public ItemConfig accessory = null;
 
 
         [Header("For Player - ItemSlot Mapping")]
@@ -59,16 +59,11 @@ namespace RPG.Items
                 }
         }
 
-        
-
         public List<ItemConfig> GetEquippedItems ()
         {
             return equippedItems;
         }
-            
 
-
-       
         private IEnumerator InitializeEquipmentInSlots()
         {
             yield return new WaitUntil(() => (LoadWeaponInSlots()));
@@ -183,7 +178,6 @@ namespace RPG.Items
         {
            foreach (var item in equippedItems)
             {
-                
                 if (item == null) continue;
                 
                 if (item == equippedItems[0]) continue;
