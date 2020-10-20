@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2eec4d90ca2237479ebaf2ba8010844, type: 3}
+  m_Name: MissileLauncher
+  m_EditorClassIdentifier: 
+  itemType: 1
+  mass: 0
+  isStackable: 0
+  isEquippable: 1
+  baseCost: 0
+  inWolrdItemPrefab: {fileID: 0}
+  itemIcon: {fileID: 0}
+  itemDescription: 
+  genericModifier:
+    additiveModifiers: []
+    percentageModifiers: []
+  animatorOverride: {fileID: 0}
+  equippedPrefab: {fileID: 5409181791976686694, guid: 4b03e4552f3d3c14e9d25f24c645c6df,
+    type: 3}
+  weaponDamage: 5
+  damageBonus: 0
+  weaponRange: 500
+  actionPointCost: 0
+  rateOfFire: 30
+  projectile: {fileID: 7278496815475724841, guid: 6d1e1975b8e2b6049842d62d5f5e404b,
+    type: 3}
+  hardPointType: 2
