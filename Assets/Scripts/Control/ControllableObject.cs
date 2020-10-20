@@ -1,9 +1,14 @@
 using System;
 using System.Collections;
+using PixelCrushers.DialogueSystem;
 using RPG.Attributes;
 using RPG.Base;
 using RPG.Combat;
+using RPG.Events;
+using RPG.Items;
 using RPG.Movement;
+using RPG.Stats;
+using RPG.UI;
 using UnityEngine;
 
 namespace RPG.Control
@@ -22,8 +27,8 @@ namespace RPG.Control
         public StateManager turnManager;
         public IDamagable health;
         public IAttack IAttack;
-        public delegate void DefaultBehviour();
-        public DefaultBehviour defaultBehviour;
+        public delegate void DefaultBehaviour();
+        public DefaultBehaviour defaultBehaviour;
         [SerializeField] private TaskState taskState;
         public RPG_TaskSystem taskSystem;
         float waitingTimer;
@@ -169,14 +174,28 @@ namespace RPG.Control
         //standards interaction pattern functions.
         public void ExecuteTask_Trade(RPG_TaskSystem.Task.Trade task)
         {
-            task.interactable.ShopMenu(this);
+            if (task.interactable.GetComponent<Shop>() == null)
+            {
+                Debug.Log ("I don't have anything to trade");
+            }
+            else
+            {
+                task.interactable.GetComponent<Shop>().OpenShopMenu();
+            }
+            
             
             taskState = TaskState.waiting;
         }
         public void ExecuteTask_Talk(RPG_TaskSystem.Task.Talk task)
         {
 
-            task.interactable.TalkToNPC(this);
+            if (task.interactable.GetComponent<DialogueSystemTrigger>() == null)
+            {
+                Debug.Log("I don't have anything to talk about");
+                return;
+            }
+            task.interactable.GetComponent<DialogueSystemTrigger>().OnUse();
+            //task.interactable.TalkToNPC(this);
             taskState = TaskState.waiting;
         }
         public void ExecuteTask_Open(RPG_TaskSystem.Task.Open task)
@@ -186,9 +205,10 @@ namespace RPG.Control
             taskState = TaskState.waiting;
         }
         public void ExecuteTask_PickUp(RPG_TaskSystem.Task.Pickup task)
-        {
+        {   
+            ItemInWorld itemInWorld = task.interactable as ItemInWorld;
 
-            task.interactable.PickUp(this);
+            GetComponent<Inventory>().AddItem(itemInWorld.PickUpItem());
             taskState = TaskState.waiting;
         }
         public void ExecuteTask_Inspect(RPG_TaskSystem.Task.Inspect task)
@@ -200,9 +220,14 @@ namespace RPG.Control
         }
         public void ExecuteTask_Scan(RPG_TaskSystem.Task.Scan task)
         {
-
+            CharacterStats targetStats = task.interactable.GetComponent<CharacterStats>();
             Debug.Log("Scanning ... beep...boop");
-            task.interactable.Scan(this);
+
+            Debug.Log(gameObject.name);
+
+            // Debug.Log(combatTargetStat.GetStat(Stat.Armor));
+            // Debug.Log(combatTargetStat.GetStat(Stat.Health));
+            Debug.Log(targetStats.GetLevel());
             taskState = TaskState.waiting;
         }
         public void ExecuteTask_Default(RPG_TaskSystem.Task.Default task)

@@ -34,7 +34,7 @@ namespace RPG.Stats
                 characterPerks.Add(perkToAdd);
         }
 
-        internal void AddAttribute(StatType statToDisplay)
+        internal void AddAttribute(StatName statToDisplay)
         {
             foreach (Modifier mod in perkModifiers)
             {
@@ -64,7 +64,7 @@ namespace RPG.Stats
 
         }
 
-        public IEnumerable<float> GetAdditiveModifiers(StatType stat)
+        public IEnumerable<float> GetAdditiveModifiers(StatName stat)
         {
             float totalStatValue = 0;
 
@@ -89,7 +89,7 @@ namespace RPG.Stats
             yield return totalStatValue;
         }
 
-        public IEnumerable<float> GetPercentageModifiers(StatType stat)
+        public IEnumerable<float> GetPercentageModifiers(StatName stat)
         {
 
             foreach (var perk in characterPerks)

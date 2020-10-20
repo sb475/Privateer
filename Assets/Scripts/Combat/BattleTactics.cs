@@ -23,7 +23,7 @@ namespace RPG.Combat
         [System.Serializable]
         struct Modifier
         {
-            public StatType stat;
+            public StatName stat;
             public float value;
         }
 
@@ -70,12 +70,12 @@ namespace RPG.Combat
         }
 
 
-        public IEnumerable<float> GetAdditiveModifiers(StatType stat)
+        public IEnumerable<float> GetAdditiveModifiers(StatName stat)
         {
             yield return 0;
         }
 
-        public IEnumerable<float> GetPercentageModifiers(StatType stat)
+        public IEnumerable<float> GetPercentageModifiers(StatName stat)
         {
             Debug.Log("BattleTactics " + stat);
             if (activeModifiers == null || activeModifiers == noModifiers) yield return 0;

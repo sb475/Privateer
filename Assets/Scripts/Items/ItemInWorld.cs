@@ -20,9 +20,17 @@ namespace RPG.Items
             displayName = item.name;
             interactionPoint = gameObject.transform;
             InitializeOutline();
-            defaultInteraction = PickUp;
+            defaultAction = new RPG_TaskSystem.Task.Pickup {interactable = this};
 
         }
+
+        public ItemInInventory PickUpItem()
+        {
+            Destroy(gameObject);
+            InfoToolTip.HideToolTip_Static();
+            return new ItemInInventory { itemObject = item, itemQuantity = itemQuantity };
+        }
+
 
         // private void OnTriggerEnter(Collider other)
         // {
@@ -43,13 +51,10 @@ namespace RPG.Items
         //         }
         // }
 
-        public override void PickUp(ControllableObject playerController)
-        {
-            (playerController as CrewMember).AddItemToInventory(item, itemQuantity);
+        // public override void PickUp(ControllableObject playerController)
+        // {
 
-            Destroy(gameObject);
-            InfoToolTip.HideToolTip_Static();
-        }
+        // }
 
         //automate placement of things later
         // private void ShowPrefab (ItemConfig item)

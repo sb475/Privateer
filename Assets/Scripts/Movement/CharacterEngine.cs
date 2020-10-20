@@ -26,12 +26,10 @@ namespace RPG.Movement
         NavMeshAgent navMeshAgent;
         IDamagable health;
         public float moveSpeed = 0f;
-        private float speedSmoothVelocity = 0f;
-        private float speedSmoothTime = 0.1f;
-        bool keyMove;
+
         
         float angleSmoothVelocity = 0f;
-        private float angleSmoothTime = 0.1f ;
+        public float angleSmoothTime = 0.1f ;
 
         private void Awake() 
         {
@@ -42,25 +40,12 @@ namespace RPG.Movement
             controller = GetComponent<CharacterController>();
             cam = Camera.main.transform;
         }
-
-        private void Start() {
-            navMeshAgent.Warp(transform.position);
-        }
         // Update is called once per frame
         void Update()
         {
             navMeshAgent.enabled = !health.IsDead();
 
-            if (keyMove)
-            {
-                GetComponent<Animator>().SetFloat("forwardMovement", moveSpeed);
-                
-            }
-            else
-            {
-                NavMeshAnimator();
-            }
-            
+            NavMeshAnimator();
 
             if (isFollowing)
             {
@@ -77,39 +62,19 @@ namespace RPG.Movement
             
 
             Vector3 direction = new Vector3(horizonal, 0f, vertical).normalized;
-       
+
             if (direction.magnitude >= 0.1f)
-            {
-                keyMove = true;
-                
-                GetComponent<ActionScheduler>().CancelCurrectAction();
-
-                GetComponent<ActionScheduler>().StartAction(this);
+            {   
+                ////gets the direction of the local character
                 float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
-                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref angleSmoothVelocity, angleSmoothTime);
-                transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
+                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref angleSmoothVelocity, angleSmoothTime * Time.deltaTime);
 
-                
-                Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-                controller.Move(moveDir * maxSpeed * Time.deltaTime);
+                Vector3 moveDir = Quaternion.Euler(0f, angle, 0f) * Vector3.forward;
 
-                float targetSpeed = maxSpeed * direction.magnitude;
-                moveSpeed = Mathf.SmoothDamp(moveSpeed, targetSpeed, ref speedSmoothVelocity, speedSmoothTime);
-                
-                }
-            else 
-            {
-                if (Mathf.Round(moveSpeed * 100f) >= .2f )
-                {
-                    moveSpeed = Mathf.SmoothDamp(moveSpeed, 0, ref speedSmoothVelocity, speedSmoothTime);
-                }
-                else
-                {
-                    keyMove = false;
-                }               
+                MoveToLocation(this.transform.position + moveDir);
             }
-          
+         
         }
 
         public void StartMoveAction(Vector3 destination, float speedFraction)
@@ -120,6 +85,7 @@ namespace RPG.Movement
 
         public bool MoveTo(Vector3 destination, float speedFraction)
         {
+            Debug.DrawLine(transform.position, destination, Color.red);
             
             navMeshAgent.destination = destination;
             navMeshAgent.speed = maxSpeed * Mathf.Clamp01(speedFraction);
@@ -227,6 +193,11 @@ namespace RPG.Movement
             transform.position = data.position.ToVector();
             transform.eulerAngles = data.rotation.ToVector();
             GetComponent<NavMeshAgent>().enabled = true; // restarts navmesh to allow character to move
+        }
+
+        public void SetSpeed(float speed)
+        {
+            maxSpeed = speed;
         }
     }
 }

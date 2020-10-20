@@ -18,7 +18,7 @@ namespace RPG.UI{
         [SerializeField] private CharacterStats player;
         public GameObject container;
         public GameObject displayTemplate;
-        public List<StatType> statsToDisplay;
+        public List<StatName> statsToDisplay;
         
 
         [SerializeField] TextMeshProUGUI currentHealth;
@@ -66,11 +66,11 @@ namespace RPG.UI{
             //look at decoupling this in the future
             currentHealth.text = playerToDisplay.GetComponent<Health>().GetHealthPoints().ToString();
             totalHealth.text = playerToDisplay.GetComponent<Health>().GetMaxHealthPoints().ToString();
-            displayArmor.text = playerToDisplay.GetStat(StatType.Armor).ToString();
+            displayArmor.text = playerToDisplay.GetStat(StatName.Armor).ToString();
             displayDamage.text = playerToDisplay.GetComponent<IAttack>().DamageAsString();
 
 
-            foreach (StatType stat in statsToDisplay)
+            foreach (StatName stat in statsToDisplay)
             {
            
                 RectTransform statToDisplayTransform = Instantiate(displayTemplate.transform, container.transform).GetComponent<RectTransform>();

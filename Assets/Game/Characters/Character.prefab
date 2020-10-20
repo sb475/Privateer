@@ -62,6 +62,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -95,7 +96,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3306818609460779085}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: d288a0e4a2d923b46898986e979da643, type: 3}
+  m_Avatar: {fileID: 9000000, guid: c8c20564eb982f84a96a0d4d8e357cc5, type: 3}
   m_Controller: {fileID: 9100000, guid: 43ad66a489aa3234fb3716e750d95c6a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -142,7 +143,9 @@ MonoBehaviour:
   knifeHolsterTransform: {fileID: 0}
   defaultWeapon: {fileID: 11400000, guid: ff8cba8d9da897444b9483d227de72bd, type: 2}
   defaultArmor: {fileID: 11400000, guid: 16ff9519f857fd548adf3193caf2d587, type: 2}
-  actionPoints: 0
+  currentAP: 0
+  attacking: 0
+  currentTarget: {fileID: 0}
   currentWeaponConfig: {fileID: 0}
   currentArmorConfig: {fileID: 0}
 --- !u!114 &114812628671522832
@@ -196,8 +199,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: RPG.Attributes.Health+TakeDamageEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   onDie:
     m_PersistentCalls:
       m_Calls:
@@ -212,15 +213,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   hasBeenAttacked:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   maxHealth: 0
   currentHealth: 0
+  isDead: 0
 --- !u!54 &6742760884462094681
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -342,9 +340,13 @@ MonoBehaviour:
   patrolPath: {fileID: 0}
   waypointTolerance: 1
   patrolSpeedFraction: 0.2
-  battleController: {fileID: 0}
   attitude: 0
   playerTeam: []
+  boardingLocation: {fileID: 0}
+  chosenCover: {fileID: 0}
+  closeCombatRange: 10
+  characterFaction: {fileID: 0}
+  atBoardingLocation: 0
 --- !u!114 &-5999181605297448534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -383,6 +385,7 @@ MonoBehaviour:
   followDistance: 4
   isFollowing: 0
   moveSpeed: 0
+  angleSmoothTime: 0.1
 --- !u!114 &2316309059195888670
 MonoBehaviour:
   m_ObjectHideFlags: 0

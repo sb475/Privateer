@@ -32,7 +32,7 @@ namespace RPG.Attributes
         }
         private float GetInitialHealth()
         {
-            return GetComponent<IStat>().GetStat(StatType.Health);
+            return GetComponent<IStat>().GetStat(StatName.Health);
         }
         public bool IsDead()
         {
@@ -41,7 +41,7 @@ namespace RPG.Attributes
 
         public bool RollToHit(GameObject instigator)
         {
-            float targetArmorClass = GetComponent<IStat>().GetStat(StatType.Armor);
+            float targetArmorClass = GetComponent<IStat>().GetStat(StatName.Armor);
             //add base stats to combat
             float hitRollValue = GameEvents.instance.GetRollValue(20);
             print(hitRollValue);
@@ -98,7 +98,7 @@ namespace RPG.Attributes
 
         public float GetMaxHealthPoints()
         {
-            return GetComponent<CharacterStats>().GetStat(StatType.Health);
+            return GetComponent<CharacterStats>().GetStat(StatName.Health);
         }
 
         public float GetPercentage()
@@ -127,7 +127,7 @@ namespace RPG.Attributes
             Experience experience = instigator.GetComponent<Experience>();
             if (experience == null) return;
 
-            experience.GainExperience(GetComponent<CharacterStats>().GetStat(StatType.ExperienceReward));
+            experience.GainExperience(GetComponent<CharacterStats>().GetStat(StatName.ExperienceReward));
         }
 
         public void Heal (int x)

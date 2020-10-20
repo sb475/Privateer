@@ -56,7 +56,7 @@ namespace RPG.Combat
 
         private float GetInitalActionPoints()
         {
-            return GetComponent<CharacterStats>().GetStat(StatType.ActionPoints);
+            return GetComponent<CharacterStats>().GetStat(StatName.ActionPoints);
         }
 
         private void Start() 
@@ -198,7 +198,7 @@ namespace RPG.Combat
             if (target == null) return; // guard statement
                   
     //this rolls based on the Damage of the weapon + Base damage of the weapon. Weapon damage = 6f, it's a D6 roll.
-            float damage = GetComponent<CharacterStats>().CalculateDamage(StatType.Damage, currentWeaponConfig);
+            float damage = GetComponent<CharacterStats>().CalculateDamage(StatName.Damage, currentWeaponConfig);
             
             if (currentWeapon.value != null)
             {
@@ -313,16 +313,18 @@ namespace RPG.Combat
 
         public string DamageAsString()
         {
-            return (GetComponent<CharacterStats>().GetDamage(StatType.Damage, currentWeaponConfig) + " " + currentWeaponConfig.GetDamageBonus()).ToString();
+            return (GetComponent<CharacterStats>().GetDamage(StatName.Damage, currentWeaponConfig) + " " + currentWeaponConfig.GetDamageBonus()).ToString();
         }
 
         private void OnDrawGizmos() {
-            if (currentWeaponConfig != null)
+
+            if ( currentWeaponConfig != null)
             {
+
                 Gizmos.color = Color.green;
                 Gizmos.DrawWireSphere(transform.position, currentWeaponConfig.GetRange());
-            }
 
+            }
         }
 
         public float GetWeaponDamage()

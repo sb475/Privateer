@@ -2044,11 +2044,38 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 32
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 0}
-    - {fileID: 1830737791875620432, guid: a8697d8b67507044e8939d47e3903b86, type: 3}
-  m_SourcePrefab: {fileID: 100100000, guid: a8697d8b67507044e8939d47e3903b86, type: 3}
---- !u!114 &325597633 stripped
+    - target: {fileID: 1335599714407090648, guid: a8697d8b67507044e8939d47e3903b86,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 2438519904071974552, guid: a8697d8b67507044e8939d47e3903b86,
+        type: 3}
+      propertyPath: m_WalkableMask
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 8619467894135620381, guid: a8697d8b67507044e8939d47e3903b86,
+        type: 3}
+      propertyPath: majorAttributePoints
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8619467894135620381, guid: a8697d8b67507044e8939d47e3903b86,
+        type: 3}
+      propertyPath: characterStatsData
+      value: 
+      objectReference: {fileID: 11400000, guid: b4c5685a93219ad43bd53e9ac7821910,
+        type: 2}
+    - target: {fileID: 8619467894135620381, guid: a8697d8b67507044e8939d47e3903b86,
+        type: 3}
+      propertyPath: startingLevel
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8619467894135620381, guid: a8697d8b67507044e8939d47e3903b86,
+        type: 3}
+      propertyPath: characterBaseStatData
+      value: 
+      objectReference: {fileID: 11400000, guid: 84080f5acb7e6a546b6e076e7c33a5cc,
+        type: 2}
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8619467894135620383, guid: a8697d8b67507044e8939d47e3903b86,
     type: 3}
@@ -2060,7 +2087,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d21f13a552dd60b488ab0e92c7ceec36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &325597634 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2863794154998428353, guid: a8697d8b67507044e8939d47e3903b86,
     type: 3}
@@ -5816,9 +5842,27 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1830737791875620432, guid: a8697d8b67507044e8939d47e3903b86, type: 3}
-  m_SourcePrefab: {fileID: 100100000, guid: a8697d8b67507044e8939d47e3903b86, type: 3}
+    - target: {fileID: 1335599714407090648, guid: a8697d8b67507044e8939d47e3903b86,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2438519904071974552, guid: a8697d8b67507044e8939d47e3903b86,
+        type: 3}
+      propertyPath: m_WalkableMask
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 8619467894135620381, guid: a8697d8b67507044e8939d47e3903b86,
+        type: 3}
+      propertyPath: characterAttributes.characterAttributes.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8619467894135620381, guid: a8697d8b67507044e8939d47e3903b86,
+        type: 3}
+      propertyPath: characterBaseStatData
+      value: 
+      objectReference: {fileID: 11400000, guid: 84080f5acb7e6a546b6e076e7c33a5cc,
+        type: 2}
 --- !u!114 &1298946240 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8619467894135620383, guid: a8697d8b67507044e8939d47e3903b86,

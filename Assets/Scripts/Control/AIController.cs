@@ -8,6 +8,7 @@
     using RPG.Global;
 using System;
 using RPG.Items;
+using RPG.AI;
 
 namespace RPG.Control
     {
@@ -73,21 +74,17 @@ namespace RPG.Control
 
             private void Update()
             {
-            // if (health.IsDead()) 
-            // {
-            //     turnManager.SetToNonCombat();
-            //     return;
-            // }
-
-            mover.MoveTo(target.gameObject.transform.position, 1f);
-
+                if (health.IsDead()) 
+                {
+                    turnManager.SetToNonCombat();
+                    return;
+                }
 
             // if (InCloseCombatRange()) return;
-
-
+            //if ()
             // if (isInRange()) return;
 
-            // if (HostileBehavior()) return;
+            
 
             // //if (OnGuardDuty()) return;
 

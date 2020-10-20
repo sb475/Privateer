@@ -10,7 +10,6 @@ using UnityEngine;
 namespace RPG.Control
 {
     [RequireComponent(typeof(IDamagable))]
-    [RequireComponent(typeof(AIController))]
     public class CharacterInteraction : Interactable
     {
         public Inventory inventory;
@@ -32,18 +31,11 @@ namespace RPG.Control
 
         public override void DefaultInteract(ControllableObject callingController)
         {
-                if (defaultInteraction == AttackNPC)
-                {
-                    Debug.Log ("Default was to attack!");
-                    interactRadius = callingController.GetComponent<Fighter>().currentWeaponConfig.GetRange();
-                    base.DefaultInteract(callingController);
-                }
-                else
-                {
-                    base.DefaultInteract(callingController);
-                }
+
+
 
         }
+
 
         public virtual void InitializeDefaultBehaviour()
         {
@@ -52,52 +44,23 @@ namespace RPG.Control
             {
                 if (GetComponent<AIController>().GetAttitude() == AttitudeType.Hostile)
                 {
-                    defaultInteraction = AttackNPC;
+                    defaultAction = new RPG_TaskSystem.Task.Attack { interactable = this};
+                    //defaultInteraction = AttackNPC;
                     defaultCursorType = CursorType.Combat;
                 }
             }
             if (GetComponent<Shop>() != null)
             {
-                defaultInteraction = ShopMenu;
+                defaultAction = new RPG_TaskSystem.Task.Trade { interactable = this };
+                //defaultInteraction = ShopMenu;
                 defaultCursorType = CursorType.Shop;
             }
             else if (GetComponent<DialogueSystemTrigger>() != null)
             {
-                defaultInteraction = TalkToNPC;
+                defaultAction = new RPG_TaskSystem.Task.Talk { interactable = this };
                 defaultCursorType = CursorType.Dialogue;
             }
 
-        }
-
-        public override void AttackNPC (ControllableObject controllable)
-        {
-            controllable.GetComponent<IAttack>().Attack(this.health);
-        }
-
-        public override void ShopMenu (ControllableObject controllable)
-        {
-            Shop npcShop = GetComponent<Shop>();
-            npcShop.OpenShopMenu();
-        }
-
-        public override void TalkToNPC(ControllableObject controllable)
-        {
-            if (GetComponent<DialogueSystemTrigger>() == null)
-            {
-                Debug.Log("I don't have anything to talk about");
-                return;
-            }
-            GetComponent<DialogueSystemTrigger>().OnUse();
-        }
-
-        internal void Scan(CrewMember callingController)
-        {
-            CharacterStats combatTargetStat = GetComponent<CharacterStats>();
-            Debug.Log(gameObject.name);
-
-            // Debug.Log(combatTargetStat.GetStat(Stat.Armor));
-            // Debug.Log(combatTargetStat.GetStat(Stat.Health));
-            Debug.Log(combatTargetStat.GetLevel());
         }
 
     }

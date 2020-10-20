@@ -47,27 +47,27 @@ namespace RPG.Stats
        {
             currentLevel.ForceInit();
        }
-        public float GetStat(StatType stat)
+        public float GetStat(StatName stat)
         {
             return (GetBaseStatValue(stat) + GetAdditiveModifier(stat)) * (1 + GetPercetangeModifier(stat)/100);
         }
 
-        public float CalculateDamage(StatType stat, WeaponConfig weaponConfig)
+        public float CalculateDamage(StatName stat, WeaponConfig weaponConfig)
         {
             return ((GameEvents.instance.GetRollValue((int)weaponConfig.GetDamage()) + GetBaseStatValue(stat) + GetAdditiveModifier(stat)) * (1 + GetPercetangeModifier(stat) / 100)) + weaponConfig.GetDamageBonus();
         }
 
-        public float GetDamage(StatType stat, WeaponConfig weaponConfig)
+        public float GetDamage(StatName stat, WeaponConfig weaponConfig)
         {
             return (weaponConfig.GetDamage() + GetBaseStatValue(stat) + GetAdditiveModifier(stat)) * (1 + GetPercetangeModifier(stat) / 100);
         }
         
 
-        private float GetBaseStatValue(StatType stat)
+        private float GetBaseStatValue(StatName stat)
          {
-            foreach (Stat baseStat in characterBaseStat)
+            foreach (Stat baseStat in characterBaseStat)    
             {
-                if (baseStat.statType == stat)
+                if (baseStat.statType.name== stat.ToString())
                 {
                     return baseStat.baseValue;
                 }
@@ -75,11 +75,11 @@ namespace RPG.Stats
             
             return 0;
         }
-        private Stat GetBaseStat(StatType stat)
+        private Stat GetBaseStat(StatName stat)
         {
             foreach(Stat baseStat in characterBaseStat)
             {
-                if (baseStat.statType == stat)
+                if (baseStat.statType.name == stat.ToString())
                 {
                     return baseStat;
                 }
@@ -94,7 +94,7 @@ namespace RPG.Stats
            return currentLevel.value;
        }
 
-       public void spendMinor(int value, StatType stat)
+       public void spendMinor(int value, StatName stat)
        {
            if (minorAttributePoints > 0)
            {
@@ -111,7 +111,7 @@ namespace RPG.Stats
 
        }
 
-        public void spendMajor(int value, StatType stat)
+        public void spendMajor(int value, StatName stat)
         {
             if (majorAttributePoints > 0)
             {
@@ -127,7 +127,7 @@ namespace RPG.Stats
         }
 
 
-        private float GetAdditiveModifier(StatType stat)
+        private float GetAdditiveModifier(StatName stat)
         {
             float total = 0;
             
@@ -169,7 +169,7 @@ namespace RPG.Stats
         }
 
 
-        private float GetPercetangeModifier(StatType stat)
+        private float GetPercetangeModifier(StatName stat)
         {
             float total = 0;
             foreach (IModifierProvider provider in GetComponents<IModifierProvider>())

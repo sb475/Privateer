@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static RPG.Control.RPG_TaskSystem;
 
 namespace RPG.Base
 {
@@ -15,6 +16,8 @@ namespace RPG.Base
 
         public delegate void DefaultInteraction(ControllableObject controllable);
         public DefaultInteraction defaultInteraction;
+
+        public Task defaultAction;
 
         public List<ActionMenuOptions> actionMenuOptions;
         public float interactRadius = 3f;
@@ -38,8 +41,14 @@ namespace RPG.Base
 
         public virtual void DefaultInteract(ControllableObject callingController)
         {
+
             StartCoroutine(MoveToDefault(callingController, () => defaultInteraction(callingController)));
         
+        }
+
+        public Task GetDefaultAction ()
+        {
+            return defaultAction;
         }
 
         public IEnumerator MoveToDefault(ControllableObject callingController, Action interactableAction)
@@ -93,35 +102,5 @@ namespace RPG.Base
             InfoToolTip.HideToolTip_Static();
             objectOutline.enabled = false;
         }
-
-#region InteractiveOptions
-
-
-        public virtual void ShopMenu(ControllableObject controllable)
-        {
-
-        }
-
-
-        public virtual void TalkToNPC(ControllableObject controllable)
-        {
-        }
-
-        public virtual void AttackNPC( ControllableObject controllable)
-        {
-
-        }
-
-        public virtual void Scan(ControllableObject controllable)
-        {
-            
-        }
-
-        public virtual void PickUp(ControllableObject controllable)
-        {
-
-        }
-
-    #endregion
     }
 }
