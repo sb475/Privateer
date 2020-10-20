@@ -6,15 +6,15 @@ using UnityEngine;
 public class Threshold : MonoBehaviour
 {
 
-    public Room roomA;
-    public Room roomB;
+    public SmartRoom roomA;
+    public SmartRoom roomB;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<GAgent>() != null)
         {
             GAgent agent = other.GetComponent<GAgent>();
-            Room currentRoom = agent.GetCurrentRoom();
+            SmartRoom currentRoom = agent.GetCurrentRoom();
 
             if (currentRoom == roomA)
             {

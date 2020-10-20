@@ -9,7 +9,7 @@ namespace RPG.AI
     {
         public string roomName;
         public List<GameObject> guardObjects;
-        public List<Room> rooms;
+        public List<SmartRoom> rooms;
         public PatrolPath patrolPath;
         public GOAPStates states;
         public ResourceQueue guards;
@@ -35,12 +35,12 @@ namespace RPG.AI
             resourceQue.Add("patrol", patrol);
         }
 
-        public void RegisterRoom(Room room)
+        public void RegisterRoom(SmartRoom room)
         {
             rooms.Add(room);
         }
 
-        public List<Room> GetRooms()
+        public List<SmartRoom> GetRooms()
         {
             return rooms;
         }
@@ -49,7 +49,7 @@ namespace RPG.AI
         {
             List<GAgent> agentList = new List<GAgent>();
 
-            foreach (Room r in rooms)
+            foreach (SmartRoom r in rooms)
             {
                 foreach (GAgent ag in r.agents)
                 {
@@ -65,7 +65,7 @@ namespace RPG.AI
         {
             List<GameObject> agentList = new List<GameObject>();
 
-            foreach (Room r in rooms)
+            foreach (SmartRoom r in rooms)
             {
                 foreach (GAgent ag in r.agents)
                 {
@@ -79,10 +79,10 @@ namespace RPG.AI
 
             return agentList;
         }
-            public List<Room> GetHostileLocation()
+            public List<SmartRoom> GetHostileLocation()
         {
-            List<Room> roomsWithHostile = new List<Room>();
-            foreach (Room r in rooms)
+            List<SmartRoom> roomsWithHostile = new List<SmartRoom>();
+            foreach (SmartRoom r in rooms)
             {
                 foreach (GAgent ag in r.agents)
                 {

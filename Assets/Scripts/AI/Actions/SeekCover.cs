@@ -36,7 +36,7 @@ namespace RPG.AI
                 //some kind of validation to minimize processing every round.
 
                 //Debug.Log("Cover Points: " + coverPoints.Count);
-                if (coverPoints.Count == 0) coverPoints = agent.GetCurrentRoom().GetLocalResources().GetResourceList();
+                if (coverPoints.Count == 0) coverPoints = agent.GetCurrentRoom().GetList("cover").GetResourceList();
                 actionDestination = this.transform.position;
 
                 for (int i = 0; i < coverPoints.Count; i++)
@@ -54,7 +54,7 @@ namespace RPG.AI
                     }
                 }
 
-                chosenObj = agent.GetCurrentRoom().GetLocalResources().RemoveResource(chosenObj);
+                chosenObj = agent.GetCurrentRoom().GetList("cover").RemoveResource(chosenObj);
 
                 actionDestination = chosenSpot;
                 //actionDestination = testPoint.transform.position;
@@ -85,7 +85,7 @@ namespace RPG.AI
         {
             Debug.Log(this + " PostPerform");
 
-            agent.GetCurrentRoom().GetLocalResources().AddResource(chosenObj);
+            agent.GetCurrentRoom().GetList("cover").AddResource(chosenObj);
 
             //coverPoints = new List<GameObject>();
             agent.room.GetGOAPStates().ModifyState("CoverAvailable", 1);
@@ -98,7 +98,7 @@ namespace RPG.AI
 
         public override bool OnInterrupt()
         {
-            agent.GetCurrentRoom().GetLocalResources().AddResource(chosenObj);
+            agent.GetCurrentRoom().GetList("cover").AddResource(chosenObj);
             //coverPoints = new List<GameObject>();
             agent.room.GetGOAPStates().ModifyState("CoverAvailable", 1);
             timesInterrupted++;
