@@ -32,7 +32,7 @@ namespace RPG.Combat
         public GameObject currentTarget;
         public IDamagable target;
         StateManager turnManager;
-        CharacterEquipment equipment;
+        public CharacterEquipment equipment;
         
         // mathf.infitity allows to attack right away
         float timeSinceLastAttack = Mathf.Infinity;

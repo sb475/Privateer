@@ -30,49 +30,51 @@ namespace RPG.AI
             //Debug.Log(this + " PrePerform");
             if (actionState != ActionState.interrupted || timesInterrupted > 2)
             {
+                chosenObj = null;
+
                 target = GWorld.Instance.GetList("hostiles").GetResource(0);
                 if (target == null) return false;
 
                 //some kind of validation to minimize processing every round.
 
                 //Debug.Log("Cover Points: " + coverPoints.Count);
-                if (coverPoints.Count == 0) coverPoints = agent.GetCurrentRoom().GetLocalResources().GetResourceList();
-                actionDestination = this.transform.position;
+                coverPoints = agent.GetCurrentRoom().GetList("cover").GetResourceList();
 
-                for (int i = 0; i < coverPoints.Count; i++)
+                if (coverPoints.Count != 0)
                 {
-                    //Debug.Log(coverPoints[i].name);
+                    actionDestination = this.transform.position;
 
-                    Vector3 hideDir = coverPoints[i].transform.position - target.transform.position;
-                    Vector3 hidePos = coverPoints[i].transform.position + hideDir.normalized * 2;
-
-                    if (Vector3.Distance(this.transform.position, hidePos) < dist)
+                    for (int i = 0; i < coverPoints.Count; i++)
                     {
-                        chosenSpot = hidePos;
-                        chosenObj = coverPoints[i];
-                        dist = Vector3.Distance(this.transform.position, hidePos);
+                        //Debug.Log(coverPoints[i].name);
+                        Vector3 hideDir = coverPoints[i].transform.position - target.transform.position;
+                        Vector3 hidePos = coverPoints[i].transform.position + hideDir.normalized * 2;
+                        if (Vector3.Distance(hidePos, target.transform.position) > agent.fighter.GetWeaponRange()) continue;
+
+                        if (Vector3.Distance(this.transform.position, hidePos) < dist)
+                        {
+                            chosenSpot = hidePos;
+                            chosenObj = coverPoints[i];
+                            dist = Vector3.Distance(this.transform.position, hidePos);
+                        }
+                    }
+
+                    if (chosenObj != null)
+                    {
+                        actionDestination = chosenSpot;
+                        chosenObj = agent.GetCurrentRoom().GetLocalResources().RemoveResource(chosenObj);
+                        agent.room.GetGOAPStates().ModifyState("CoverAvailable", -1);
                     }
                 }
-
-                chosenObj = agent.GetCurrentRoom().GetLocalResources().RemoveResource(chosenObj);
-
-                actionDestination = chosenSpot;
-                //actionDestination = testPoint.transform.position;
-                //target = chosenObj
+                Debug.Log("There was no cover available, " + gameObject.name + " is ready to engage");
+                beliefs.ModifyState("readyToEngage", 1);
             }
             else
             {
                 Debug.Log("Resuming action " + this);
             }
 
-
-            agent.room.GetGOAPStates().ModifyState("CoverAvailable", -1);
-
-            if (target == null)
-            {
-                return false;
-            }
-            return true;
+            return false;
         }
 
         public override bool PerformAction()

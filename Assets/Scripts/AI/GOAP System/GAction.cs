@@ -42,7 +42,7 @@ namespace RPG.AI
             effects = new Dictionary<string, int>();
         }
 
-        public void Awake()
+        public virtual void Awake()
         {
             engine = this.gameObject.GetComponent<IEngine>();
             agent = this.gameObject.GetComponent<GAgent>();

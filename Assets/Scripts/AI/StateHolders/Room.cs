@@ -22,7 +22,7 @@ namespace RPG.AI
             cover = new ResourceList(coverObjects, "CoverAvailable", this.states);
             station = GetComponentInParent<StationAI>();
             station.RegisterRoom(this);
-            //resourceList.Add("cover", cover);
+            resourceList.Add("cover", cover);
         }
 
         public void RegisterAgent(GAgent agent, Room room)
