@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Guard : GAgent
 {
-    public float statusCheck = 0.5f;
-    public GameObject hostile; 
+    public float statusCheck = 2f;
+    public List<GameObject> hostiles = new List<GameObject>(); 
     // Start is called before the first frame update
     new void Start()
     {
@@ -22,21 +22,25 @@ public class Guard : GAgent
       //hostile = GWorld.Instance.GetList("hostiles").GetResource(0);
 
        Invoke("LookForHostiles", statusCheck);
+
     }
 
     void LookForHostiles()
     {
-        if (hostile == null) return;
-        if (Vector3.Distance(hostile.transform.position, this.transform.position) < 50)
+        foreach (GAgent ag in room.GetAgentsInRoom())
+            if (ag.isHostile)
+               hostileAgents.Add(ag);
+
+        foreach (GAgent hostile in hostileAgents)
         {
-            if (Vector3.Distance(hostile.transform.position, this.transform.position) < 10)
+            if (Vector3.Distance(hostile.transform.position, this.transform.position) < 15)
             {
-                beliefs.ModifyState("tooClose", 1);
+                beliefs.ModifyState("threatened", 1);
+                CancelCurrentGoal();
             }
-            beliefs.ModifyState("threatened", 1);
-           CancelCurrentGoal();
+            Invoke("LookForHostiles", statusCheck);
         }
-        Invoke("LookForHostiles", statusCheck);
     }
+
 
 }

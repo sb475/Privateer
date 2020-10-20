@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RPG.AI
 {
-    public class Room : MonoBehaviour
+    public class SmartRoom : MonoBehaviour
     {
         public StationAI station;
         public string roomName;
@@ -17,15 +17,17 @@ namespace RPG.AI
 
         private void Awake()
         {
+            agents = new List<GAgent>();
             states = new GOAPStates();
             resourceList = new Dictionary<string, ResourceList>();
             cover = new ResourceList(coverObjects, "CoverAvailable", this.states);
+            resourceList.Add("cover", cover);
             station = GetComponentInParent<StationAI>();
             station.RegisterRoom(this);
-            resourceList.Add("cover", cover);
+
         }
 
-        public void RegisterAgent(GAgent agent, Room room)
+        public void RegisterAgent(GAgent agent, SmartRoom room)
         {
             room.DeRegisterAgent(agent);
             agents.Add(agent);
@@ -62,11 +64,6 @@ namespace RPG.AI
         public GOAPStates GetGOAPStates()
         {
             return states;
-        }
-
-        public ResourceList GetLocalResources()
-        {
-            return cover;
         }
 
     }

@@ -29,8 +29,11 @@ namespace RPG.AI
         public Dictionary<SubGoal, int> goals = new Dictionary<SubGoal, int>();
         public LocalMemory localMemory = new LocalMemory();
         public GOAPStates beliefs = new GOAPStates();
+        public List<GAgent> hostileAgents = new List<GAgent>();
+        public bool isHostile;
 
-        public Room room;
+        public SmartRoom room;
+        
         //public Station station;
         //public Ship ship;
         //public World world;
@@ -109,12 +112,12 @@ namespace RPG.AI
             actionStarted = false;
         }
 
-        public Room GetCurrentRoom()
+        public SmartRoom GetCurrentRoom()
         {
             return room;
         }
 
-        public void SetCurretRoom(Room room)
+        public void SetCurretRoom(SmartRoom room)
         {
             room.RegisterAgent(this, this.room);
             this.room = room;
