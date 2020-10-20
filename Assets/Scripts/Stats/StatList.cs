@@ -8,7 +8,6 @@ namespace RPG.Stats
     {
         const string statListName = "Stats";
         public List<Stat> statList;
-
         
     }
 }

@@ -9,7 +9,7 @@ namespace RPG.UI
 {
     public class DisplayStatSlider: MonoBehaviour
     {
-        public StatType statToDisplay;
+        public StatName statToDisplay;
         Slider statSlider;
         [SerializeField] bool isMajorAttribute;
         private CharacterStats characterBastStats;

@@ -179,7 +179,7 @@ namespace RPG.Items
             
         }
 
-        public IEnumerable GetAdditiveModifiers(StatType stat)
+        public IEnumerable GetAdditiveModifiers(StatName stat)
         {
            foreach (var item in equippedItems)
             {
@@ -201,7 +201,7 @@ namespace RPG.Items
             }
         }
 
-        public IEnumerable GetPercentageModifiers(StatType stat)
+        public IEnumerable GetPercentageModifiers(StatName stat)
         {
             foreach (var item in equippedItems)
             {   

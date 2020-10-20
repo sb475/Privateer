@@ -7,6 +7,12 @@ TagManager:
   - BattleController
   - StateHandler
   - CoverObject
+  - Waypoint
+  - Collide
+  - Fire
+  - SkyboxCamera
+  - Location
+  - Hostile
   layers:
   - Default
   - TransparentFX

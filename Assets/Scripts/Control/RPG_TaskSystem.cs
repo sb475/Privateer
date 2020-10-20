@@ -9,6 +9,7 @@ namespace RPG.Control
     [System.Serializable]
     public class RPG_TaskSystem
     {
+        [System.Serializable]
         public abstract class Task {
             public Interactable interactable;
             public ControllableObject controllable;
@@ -52,11 +53,7 @@ namespace RPG.Control
 
 
             }
-           
-
-            
         }
-
         
         public List<Task> taskList;
 

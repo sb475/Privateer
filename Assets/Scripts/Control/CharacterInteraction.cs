@@ -10,7 +10,6 @@ using UnityEngine;
 namespace RPG.Control
 {
     [RequireComponent(typeof(IDamagable))]
-    [RequireComponent(typeof(AIController))]
     public class CharacterInteraction : Interactable
     {
         public Inventory inventory;

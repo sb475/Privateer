@@ -8,6 +8,7 @@
     using RPG.Global;
 using System;
 using RPG.Items;
+using RPG.AI;
 
 namespace RPG.Control
     {

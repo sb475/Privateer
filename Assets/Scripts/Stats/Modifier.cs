@@ -5,7 +5,7 @@ namespace RPG.Stats
     [System.Serializable]
     public class Modifier
     {
-        public StatType statType;
+        public StatName statType;
         public float statValue;
     }
 }

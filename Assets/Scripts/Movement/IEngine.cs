@@ -10,7 +10,7 @@ namespace RPG.Movement
         void MoveToLocation(Vector3 newTarget);
         void Cancel();
         void KeyMovement();
-        void GracefullyStopAnimate();
+        void SetSpeed(float speed);
 
     }
 }

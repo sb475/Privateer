@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 namespace RPG.Global {
+    //this needs to get converted into a state machine or something like it.
     
     public enum GameState { OUTOFCOMBAT, COMBAT, COMBATOVER, GAMEOVER };
 
@@ -79,13 +80,6 @@ namespace RPG.Global {
         {
             return state;
         }
-
-        
-     
-
-
-
-
 
     }
 }

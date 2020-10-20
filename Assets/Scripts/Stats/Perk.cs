@@ -7,7 +7,7 @@ namespace RPG.Stats
 {
 
 //Mirror progression dictionary build but for Perks
-    [CreateAssetMenu(fileName = "Perk", menuName = "Perks/Make Perk", order = 0)]
+    [CreateAssetMenu(fileName = "Perk", menuName = "Character/Make Perk", order = 0)]
     public class Perk : ScriptableObject
     {
         public int perkLevel = 0;

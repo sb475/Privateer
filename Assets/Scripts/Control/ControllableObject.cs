@@ -27,8 +27,8 @@ namespace RPG.Control
         public StateManager turnManager;
         public IDamagable health;
         public IAttack IAttack;
-        public delegate void DefaultBehviour();
-        public DefaultBehviour defaultBehviour;
+        public delegate void DefaultBehaviour();
+        public DefaultBehaviour defaultBehaviour;
         [SerializeField] private TaskState taskState;
         public RPG_TaskSystem taskSystem;
         float waitingTimer;

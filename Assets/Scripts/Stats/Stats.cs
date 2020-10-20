@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace RPG.Stats
 {
-//need to find a better way to organize these 
-    public enum StatType
+    //used to keep name's uniform. Can be replaced with string.
+    public enum StatName
     {
         Health,
         ExperienceReward,
@@ -12,7 +13,7 @@ namespace RPG.Stats
         Armor,
         ActionPoints,
         Consitution,
-        Intillect,
+        Intelligence,
         Personality,
         Strength,
         Speed,
@@ -30,23 +31,7 @@ namespace RPG.Stats
 
         public StatType statType;
         public float baseValue;
-        public string statDescription;
 
-    }
-
-    [System.Serializable]
-    public class Stat_Test
-    {
-        public StatType statType;
-        public float baseValue;
-        public string statDescription;
-
-        /* void statType(StatType statType, float value, string statDescription)
-        {
-
-        } */
-    }
-
-    
+    }    
         
 }

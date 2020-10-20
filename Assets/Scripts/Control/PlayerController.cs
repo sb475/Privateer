@@ -105,6 +105,7 @@ namespace RPG.Control
                 return;
             }
             DetermineShipControl();
+            MoveWithKeyPress();
             
             if (InteractWithObject()) return;
             if (InteractWithMovement()) return;
@@ -128,7 +129,7 @@ namespace RPG.Control
                         maxNavPathLength = 40f;
                     }
                     controllingShip = false;
-                    MoveWithKeyPress();
+                    
                 }
                 else
                 {
@@ -141,7 +142,6 @@ namespace RPG.Control
                         SetControllable(ship);
                         maxNavPathLength = 2000f;
                     }
-                    currentControllable.mov.KeyMovement();
                     
                 }
             }
@@ -164,10 +164,6 @@ namespace RPG.Control
             if (currentControllable.turnManager.GetCanMove())
             {
                 currentControllable.mov.KeyMovement();
-            }
-            else
-            {
-                currentControllable.mov.GracefullyStopAnimate();
             }
                        
         }
