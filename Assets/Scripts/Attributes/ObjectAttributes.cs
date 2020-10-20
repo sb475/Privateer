@@ -1,3 +1,4 @@
+using RPG.Combat;
 using UnityEngine;
 using UnityEngine.Events;
 using static RPG.Attributes.Health;
@@ -14,13 +15,29 @@ namespace RPG.Attributes
         public class TakeDamageEvent : UnityEvent<float>
         {
         }
+        public float maxDurability;
 
-        public float durability;
+        public float currentDurability;
+
+        private void Awake() {
+            currentDurability = maxDurability;
+        }
+
 
         public void Die()
         {
             onDie?.Invoke();
-            Destroy(this);
+            
+            //Add special behaviours here. I.e. if it's a missile do this
+            if (GetComponent<Missile>() != null)
+            {
+                GetComponent<Missile>().DestroyProjectile(gameObject, 0f);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+            
         }
 
         public bool IsDead()
@@ -30,14 +47,27 @@ namespace RPG.Attributes
 
         public void TakeDamage(GameObject instigator, float damage)
         {
-            durability -= damage;
+            currentDurability -= damage;
             takeDamage?.Invoke(damage);
+
             //some kind of roll mechanic involved here
-            if (durability == 0)
+
+            Debug.Log(this.gameObject.name + " durability is: " + currentDurability);
+            if (currentDurability <= 0)
             {
                 isDead = true;
                 Die();
             }
+        }
+
+        //if object being targetted has a ShipWeaponControl system, it will be added to sytem for tracking.
+        public void TargetLocked(Missile missile)
+        {
+            if (GetComponent<ShipWeaponControl>() != null)
+            {
+                GetComponent<ShipWeaponControl>().DetectIncomingMissiles(missile);
+            }
+            
         }
     }
 }

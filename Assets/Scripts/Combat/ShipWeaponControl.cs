@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using RPG.Attributes;
 using RPG.Base;
@@ -14,6 +15,7 @@ namespace RPG.Combat
         public List<ShipWeaponSystem> missileWeapons;
         public List<ShipWeaponSystem> turretWeapons;
         public List<ShipWeaponSystem> defenseWeapons;
+        public List<Missile> incomingMissiles;
         float weaponRange;
         public bool fireAtWill;
 
@@ -21,6 +23,10 @@ namespace RPG.Combat
 
         private void Start() {
             GetWeaponSystems();
+        }
+
+        private void LateUpdate() {
+            DefensiveFire();
         }
 
         public void FireAtWill(IDamagable target)
@@ -40,24 +46,59 @@ namespace RPG.Combat
 
         }
 
-        private void OnTriggerEnter(Collider other) {
-            if (other.GetComponent<Missile>() != null)
-            {  
-                Debug.Log(other.gameObject.name);
-                DefensiveFire(other.gameObject);
-                
+        public float GetAverageWeaponRange (List<ShipWeaponSystem> weaponSystemList)
+        {
+            float averageRange = 0;
+            foreach(ShipWeaponSystem weaponSystem in weaponSystemList)
+            {
+                averageRange += weaponSystem.GetWeaponRange();
             }
+            return averageRange / weaponSystemList.Count;
         }
 
-        public void DefensiveFire(GameObject missile)
+        public void IncomingProjectingDestroyed(Missile missile)
         {
+            incomingMissiles.Remove(missile);
             foreach (ShipWeaponSystem weapon in defenseWeapons)
             {
-                if (weapon.target == null)
+                if (weapon.target == missile.GetComponent<IDamagable>())
                 {
-                    weapon.Attack(missile.gameObject);
+                //work in a dps calculation to determine targets. If dps of weapon will not defeat durability of missile before time of impact, add secondary target.
+                    Debug.Log("Found null missile, removing");
+                    weapon.CeaseFire();
                 }
             }
+            
+        }
+
+        public void DefensiveFire()
+        {
+            foreach (Missile missile in incomingMissiles)
+            {
+                if (missile == null)
+                {
+                    incomingMissiles.Remove(missile);
+                    continue;
+                }
+
+                else if (Vector3.Distance(missile.transform.position, transform.position) <= GetAverageWeaponRange(defenseWeapons))
+                {
+                    Debug.Log("Missile is in range");
+                    foreach (ShipWeaponSystem weapon in defenseWeapons)
+                    {
+                        //work in a dps calculation to determine targets. If dps of weapon will not defeat durability of missile before time of impact, add secondary target.
+                        if (weapon.target == null && weapon.target != missile)
+                        {
+                            weapon.SetTarget(missile.GetComponent<IDamagable>());
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                }
+            }
+           
         }
 
 
@@ -101,6 +142,12 @@ namespace RPG.Combat
                 }
             }
 
+        }
+
+        public void DetectIncomingMissiles(Missile missile)
+        {
+            Debug.Log("WARNING WARNING INCOMING MISSILES");
+            incomingMissiles.Add(missile);
         }
 
         public float OptimalWeaponRange()

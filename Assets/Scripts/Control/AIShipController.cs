@@ -119,7 +119,7 @@ namespace RPG.Control
     public void EngageShip (Transform target)
     {
         Debug.Log("Engaging " + target.name);
-        engine.StartMoveAction(target.position, 1f);
+        //engine.StartMoveAction(target.position, 1f);
         if (Vector3.Distance(target.position, transform.position) <= shipWeaponControl.OptimalWeaponRange())
         {
             engine.Cancel();

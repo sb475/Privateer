@@ -22,7 +22,6 @@ namespace RPG.Combat
 
         public override void Start()
         {
-            
 
             if (missileHealth.IsDead())
             {
@@ -44,9 +43,22 @@ namespace RPG.Combat
             this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * turnSpeed);
             }
 
+            Debug.DrawRay(transform.position, transform.forward * projectileSpeed);
+
+                      
             
-            
-            
+        }
+
+
+        public override void DestroyProjectile(Object obj, float t)
+        {
+            //if the target has a shipweapon control, remove from incomingMissile list.
+            if (target.gameObject.GetComponent<ShipWeaponControl>() != null)
+            {
+                target.gameObject.GetComponent<ShipWeaponControl>().IncomingProjectingDestroyed(this);
+            }
+           
+            base.DestroyProjectile(obj, t + 0.5f);
         }
     }
 
