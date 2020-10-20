@@ -5,7 +5,6 @@ using UnityEngine;
 public class Citizen : GAgent
 {
     public float statusCheck = 0.5f;
-    public GameObject hostile; 
     // Start is called before the first frame update
     new void Start()
     {
@@ -21,20 +20,33 @@ public class Citizen : GAgent
 
        // hostile = GWorld.Instance.GetList("hostiles").GetResource(0);
 
-        Invoke(nameof(LookForHostiles), statusCheck);
+        //Invoke(nameof(LookForHostiles), statusCheck);
 
     }
 
-    void LookForHostiles()
+    IEnumerator LookForHostiles(float checkTime)
     {
-        if (hostile == null) return;
-        if (Vector3.Distance(hostile.transform.position, this.transform.position) < 15)
+        foreach (GAgent ag in room.GetAgentsInRoom())
+            if (ag.isHostile)
+                hostileAgents.Add(ag);
+
+        foreach (GAgent hostile in hostileAgents)
         {
-            Debug.Log("in range");
-           beliefs.ModifyState("threatened", 1);
-           CancelCurrentGoal();
+            if (Vector3.Distance(hostile.transform.position, this.transform.position) < 15)
+            {
+                if (Vector3.Distance(hostile.transform.position, this.transform.position) < 10)
+                {
+                    beliefs.ModifyState("tooClose", 1);
+                }
+                beliefs.ModifyState("threatened", 1);
+                CancelCurrentGoal();
+            }
+
         }
-        Invoke("LookForHostiles", statusCheck);
+
+        yield return new WaitForSeconds(checkTime);
+
+        StartCoroutine(LookForHostiles(checkTime));
     }
 
 

@@ -9,6 +9,7 @@ namespace RPG.AI
     {
         public string roomName;
         public List<GameObject> guardObjects;
+        public List<GameObject> wanderLocations;
         public List<SmartRoom> rooms;
         public PatrolPath patrolPath;
         public GOAPStates states;
@@ -16,6 +17,8 @@ namespace RPG.AI
         private static ResourceQueue patrol;
         private static Dictionary<string, ResourceQueue> resourceQue;
         private static Dictionary<string, ResourceList> resourceList;
+
+        public List<SmartRoom> hostilesPresentInRoom;
 
         private void Awake()
         {
@@ -33,6 +36,19 @@ namespace RPG.AI
 
             patrol = new ResourceQueue(patrolPath.GetPatrolPath(), "PatrolPointAvailable", this.states);
             resourceQue.Add("patrol", patrol);
+
+            StartCoroutine(LookForHostiles(1));
+        }
+
+        IEnumerator LookForHostiles(float checkTime)
+        {
+            foreach (GAgent ag in GetAgentsOnStation())
+                if (ag.isHostile && !hostilesPresentInRoom.Contains(ag.room))
+                    hostilesPresentInRoom.Add(ag.room);
+                
+            yield return new WaitForSeconds(checkTime);
+
+            StartCoroutine(LookForHostiles(checkTime));
         }
 
         public void RegisterRoom(SmartRoom room)
@@ -45,7 +61,12 @@ namespace RPG.AI
             return rooms;
         }
 
-        public List<GAgent> FindAgentType(Type agentType)
+        public List<GameObject> GetWander()
+        {
+            return wanderLocations;
+        }
+
+        public List<GAgent> GetAgentsOnStation()
         {
             List<GAgent> agentList = new List<GAgent>();
 

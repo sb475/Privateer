@@ -5,7 +5,6 @@ using UnityEngine;
 public class Guard : GAgent
 {
     public float statusCheck = 2f;
-    public List<GameObject> hostiles = new List<GameObject>(); 
     // Start is called before the first frame update
     new void Start()
     {
@@ -21,25 +20,33 @@ public class Guard : GAgent
 
       //hostile = GWorld.Instance.GetList("hostiles").GetResource(0);
 
-       Invoke("LookForHostiles", statusCheck);
+       StartCoroutine(LookForHostiles(statusCheck));
 
     }
 
-    void LookForHostiles()
+    IEnumerator LookForHostiles(float checkTime)
     {
         foreach (GAgent ag in room.GetAgentsInRoom())
-            if (ag.isHostile)
+            if (ag.isHostile && !hostileAgents.Contains(ag))
                hostileAgents.Add(ag);
 
         foreach (GAgent hostile in hostileAgents)
         {
             if (Vector3.Distance(hostile.transform.position, this.transform.position) < 15)
             {
+                if (Vector3.Distance(hostile.transform.position, this.transform.position) < 10)
+                {
+                    beliefs.ModifyState("tooClose", 1);
+                }
                 beliefs.ModifyState("threatened", 1);
                 CancelCurrentGoal();
             }
-            Invoke("LookForHostiles", statusCheck);
+
         }
+
+        yield return new WaitForSeconds(checkTime);
+
+        StartCoroutine(LookForHostiles(checkTime));
     }
 
 

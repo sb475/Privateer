@@ -64,7 +64,7 @@ namespace RPG.AI
             foreach (GAction a in acts)
                 actions.Add(a);
 
-            room.agents.Add(this);
+            room.RegisterAgent(this, null);
         }
 
 

@@ -12,6 +12,7 @@ namespace RPG.AI
         public ResourceList cover;
         public List<GAgent> agents;
         public GOAPStates states;
+        public bool hostilePresent;
         private static Dictionary<string, ResourceQueue> resourceQue = new Dictionary<string, ResourceQueue>();
         private static Dictionary<string, ResourceList> resourceList;
 
@@ -29,8 +30,10 @@ namespace RPG.AI
 
         public void RegisterAgent(GAgent agent, SmartRoom room)
         {
-            room.DeRegisterAgent(agent);
+            if (room != null) room.DeRegisterAgent(agent);
+
             agents.Add(agent);
+            if (agent.isHostile) station.hostilesPresentInRoom.Add(this);
         }
 
         public void DeRegisterAgent(GAgent agent)

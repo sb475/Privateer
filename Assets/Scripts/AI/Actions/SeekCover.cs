@@ -62,7 +62,7 @@ namespace RPG.AI
                     if (chosenObj != null)
                     {
                         actionDestination = chosenSpot;
-                        chosenObj = agent.GetCurrentRoom().GetLocalResources().RemoveResource(chosenObj);
+                        chosenObj = agent.GetCurrentRoom().GetList("cover").RemoveResource(chosenObj);
                         agent.room.GetGOAPStates().ModifyState("CoverAvailable", -1);
                     }
                 }
@@ -87,7 +87,7 @@ namespace RPG.AI
         {
             Debug.Log(this + " PostPerform");
 
-            agent.GetCurrentRoom().GetLocalResources().AddResource(chosenObj);
+            agent.GetCurrentRoom().GetList("cover").AddResource(chosenObj);
 
             //coverPoints = new List<GameObject>();
             agent.room.GetGOAPStates().ModifyState("CoverAvailable", 1);
@@ -100,7 +100,7 @@ namespace RPG.AI
 
         public override bool OnInterrupt()
         {
-            agent.GetCurrentRoom().GetLocalResources().AddResource(chosenObj);
+            agent.GetCurrentRoom().GetList("cover").AddResource(chosenObj);
             //coverPoints = new List<GameObject>();
             agent.room.GetGOAPStates().ModifyState("CoverAvailable", 1);
             timesInterrupted++;

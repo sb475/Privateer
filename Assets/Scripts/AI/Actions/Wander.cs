@@ -19,9 +19,9 @@ namespace RPG.AI
 
             if (actionState != ActionState.interrupted || timesInterrupted > 2)
             {
-                nextPoint = Random.Range(0, GWorld.Instance.GetList("locations").GetListRange());
+                nextPoint = Random.Range(0, agent.room.station.GetWander().Count);
                 //Debug.Log(nextPoint);
-                target = GWorld.Instance.GetList("locations").GetResource(nextPoint);
+                target = agent.room.station.GetWander()[nextPoint];
 
                 if (target == null)
                 {
@@ -36,7 +36,7 @@ namespace RPG.AI
                 Debug.Log("Resuming action " + this);
             }
 
-            GWorld.Instance.GetGOAPStates().ModifyState("LocationAvailable", -1);
+            //GWorld.Instance.GetGOAPStates().ModifyState("LocationAvailable", -1);
             return true;
         }
 
@@ -51,7 +51,7 @@ namespace RPG.AI
             engine.SetSpeed(5.66f);
             //GWorld.Instance.GetList("locations").AddResource(target);
             localMemory.RemoveItem(target);
-            GWorld.Instance.GetGOAPStates().ModifyState("LocationAvailable", 1);
+            //GWorld.Instance.GetGOAPStates().ModifyState("LocationAvailable", 1);
             timesInterrupted = 0;
             actionPerformed = false;
             actionComplete = false;
@@ -62,7 +62,7 @@ namespace RPG.AI
         public override bool OnInterrupt()
         {
             engine.SetSpeed(5.66f);
-            GWorld.Instance.GetGOAPStates().ModifyState("LocationAvailable", 1);
+            //GWorld.Instance.GetGOAPStates().ModifyState("LocationAvailable", 1);
             timesInterrupted++;
             Debug.Log(this + " was interrupted");
             actionPerformed = false;
