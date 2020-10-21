@@ -10,46 +10,69 @@ namespace RPG.AI
         public string roomName;
         public List<GameObject> guardObjects;
         public List<GameObject> wanderLocations;
+        public List<GameObject> hostilesOnStation;
         public List<SmartRoom> rooms;
         public PatrolPath patrolPath;
         public GOAPStates states;
         public ResourceQueue guards;
         private static ResourceQueue patrol;
+        private static ResourceList hostiles;
         private static Dictionary<string, ResourceQueue> resourceQue;
         private static Dictionary<string, ResourceList> resourceList;
-
-        public List<SmartRoom> hostilesPresentInRoom;
 
         private void Awake()
         {
             states = new GOAPStates();
             resourceList = new Dictionary<string, ResourceList>();
             resourceQue = new Dictionary<string, ResourceQueue>();
-            
-        }
-
-        private void Start()
-        {
-            guardObjects = FindGuards();
             guards = new ResourceQueue(guardObjects, "GuardsAvailable", this.states);
             resourceQue.Add("guards", guards);
 
             patrol = new ResourceQueue(patrolPath.GetPatrolPath(), "PatrolPointAvailable", this.states);
             resourceQue.Add("patrol", patrol);
 
-            StartCoroutine(LookForHostiles(1));
+            hostiles = new ResourceList(hostilesOnStation, "HostilesOnStation", this.states);
+            resourceList.Add("hostiles", hostiles);
+
         }
 
-        IEnumerator LookForHostiles(float checkTime)
+        private void Start()
         {
-            foreach (GAgent ag in GetAgentsOnStation())
-                if (ag.isHostile && !hostilesPresentInRoom.Contains(ag.room))
-                    hostilesPresentInRoom.Add(ag.room);
-                
-            yield return new WaitForSeconds(checkTime);
+            guardObjects = FindGuards();
 
-            StartCoroutine(LookForHostiles(checkTime));
         }
+
+
+        //dead code, may be helpful reference in future
+        //IEnumerator LookForHostiles(float checkTime)
+        //{
+        //    foreach (GAgent ag in GetAgentsOnStation())
+        //        if (ag.isHostile && !hostilesPresentInRoom.Contains(ag.room))
+        //            hostilesPresentInRoom.Add(ag.room);
+                
+        //    yield return new WaitForSeconds(checkTime);
+
+        //    StartCoroutine(LookForHostiles(checkTime));
+        //}
+
+        public void DeRegisterHostile(GAgent agent)
+        {
+            int indexToRemove = -1;
+            foreach (GameObject ag in GetList("hostiles").GetResourceList())
+            {
+                indexToRemove++;
+                if (ag == agent.gameObject)
+                    break;
+            }
+            if (indexToRemove > -1)
+                GetList("hostiles").GetResourceList().RemoveAt(indexToRemove);
+        }
+        public void RegisterHostile(GAgent agent)
+        {
+            if (!GetList("hostiles").GetResourceList().Contains(agent.gameObject))
+                GetList("hostiles").AddResource(agent.gameObject);
+        }
+
 
         public void RegisterRoom(SmartRoom room)
         {
@@ -72,7 +95,7 @@ namespace RPG.AI
 
             foreach (SmartRoom r in rooms)
             {
-                foreach (GAgent ag in r.agents)
+                foreach (GAgent ag in r.agentsInRoom)
                 {
 
                     agentList.Add(ag);
@@ -88,7 +111,7 @@ namespace RPG.AI
 
             foreach (SmartRoom r in rooms)
             {
-                foreach (GAgent ag in r.agents)
+                foreach (GAgent ag in r.agentsInRoom)
                 {
                     if (ag.GetType() == typeof(Guard))
                         agentList.Add(ag.gameObject);
@@ -105,7 +128,7 @@ namespace RPG.AI
             List<SmartRoom> roomsWithHostile = new List<SmartRoom>();
             foreach (SmartRoom r in rooms)
             {
-                foreach (GAgent ag in r.agents)
+                foreach (GAgent ag in r.agentsInRoom)
                 {
                     //if hostile are present, return room.
                 }

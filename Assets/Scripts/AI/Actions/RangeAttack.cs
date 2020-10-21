@@ -1,4 +1,5 @@
 ﻿using RPG.AI;
+using RPG.Attributes;
 using RPG.Combat;
 using RPG.Items;
 using System.Collections;
@@ -54,9 +55,7 @@ namespace RPG.AI
 
         public override bool PerformAction()
         {
-            //Debug.Log(gameObject.name + " has performed the action " + this)
-
-            Debug.Log("pew pew pew");
+            agent.fighter.Attack(target.GetComponent<IDamagable>());
             return true;
         }
 

@@ -64,7 +64,7 @@ namespace RPG.AI
             foreach (GAction a in acts)
                 actions.Add(a);
 
-            room.RegisterAgent(this, null);
+            room.RegisterAgent(this);
         }
 
 
@@ -119,7 +119,8 @@ namespace RPG.AI
 
         public void SetCurretRoom(SmartRoom room)
         {
-            room.RegisterAgent(this, this.room);
+            this.room.DeRegisterAgent(this);
+            room.RegisterAgent(this);
             this.room = room;
 
         }
