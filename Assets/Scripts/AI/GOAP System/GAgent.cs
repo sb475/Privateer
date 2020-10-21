@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UIElements;
 using RPG.Control;
+using RPG.Combat;
 
 namespace RPG.AI
 {
@@ -28,13 +29,19 @@ namespace RPG.AI
         public Dictionary<SubGoal, int> goals = new Dictionary<SubGoal, int>();
         public LocalMemory localMemory = new LocalMemory();
         public GOAPStates beliefs = new GOAPStates();
+        public List<GAgent> hostileAgents = new List<GAgent>();
+        public bool isHostile;
 
-        public Room room;
+        public SmartRoom room;
+        
         //public Station station;
         //public Ship ship;
         //public World world;
 
         public IEnumerator startAction;
+
+        public Fighter fighter;
+
 
         GPlanner planner;
         Queue<GAction> actionQueue;
@@ -45,6 +52,11 @@ namespace RPG.AI
 
         Vector3 destination = Vector3.zero;
 
+        private void Awake()
+        {
+            fighter = GetComponent<Fighter>();
+        }
+
         // Start is called before the first frame update
         public void Start()
         {
@@ -52,7 +64,7 @@ namespace RPG.AI
             foreach (GAction a in acts)
                 actions.Add(a);
 
-            room.agents.Add(this);
+            room.RegisterAgent(this);
         }
 
 
@@ -100,14 +112,15 @@ namespace RPG.AI
             actionStarted = false;
         }
 
-        public Room GetCurrentRoom()
+        public SmartRoom GetCurrentRoom()
         {
             return room;
         }
 
-        public void SetCurretRoom(Room room)
+        public void SetCurretRoom(SmartRoom room)
         {
-            room.RegisterAgent(this, this.room);
+            this.room.DeRegisterAgent(this);
+            room.RegisterAgent(this);
             this.room = room;
 
         }
