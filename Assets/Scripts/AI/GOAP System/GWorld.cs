@@ -130,7 +130,7 @@ namespace RPG.AI
 
         public GameObject GetResource(int i)
         {
-            if (list.Count == 0 || i > list.Count-1)
+            if (list.Count == 0 || i > list.Count - 1)
             {
                 return null;
             }
@@ -165,7 +165,7 @@ namespace RPG.AI
             resourceList.Add("locations", locations);
             locations = new ResourceList("Hostile", "HostilePresent", states);
             resourceList.Add("hostiles", locations);
-           
+
         }
 
         public ResourceQueue GetQueue(string type)

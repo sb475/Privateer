@@ -79,42 +79,56 @@ namespace RPG.Combat
 
         private void AttackBehavior(IDamagable target)
         {
-            if (!GetIsInRange(target))
+
+            transform.LookAt(target.gameObject.transform);
+
+            //This will trigger the Hit() event.
+
+
+            if (timeSinceLastAttack > timeBetweenAttacks)
             {
-                if (turnManager.GetCanMove())
-                {
-                    GetComponent<IEngine>().StartMoveAction(target.gameObject.transform.position, 1f);
-                }
-                else
-                {
-                    print(target.gameObject.name + " is out of range");
-
-                    if ((GetComponent<AIController>() != null))
-                    {
-                        turnManager.SetCanAct(false);
-                    }
-
-                }
-                //leave in place for moving to cover
-            }
-            else
-            {
-                GetComponent<IEngine>().Cancel();
-                    //reset flag so that next time in range resets.
-                outOfRangeAnnounced = false;
-
-                transform.LookAt(target.gameObject.transform);
-
-                //This will trigger the Hit() event.
-
-
-                if (timeSinceLastAttack > timeBetweenAttacks)
-                {
-                    TriggerAttack();
-                    timeSinceLastAttack = 0;
-                }
+                TriggerAttack();
+                timeSinceLastAttack = 0;
             }
         }
+
+
+            //if (!GetIsInRange(target))
+            //{
+            //    if (turnManager.GetCanMove())
+            //    {
+            //        GetComponent<IEngine>().StartMoveAction(target.gameObject.transform.position, 1f);
+            //    }
+            //    else
+            //    {
+            //        print(target.gameObject.name + " is out of range");
+
+            //        if ((GetComponent<AIController>() != null))
+            //        {
+            //            turnManager.SetCanAct(false);
+            //        }
+
+            //    }
+            //    //leave in place for moving to cover
+            //}
+            //else
+            //{
+            //    GetComponent<IEngine>().Cancel();
+            //        //reset flag so that next time in range resets.
+            //    outOfRangeAnnounced = false;
+
+            //    transform.LookAt(target.gameObject.transform);
+
+            //    //This will trigger the Hit() event.
+
+
+            //    if (timeSinceLastAttack > timeBetweenAttacks)
+            //    {
+            //        TriggerAttack();
+            //        timeSinceLastAttack = 0;
+            //    }
+            //}
+        //}
 
 #region WeaponConfigurations
 

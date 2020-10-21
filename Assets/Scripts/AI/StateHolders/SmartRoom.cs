@@ -10,48 +10,54 @@ namespace RPG.AI
         public string roomName;
         public List<GameObject> coverObjects;
         public ResourceList cover;
-        public List<GAgent> agents;
+        public List<GAgent> agentsInRoom;
         public GOAPStates states;
-        public bool hostilePresent;
         private static Dictionary<string, ResourceQueue> resourceQue = new Dictionary<string, ResourceQueue>();
         private static Dictionary<string, ResourceList> resourceList;
 
         private void Awake()
         {
-            agents = new List<GAgent>();
+            agentsInRoom = new List<GAgent>();
             states = new GOAPStates();
             resourceList = new Dictionary<string, ResourceList>();
             cover = new ResourceList(coverObjects, "CoverAvailable", this.states);
             resourceList.Add("cover", cover);
             station = GetComponentInParent<StationAI>();
-            station.RegisterRoom(this);
 
+
+            Time.timeScale = 5f;
         }
 
-        public void RegisterAgent(GAgent agent, SmartRoom room)
+        private void Start()
         {
-            if (room != null) room.DeRegisterAgent(agent);
+            station.RegisterRoom(this);
+        }
 
-            agents.Add(agent);
-            if (agent.isHostile) station.hostilesPresentInRoom.Add(this);
+        public void RegisterAgent(GAgent agent)
+        {
+            if (!agentsInRoom.Contains(agent)) 
+                agentsInRoom.Add(agent);
+
+            if (agent.isHostile)
+                station.RegisterHostile(agent);
         }
 
         public void DeRegisterAgent(GAgent agent)
         {
             int indexToRemove = -1;
-            foreach (GAgent ag in agents)
+            foreach (GAgent ag in agentsInRoom)
             {
                 indexToRemove++;
                 if (ag == agent)
                     break;
             }
             if (indexToRemove > -1)
-                agents.RemoveAt(indexToRemove);
+                agentsInRoom.RemoveAt(indexToRemove);
         }
 
         public List<GAgent> GetAgentsInRoom()
         {
-            return agents;
+            return agentsInRoom;
         }
 
         public ResourceQueue GetQueue(string type)
