@@ -37,7 +37,7 @@ namespace RPG.UI
         {
             if (CanBuyPerk())
             {
-                GameEvents.instance.BuyPerk(perkButtonType, nextPerkLevelAvailable);
+                //GameEvents.instance.BuyPerk(perkButtonType, nextPerkLevelAvailable);
                 nextPerkLevelAvailableDisplay.text = DisplayNextLevelAvailable().ToString();
             }
             else

@@ -55,7 +55,7 @@ namespace RPG.UI{
             return true;
         }
 
-        public void UI_ItemDrop (ItemInInventory itemToDrop){
+        public void UI_ItemDrop (Item itemToDrop){
             UI_ItemRemove(itemToDrop);
             Instantiate(itemToDrop.itemObject.inWolrdItemPrefab, inventoryOwner.transform.position, Quaternion.identity);
             RefreshInventoryItems();

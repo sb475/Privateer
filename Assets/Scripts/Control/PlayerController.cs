@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using RPG.Base;
 using RPG.Cinematic;
 using RPG.Combat;
@@ -14,35 +15,8 @@ using UnityEngine.EventSystems;
 
 namespace RPG.Control
 {
-        
     public class PlayerController : MonoBehaviour
     {
-
-
-
-        [Header("Controllable Assets")]
-        public List<CrewMember> currentTeam;
-        public List<CrewMember> crewOnShip;
-        public Ship ship;
-
-        public bool canControlShip;
-        public bool controllingShip;
-        public float zoomContolTransition;
-        public float maxZoomOnChar;
-        public float maxZoomOnShip;
-
-        public ControllableObject currentControllable;
-        public CrewMember lastControlledCrew;
-
-        public CameraController cameraControl;
-        float timeSinceClick;
-
-
-        Interactable interactable;
-
-        public List<Interactable> cachePlayerObjects = new List<Interactable>();
-
-        //template for perks to be added
         [System.Serializable]
         struct CursorMapping
         {
@@ -55,22 +29,41 @@ namespace RPG.Control
         [SerializeField] float maxNavMeshProjectionDistance;
         [SerializeField] float maxNavPathLength = 40;
 
+        [Header("Controllable Assets")]
+        public List<CrewMember> currentTeam;
+        public List<CrewMember> crewOnShip;
+        public Ship ship;
+        public bool canControlShip;
+        public bool controllingShip;
+        public float zoomContolTransition;
+        public float maxZoomOnChar;
+        public float maxZoomOnShip;
+
+        public IControllable currentControllable;
+        public IControllable lastControlledCrew;
+
+        public CameraController cameraControl;
+        float timeSinceClick;
+
+
+        Interactable interactable;
+        public Act command;
+
+        //template for perks to be added
+
         [SerializeField] private UIPlayerInventory uIInventory;
-
-        public CrewMember focus;
         
-
         bool isDraggingUI = false;
         private bool isPaused;
 
         private void Awake()
         {
-            isPaused = false;
-            cachePlayerObjects = null;
+            command = new Act();
+            SelectControllable(currentTeam[0]);
         }
 
         private void Start() {
-            cameraControl.SetCameraTarget(currentControllable);
+
             SetCamera();
         }
 
@@ -92,18 +85,15 @@ namespace RPG.Control
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                currentControllable.GetComponent<CrewMember>().GetWeaponOut();
-            }
+            KeyMapping();
 
             if (InteractWithUI()) return;
 
-            if (currentControllable.health.IsDead())
-            { 
-                SetCursor(CursorType.None);
-                return;
-            }
+            //if (currentControllable.health.IsDead())
+            //{ 
+            //    SetCursor(CursorType.None);
+            //    return;
+            //}
             DetermineShipControl();
             MoveWithKeyPress();
             
@@ -113,7 +103,27 @@ namespace RPG.Control
             SetCursor(CursorType.None);
             
         }
-#region DeterminePlaterControl
+
+        private void KeyMapping()
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                SelectControllable(currentTeam[0]);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                SelectControllable(currentTeam[0]);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                SelectControllable(currentTeam[0]);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                SelectControllable(currentTeam[0]);
+            }
+        }
+        #region DeterminePlaterControl
 
         private void DetermineShipControl ()
         { if (canControlShip)
@@ -135,13 +145,13 @@ namespace RPG.Control
                 {
                     //need to add a performace modifier to control scale when zooming in and out.
                     controllingShip = true;
-                    if (currentControllable != ship)
-                    {
-                        SetCamera();
-                        lastControlledCrew = (CrewMember)currentControllable;
-                        SetControllable(ship);
-                        maxNavPathLength = 2000f;
-                    }
+                    //if (currentControllable != ship)
+                    //{
+                    //    SetCamera();
+                    //    lastControlledCrew = (CrewMember)currentControllable;
+                    //    //SetControllable(ship);
+                    //    maxNavPathLength = 2000f;
+                    //}
                     
                 }
             }
@@ -161,14 +171,11 @@ namespace RPG.Control
         }
         private void MoveWithKeyPress()
         {
-            if (currentControllable.turnManager.GetCanMove())
-            {
-                currentControllable.mov.KeyMovement();
-            }
-                       
+
+                currentControllable.KeyMovement();                       
         }
 
-        public void SetControllable(ControllableObject calledObject) 
+        public void SetControllable(IControllable calledObject) 
         {
             //additional guard statement
             if (currentControllable == calledObject) return;
@@ -190,40 +197,14 @@ namespace RPG.Control
 
         
 
-        public void SelectControllable(ControllableObject selected)
+        public void SelectControllable(IControllable selected)
         {
-            if (selected == currentControllable || selected.GetComponent<StateManager>().isInCombat) return;
-
-            if (selected.GetType() == typeof(CrewMember))
-            {
-            
-                CrewMember selectedCrew = (CrewMember)selected;
-                //cache the current player to set follow behavior.
-                if (currentControllable.GetType() != typeof(CrewMember))
-                {
-                    cameraControl.SetCameraTarget(currentControllable);
-                    currentControllable = selected;
-                }
-                else
-                {
-                    
-                CrewMember oldCrewMember = (CrewMember)currentControllable;
-
-                //make sure that both characters STOP following anyone
-                selectedCrew.StopFollowingTheLeader();
-                oldCrewMember.StopFollowingTheLeader();
-
-                oldCrewMember.FollowTheLeader(selectedCrew);
-                //set camera to focus on new crewmember
-                
-                //let the world know you're selected character changed
-                //GameEvents.instance.UpdateSelectedCrew(selectedCrew);
-                }
-            }
+            if (selected == null) return;
+            if (selected == currentControllable) return;
 
             currentControllable = selected;
+            Debug.Log("Current controllable: " + currentControllable);
             cameraControl.SetCameraTarget(currentControllable);
-            
         }
 
         public List<CrewMember> ListCrew()
@@ -236,7 +217,7 @@ namespace RPG.Control
         }
 #endregion
 
-#region Interactle Behaviours
+#region Interactable Behaviours
 
         private bool InteractWithObject()
         {
@@ -286,9 +267,8 @@ namespace RPG.Control
                                 interactable = hit.collider.GetComponent<Interactable>();
                                 if (interactable != null)
                                 {
-                                    RPG_TaskSystem.Task defaultTask = interactable.GetDefaultAction();
-                                    //new RPG_TaskSystem.Task.Default { interactable = interactable, task = , controllable = currentControllable };
-                                    currentControllable.taskSystem.AddTask(defaultTask);
+                                    Debug.Log(interactable.GetDefaultAction());
+                                    currentControllable.IssueCommand(interactable.GetDefaultAction(), interactable.gameObject);
                                 }
                             }                  
 
@@ -318,67 +298,55 @@ namespace RPG.Control
 #endregion
 
 
-        
-        private void SetFollow(CrewMember newFocus)
-        {
-            focus = newFocus;
-            Debug.Log (focus);
-        }
-
-        private void RemoveFollow()
-        {
-            focus = null;
-            Debug.Log("focus removed");
-        }
         // reference this for making complex arrays based on others.
 
         #region ActionMenu
-        public void SelectActionMenu(ActionMenuOptions selectedOptions, Interactable interactable)
-        {
+        //public void SelectActionMenu(ActionMenuOptions selectedOptions, Interactable interactable)
+        //{
 
-            //actions based on clicking from mouse. Most rely on Coroutine Act, which functionality 
-            //is changed by editing the delagate "interactableAction". See in PlayerController.cs. Some 
-            //actions require to be manually altered at this time.
+        //    //actions based on clicking from mouse. Most rely on Coroutine Act, which functionality 
+        //    //is changed by editing the delagate "interactableAction". See in PlayerController.cs. Some 
+        //    //actions require to be manually altered at this time.
 
-            switch (selectedOptions)
-            {
+        //    switch (selectedOptions)
+        //    {
 
-                case ActionMenuOptions.Attack:
-                    RPG_TaskSystem.Task atkTask = new RPG_TaskSystem.Task.Attack { interactable =interactable, controllable = currentControllable };
-                    currentControllable.taskSystem.AddTask(atkTask);
-                    break;
-                case ActionMenuOptions.Trade:
-                    RPG_TaskSystem.Task tradeTask = new RPG_TaskSystem.Task.Trade { interactable = interactable };
-                    currentControllable.taskSystem.AddTask(tradeTask);
-                    break;
-                case ActionMenuOptions.Talk:
-                    RPG_TaskSystem.Task talkTask = new RPG_TaskSystem.Task.Talk { interactable = interactable };
-                    currentControllable.taskSystem.AddTask(talkTask);
-                    break;
-                case ActionMenuOptions.Move:
-                    RPG_TaskSystem.Task moveTask = new RPG_TaskSystem.Task.MoveToPosition { targetPoistion = interactable.transform.position };
-                    currentControllable.taskSystem.AddTask(moveTask);
-                    break;
-                case ActionMenuOptions.Open:
-                    RPG_TaskSystem.Task openTask = new RPG_TaskSystem.Task.Open { interactable = interactable };
-                    currentControllable.taskSystem.AddTask(openTask);
-                    break;
-                case ActionMenuOptions.PickUp:
-                    RPG_TaskSystem.Task pickUpTask = new RPG_TaskSystem.Task.Pickup { interactable = interactable, controllable = currentControllable };
-                    currentControllable.taskSystem.AddTask(pickUpTask);
-                    break;
-                case ActionMenuOptions.Inspect:
-                    RPG_TaskSystem.Task inspectTask = new RPG_TaskSystem.Task.Inspect { interactable = interactable };
-                    currentControllable.taskSystem.AddTask(inspectTask);
-                    break;
-                case ActionMenuOptions.Scan:
-                    RPG_TaskSystem.Task scanTask = new RPG_TaskSystem.Task.Scan { interactable = interactable };
-                    currentControllable.taskSystem.AddTask(scanTask);
-                    break;
-            }
+        //        case ActionMenuOptions.Attack:
+        //            RPG_TaskSystem.Task atkTask = new RPG_TaskSystem.Task.Attack { interactable =interactable, controllable = currentControllable };
+        //            currentControllable.taskSystem.AddTask(atkTask);
+        //            break;
+        //        case ActionMenuOptions.Trade:
+        //            RPG_TaskSystem.Task tradeTask = new RPG_TaskSystem.Task.Trade { interactable = interactable };
+        //            currentControllable.taskSystem.AddTask(tradeTask);
+        //            break;
+        //        case ActionMenuOptions.Talk:
+        //            RPG_TaskSystem.Task talkTask = new RPG_TaskSystem.Task.Talk { interactable = interactable };
+        //            currentControllable.taskSystem.AddTask(talkTask);
+        //            break;
+        //        case ActionMenuOptions.Move:
+        //            RPG_TaskSystem.Task moveTask = new RPG_TaskSystem.Task.MoveToPosition { targetPoistion = interactable.transform.position };
+        //            currentControllable.taskSystem.AddTask(moveTask);
+        //            break;
+        //        case ActionMenuOptions.Open:
+        //            RPG_TaskSystem.Task openTask = new RPG_TaskSystem.Task.Open { interactable = interactable };
+        //            currentControllable.taskSystem.AddTask(openTask);
+        //            break;
+        //        case ActionMenuOptions.PickUp:
+        //            RPG_TaskSystem.Task pickUpTask = new RPG_TaskSystem.Task.Pickup { interactable = interactable, controllable = currentControllable };
+        //            currentControllable.taskSystem.AddTask(pickUpTask);
+        //            break;
+        //        case ActionMenuOptions.Inspect:
+        //            RPG_TaskSystem.Task inspectTask = new RPG_TaskSystem.Task.Inspect { interactable = interactable };
+        //            currentControllable.taskSystem.AddTask(inspectTask);
+        //            break;
+        //        case ActionMenuOptions.Scan:
+        //            RPG_TaskSystem.Task scanTask = new RPG_TaskSystem.Task.Scan { interactable = interactable };
+        //            currentControllable.taskSystem.AddTask(scanTask);
+        //            break;
+        //    }
 
-            ActionMenu.HideMenuOptions_Static();
-        }
+        //    ActionMenu.HideMenuOptions_Static();
+        //}
 
         #endregion
 
@@ -418,13 +386,8 @@ namespace RPG.Control
                     if (Input.GetMouseButtonDown(0))
                     {
                         Debug.Log("Mouse clicked");
-                        
-                        
-                        StopAllCoroutines();
-                        ActionMenu.HideMenuOptions_Static();
 
-                        RPG_TaskSystem.Task.MoveToPosition task = new RPG_TaskSystem.Task.MoveToPosition{targetPoistion = target};
-                        currentControllable.taskSystem.AddTask(task);                  
+                    currentControllable.IssueCommand(ManualActions.Move, target);
                     }
                     SetCursor(CursorType.Movement);
                     return true;
@@ -484,7 +447,7 @@ namespace RPG.Control
             
             //give caluclate an object that it can modify.
             NavMeshPath path = new NavMeshPath();
-            bool hasPath = NavMesh.CalculatePath(currentControllable.transform.position, target, NavMesh.AllAreas, path);
+            bool hasPath = NavMesh.CalculatePath(currentControllable.gameObject.transform.position, target, NavMesh.AllAreas, path);
             if (!hasPath) return false;
             //if you can't get to targetted navmesh it will not show that you can go there.
             if (path.status != NavMeshPathStatus.PathComplete) return false;
@@ -532,26 +495,7 @@ namespace RPG.Control
         }
 #endregion
 
-        
-
-        private void CachePlayerClick(Interactable target)
-        {
-            cachePlayerObjects = new List<Interactable>();
-            cachePlayerObjects.Add(target);
-
-        }
-
-        public void RefreshCachePlayerClick()
-        {
-            cachePlayerObjects = new List<Interactable>();
-        }
-
-        public List<Interactable> GetCachePlayerClick()
-        {
-            return cachePlayerObjects;
-        }
-
-        public ControllableObject GetCurrentControllable()
+        public IControllable GetCurrentControllable()
         {
             return currentControllable;
         }
@@ -563,7 +507,7 @@ namespace RPG.Control
                 return GetCurrentControllable() as CrewMember;
             }
             else {
-                return lastControlledCrew;
+                return lastControlledCrew as CrewMember;
             }
             
         }

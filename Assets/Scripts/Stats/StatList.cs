@@ -7,7 +7,7 @@ namespace RPG.Stats
     public class StatList: ScriptableObject
     {
         const string statListName = "Stats";
-        public List<Stat> statList;
+        public List<Modifier> statList;
         
     }
 }

@@ -39,16 +39,7 @@ namespace RPG.Control
 
         public virtual void InitializeDefaultBehaviour()
         {
-            
-               if (GetComponent<AIController>() != null)
-            {
-                if (GetComponent<AIController>().GetAttitude() == AttitudeType.Hostile)
-                {
-                    defaultAction = new RPG_TaskSystem.Task.Attack { interactable = this};
-                    //defaultInteraction = AttackNPC;
-                    defaultCursorType = CursorType.Combat;
-                }
-            }
+ 
             if (GetComponent<Shop>() != null)
             {
                 defaultAction = new RPG_TaskSystem.Task.Trade { interactable = this };

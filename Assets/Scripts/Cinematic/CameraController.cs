@@ -71,9 +71,9 @@ namespace RPG.Cinematic
             transform.RotateAround(target.position, Vector3.up, currentYaw);
         }
 
-        public void SetCameraTarget(ControllableObject controllable)
+        public void SetCameraTarget(IControllable controllable)
         {
-            target = controllable.transform;
+            target = controllable.gameObject.transform;
         }
     
     }

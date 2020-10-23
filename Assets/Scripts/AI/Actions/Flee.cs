@@ -32,11 +32,11 @@ namespace RPG.AI
 
         public override bool PerformAction()
         {
-            if (Vector3.Distance(target.transform.position, this.transform.position) < fleeDistance)
+            if (Vector3.Distance(target.transform.position, agent.transform.position) < fleeDistance)
             {
-                Vector3 fleeVector = (target.transform.position - this.transform.position).normalized;
+                Vector3 fleeVector = (target.transform.position - agent.transform.position).normalized;
 
-                engine.MoveToLocation(this.transform.position - new Vector3(fleeVector.x, 0, fleeVector.y));
+                agent.engine.MoveToLocation(agent.transform.position - new Vector3(fleeVector.x, 0, fleeVector.y));
                 return false;
             }
             else
@@ -78,7 +78,7 @@ namespace RPG.AI
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, fleeDistance);
+            Gizmos.DrawWireSphere(agent.transform.position, fleeDistance);
 
         }
     }

@@ -15,7 +15,7 @@ namespace RPG.AI {
         public override bool PrePerform()
         {
             duration = Random.Range(10, 30);
-            engine.SetSpeed(1.558f);
+            agent.engine.SetSpeed(1.558f);
             if (actionState != ActionState.interrupted || timesInterrupted > 2)
             {
                 //Debug.Log(nextPoint);
@@ -47,7 +47,7 @@ namespace RPG.AI {
         {
             agent.room.station.GetQueue("patrol").AddResource(target);
             agent.room.station.states.ModifyState("PatrolPointAvailable", 1);
-            engine.SetSpeed(5.66f);
+            agent.engine.SetSpeed(5.66f);
             //GWorld.Instance.GetList("locations").AddResource(target);
             timesInterrupted = 0;
             actionPerformed = false;
@@ -60,7 +60,7 @@ namespace RPG.AI {
         {
             agent.room.station.GetQueue("patrol").AddResource(target);
             agent.room.station.states.ModifyState("PatrolPointAvailable", 1);
-            engine.SetSpeed(5.66f);
+            agent.engine.SetSpeed(5.66f);
             timesInterrupted++;
             Debug.Log(this + " was interrupted");
             actionPerformed = false;

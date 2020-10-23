@@ -20,14 +20,14 @@ namespace RPG.AI
         {
             target = GWorld.Instance.GetList("hostiles").GetResource(0);
             float weaponRange = agent.fighter.GetWeaponRange();
-            if (Vector3.Distance(target.transform.position, this.transform.position) < weaponRange)
+            if (Vector3.Distance(target.transform.position, agent.transform.position) < weaponRange)
             {
-                actionDestination = this.transform.position;
+                actionDestination = agent.transform.position;
                 return true;
             }
             else
             {
-                Vector3 targetDir = this.transform.position - target.transform.position;
+                Vector3 targetDir = agent.transform.position - target.transform.position;
                 Vector3 inRangeForAttackPos = target.transform.position + targetDir.normalized * weaponRange;
                 actionDestination = inRangeForAttackPos;
                 return true;

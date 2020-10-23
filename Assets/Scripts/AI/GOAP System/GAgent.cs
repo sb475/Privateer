@@ -5,10 +5,10 @@ using System.Linq;
 using UnityEngine.UIElements;
 using RPG.Control;
 using RPG.Combat;
+using RPG.Movement;
 
 namespace RPG.AI
 {
-
     public class SubGoal
     {
         public Dictionary<string, int> sgoals;
@@ -24,29 +24,27 @@ namespace RPG.AI
 
     public class GAgent : MonoBehaviour
     {
-        public List<GAction> actions = new List<GAction>();
-
         public Dictionary<SubGoal, int> goals = new Dictionary<SubGoal, int>();
         public LocalMemory localMemory = new LocalMemory();
         public GOAPStates beliefs = new GOAPStates();
         public List<GAgent> hostileAgents = new List<GAgent>();
         public bool isHostile;
 
-        public SmartRoom room;
-        
-        //public Station station;
-        //public Ship ship;
-        //public World world;
+        public GameObject actionTarget;
+        public Vector3 actionDestination = new Vector3();
 
+        public SmartRoom room;
         public IEnumerator startAction;
 
+        public Character character;
         public Fighter fighter;
-
+        public IEngine engine;
 
         GPlanner planner;
         Queue<GAction> actionQueue;
         public GAction currentAction;
         public GAction previousAction;
+        public List<GAction> actions = new List<GAction>();
         SubGoal currentGoal;
         bool actionStarted = false;
 
@@ -54,19 +52,20 @@ namespace RPG.AI
 
         private void Awake()
         {
+            character = GetComponent<Character>();
             fighter = GetComponent<Fighter>();
+            engine = GetComponent<IEngine>();
+
+            GAction[] acts = GetComponents<GAction>();
+            foreach (GAction a in acts)
+               actions.Add(a);
         }
 
         // Start is called before the first frame update
         public void Start()
         {
-            GAction[] acts = this.GetComponents<GAction>();
-            foreach (GAction a in acts)
-                actions.Add(a);
-
             room.RegisterAgent(this);
         }
-
 
         public bool ShouldCancel()
         {
@@ -243,7 +242,7 @@ namespace RPG.AI
             }
             else
             {
-                currentAction.engine.MoveToLocation(currentAction.actionDestination);
+                engine.MoveToLocation(currentAction.actionDestination);
                 return false;
             }
 

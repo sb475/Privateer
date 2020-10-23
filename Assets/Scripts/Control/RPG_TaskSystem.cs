@@ -35,7 +35,7 @@ namespace RPG.Control
             }
             public class Pickup : Task
             {
-                public ItemInInventory item;
+                public Item item;
   
             }
             public class Inspect : Task

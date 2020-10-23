@@ -56,13 +56,13 @@ namespace RPG.UI {
     }
 
     public static void ShowToolTip_Static(string tooltipString) {
-        instance.ShowToolTip(tooltipString);
+        //instance.ShowToolTip(tooltipString);
 
     }
 
     public static void HideToolTip_Static()
     {
-        instance.HideToolTip();
+        //instance.HideToolTip();
 
     }
 

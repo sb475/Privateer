@@ -9,33 +9,28 @@ using System.Collections.Generic;
 using GameDevTV.Utils;
 using System;
 using RPG.Items;
+using RPG.Base;
 
 namespace RPG.Combat
 {
     public class Fighter : MonoBehaviour, IAction, ISaveable, IAttack
     {
 
-        [SerializeField] float timeBetweenAttacks = 1f;
+        Character character;
 
+        [SerializeField] float timeBetweenAttacks = 1f;
         [SerializeField] Transform rightHandTransform = null;
         [SerializeField] Transform leftHandTransform = null;
-        [SerializeField] Transform weaponBackTransform = null;
-        // [SerializeField] Transform pistolHolsterTransform = null;
-        [SerializeField] Transform knifeHolsterTransform = null;
         [SerializeField] WeaponConfig defaultWeapon = null;
         [SerializeField] ArmorConfig defaultArmor = null;
-        public LazyValue<float> maxAP;
-        public float currentAP;
-        bool outOfRangeAnnounced = false;
-        public bool attacking;
+        public bool secondaryEqipped = false;
 
-        public GameObject currentTarget;
         public IDamagable target;
-        StateManager turnManager;
-        public CharacterEquipment equipment;
         
         // mathf.infitity allows to attack right away
         float timeSinceLastAttack = Mathf.Infinity;
+
+        [Header("Current Weapon and Armor")]
         public WeaponConfig currentWeaponConfig;
         LazyValue<Weapon> currentWeapon;
 
@@ -44,29 +39,18 @@ namespace RPG.Combat
         LazyValue<Armor> currentArmor;
 
         private void Awake() {
+            character = GetComponent<Character>();
             currentWeaponConfig = defaultWeapon;
+            //change this to pull from equipment.
             currentWeapon = new LazyValue<Weapon>(SetupDefaultWeapon);
             currentArmor = new LazyValue<Armor>(SetupDefaultArmor);
-            maxAP = new LazyValue<float>(GetInitalActionPoints);
-            turnManager = GetComponent<StateManager>();
-            attacking = false;
-            equipment = GetComponent<CharacterEquipment>();
-
-        }
-
-        private float GetInitalActionPoints()
-        {
-            return GetComponent<CharacterStats>().GetStat(StatName.ActionPoints);
         }
 
         private void Start() 
         {
             currentWeapon.ForceInit();
-            maxAP.ForceInit();
-            currentAP = maxAP.value;
         }
 
-       
         private void Update()
         {
             timeSinceLastAttack += Time.deltaTime;
@@ -77,60 +61,45 @@ namespace RPG.Combat
             if (GetComponent<IDamagable>().IsDead()) return;
         }
 
+        #region AttackFunctions
+        public void Attack(IDamagable combatTarget)
+        {
+            target = combatTarget;
+            GetComponent<ActionScheduler>().StartAction(this);
+            AttackBehavior(combatTarget);
+        }
+
         private void AttackBehavior(IDamagable target)
         {
-
             transform.LookAt(target.gameObject.transform);
-
             //This will trigger the Hit() event.
-
-
-            if (timeSinceLastAttack > timeBetweenAttacks)
+            if ((timeSinceLastAttack > currentWeaponConfig.rateOfAttack) && (GetIsInRange(target)))
             {
                 TriggerAttack();
                 timeSinceLastAttack = 0;
             }
         }
+        private bool GetIsInRange(IDamagable combatTarget)
+        {
+            return Vector3.Distance(transform.position, combatTarget.gameObject.transform.position) < currentWeaponConfig.GetRange();
+        }
+
+        public void Cancel()
+        {
+            StopAttack();
+            target = null;
+            GetComponent<IEngine>().Cancel();
+        }
+
+        private void StopAttack()
+        {
+            GetComponent<Animator>().ResetTrigger("attack");
+            GetComponent<Animator>().SetTrigger("stopAttack");
+        }
+        #endregion
 
 
-            //if (!GetIsInRange(target))
-            //{
-            //    if (turnManager.GetCanMove())
-            //    {
-            //        GetComponent<IEngine>().StartMoveAction(target.gameObject.transform.position, 1f);
-            //    }
-            //    else
-            //    {
-            //        print(target.gameObject.name + " is out of range");
-
-            //        if ((GetComponent<AIController>() != null))
-            //        {
-            //            turnManager.SetCanAct(false);
-            //        }
-
-            //    }
-            //    //leave in place for moving to cover
-            //}
-            //else
-            //{
-            //    GetComponent<IEngine>().Cancel();
-            //        //reset flag so that next time in range resets.
-            //    outOfRangeAnnounced = false;
-
-            //    transform.LookAt(target.gameObject.transform);
-
-            //    //This will trigger the Hit() event.
-
-
-            //    if (timeSinceLastAttack > timeBetweenAttacks)
-            //    {
-            //        TriggerAttack();
-            //        timeSinceLastAttack = 0;
-            //    }
-            //}
-        //}
-
-#region WeaponConfigurations
+        #region WeaponConfigurations
 
         private Weapon SetupDefaultWeapon()
         {
@@ -150,13 +119,24 @@ namespace RPG.Combat
             currentWeapon.value = AttachWeapon(weapon);
         }
 
-        public void SwitchToSecondary()
+        public void EquipSecondary()
         {
-            EquipWeapon(equipment.LoadWeapon(equipment.GetEquippedItems()[0]));
+            ItemConfig secondary;
+            character.equipment.equipped.TryGetValue(EquipmentSlots.secondary, out secondary);
+            EquipWeapon(secondary as WeaponConfig);
+            secondaryEqipped = true;
         }
-        public void SwitchToPrimary()
+        public void EquipPrimary()
         {
-            EquipWeapon(equipment.LoadWeapon(equipment.GetEquippedItems()[1]));
+            ItemConfig primary;
+            character.equipment.equipped.TryGetValue(EquipmentSlots.primary, out primary);
+            EquipWeapon(primary as WeaponConfig);
+        }
+
+        public void ReloadWeapon()
+        {
+            if (secondaryEqipped) EquipSecondary();
+            else EquipPrimary();
         }
 
         public void EquipArmor(ArmorConfig armor)
@@ -181,11 +161,7 @@ namespace RPG.Combat
     #endregion
 
 
-#region Animations
-        public IDamagable GetTarget()
-        {
-            return target;
-        }
+        #region Animations
 
         public void PresentRifle()
         {
@@ -202,10 +178,10 @@ namespace RPG.Combat
             GetComponent<Animator>().ResetTrigger("stopAttack");
             GetComponent<Animator>().SetTrigger("attack");
         }
-#endregion
+        #endregion
 
 
-#region AnimationEvent
+        #region AnimationEvent
         void Hit()
         {
 
@@ -228,7 +204,6 @@ namespace RPG.Combat
                 target.TakeDamage(gameObject, damage);
             }
             //resets target to avoid auto attacking same target next round.
-            UpdateActionPoints(2);
             target = null;
 
         }
@@ -238,93 +213,19 @@ namespace RPG.Combat
             Hit();
         }
 
-#endregion
+        #endregion
 
 
-        private bool GetIsInRange(IDamagable combatTarget)
-        {
-            return Vector3.Distance(transform.position, combatTarget.gameObject.transform.position) < currentWeaponConfig.GetRange();
-        }
+
 
         public bool CanAttack(IDamagable combatTarget)
         {
             if (combatTarget == null) { return false; }
-            if (currentAP <= 0) { return false; }
             IDamagable targetToTest = combatTarget;
             return targetToTest != null && !targetToTest.IsDead();
         }
 
-        public void Attack(IDamagable combatTarget)
-        {
-            if (!turnManager.GetCanAct()) 
-            {
-                Debug.Log("You cannot attack");
-            }
-            else
-            {
-            //assigns target for dealing damage
-            target = combatTarget;
-            currentTarget = combatTarget.gameObject;
-            GetComponent<ActionScheduler>().StartAction(this);
-            AttackBehavior(combatTarget);
-            }
-
-        }
-            //  print ("take that you weasel");
-        
-        public void Cancel()
-        {
-            StopAttack();
-            target = null;
-            GetComponent<IEngine>().Cancel();
-        }
-
-        private void StopAttack()
-        {
-            GetComponent<Animator>().ResetTrigger("attack");
-            GetComponent<Animator>().SetTrigger("stopAttack");
-        }
-
-
-//save functions
-        public object CaptureState()
-        {
-            return currentWeaponConfig.name;
-        }
-
-        public void RestoreState(object state)
-        {
-            string weaponName = (string)state;
-            WeaponConfig weapon = Resources.Load<WeaponConfig>(weaponName);
-            EquipWeapon(weapon);
-        }
-
-        //Action Points
-        public void RestoreActionPoints()
-        {
-            currentAP = maxAP.value;
-            turnManager.SetCanAct(true);
-        }
-        public float GetActionPoints()
-        {
-            return currentAP;
-        }
-
-        private float UpdateActionPoints(float costActionPoints)
-        {
-            currentAP -= costActionPoints;
-            if (currentAP <= currentWeaponConfig.GetActionPointCost())
-            {
-                turnManager.SetCanAct(false);
-            }
-            else
-            {
-                turnManager.SetCanAct(true);
-            }
-            return currentAP;
-
-        }
-
+        #region Getters
         public string DamageAsString()
         {
             return (GetComponent<CharacterStats>().GetDamage(StatName.Damage, currentWeaponConfig) + " " + currentWeaponConfig.GetDamageBonus()).ToString();
@@ -349,6 +250,30 @@ namespace RPG.Combat
         public float GetWeaponRange()
         {
             return currentWeaponConfig.GetRange();
+        }
+
+        public void RestoreActionPoints()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDamagable GetTarget()
+        {
+            return target;
+        }
+        #endregion
+    
+        //save functions
+        public object CaptureState()
+        {
+            return currentWeaponConfig.name;
+        }
+
+        public void RestoreState(object state)
+        {
+            string weaponName = (string)state;
+            WeaponConfig weapon = Resources.Load<WeaponConfig>(weaponName);
+            EquipWeapon(weapon);
         }
     }
         

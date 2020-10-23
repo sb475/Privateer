@@ -13,13 +13,13 @@ namespace RPG.Base
     [RequireComponent(typeof(Outline))]
     public class Interactable : MonoBehaviour, IRaycastable
     {
+        public ManualActions defaultAct;
 
         public delegate void DefaultInteraction(ControllableObject controllable);
         public DefaultInteraction defaultInteraction;
-
         public Task defaultAction;
 
-        public List<ActionMenuOptions> actionMenuOptions;
+        public List<ManualActions> actionMenuOptions;
         public float interactRadius = 3f;
         bool hasInteracted = false;
         public CursorType defaultCursorType;
@@ -46,9 +46,9 @@ namespace RPG.Base
         
         }
 
-        public Task GetDefaultAction ()
+        public ManualActions GetDefaultAction ()
         {
-            return defaultAction;
+            return defaultAct;
         }
 
         public IEnumerator MoveToDefault(ControllableObject callingController, Action interactableAction)

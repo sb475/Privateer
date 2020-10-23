@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace RPG.AI
 {
+    [CreateAssetMenu(fileName = "Wander", menuName = "AI/Wander", order = 0)]
     public class Wander: GAction
     {
         int nextPoint;
@@ -15,14 +16,14 @@ namespace RPG.AI
        
         public override bool PrePerform()
         {
-            engine.SetSpeed(1.558f);
+            agent.engine.SetSpeed(1.558f);
 
             if (actionState != ActionState.interrupted || timesInterrupted > 2)
             {
                 nextPoint = Random.Range(0, agent.room.station.GetWander().Count);
-                //Debug.Log(nextPoint);
+                
                 target = agent.room.station.GetWander()[nextPoint];
-
+                Debug.Log(target);
                 if (target == null)
                 {
                     return false;
@@ -48,7 +49,7 @@ namespace RPG.AI
     
         public override bool PostPerform()
         {
-            engine.SetSpeed(5.66f);
+            agent.engine.SetSpeed(5.66f);
             //GWorld.Instance.GetList("locations").AddResource(target);
             localMemory.RemoveItem(target);
             //GWorld.Instance.GetGOAPStates().ModifyState("LocationAvailable", 1);
@@ -61,7 +62,7 @@ namespace RPG.AI
 
         public override bool OnInterrupt()
         {
-            engine.SetSpeed(5.66f);
+            agent.engine.SetSpeed(5.66f);
             //GWorld.Instance.GetGOAPStates().ModifyState("LocationAvailable", 1);
             timesInterrupted++;
             Debug.Log(this + " was interrupted");

@@ -2,6 +2,7 @@
 using RPG.AI;
 using RPG.Combat;
 using RPG.Items;
+using RPG.Stats;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,10 +29,10 @@ namespace RPG.AI
             //if character is using a range weapon cannot rush. If current weapon has range then check secondary.
             if (agent.fighter.currentWeaponConfig.HasProjectile())
             { 
-                if (!(agent.fighter.equipment.secondaryWeapon as WeaponConfig).HasProjectile())
+                if (!(agent.character.equipment.equipped[EquipmentSlots.secondary] as WeaponConfig).HasProjectile())
                 {
-                    if (agent.fighter.currentWeaponConfig == agent.fighter.equipment.secondaryWeapon) return false;
-                    agent.fighter.EquipWeapon(agent.fighter.equipment.LoadWeapon(agent.fighter.equipment.secondaryWeapon));
+                    if (agent.fighter.currentWeaponConfig == agent.character.equipment.equipped[EquipmentSlots.secondary] as WeaponConfig) return false;
+                    agent.fighter.EquipWeapon(agent.character.equipment.equipped[EquipmentSlots.secondary] as WeaponConfig);
                 }
                 else
                 {
@@ -41,14 +42,14 @@ namespace RPG.AI
 
 
         float weaponRange = agent.fighter.GetWeaponRange();
-            if (Vector3.Distance(target.transform.position, this.transform.position) < weaponRange)
+            if (Vector3.Distance(target.transform.position, agent.transform.position) < weaponRange)
             {
-                actionDestination = this.transform.position;
+                actionDestination = agent.transform.position;
                 return true;
             }
             else
             {
-                Vector3 targetDir = this.transform.position - target.transform.position;
+                Vector3 targetDir = agent.transform.position - target.transform.position;
                 Vector3 inRangeForAttackPos = target.transform.position + targetDir.normalized * weaponRange;
                 actionDestination = inRangeForAttackPos;
                 return true;

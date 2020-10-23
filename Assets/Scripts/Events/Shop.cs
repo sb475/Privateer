@@ -35,7 +35,7 @@ namespace RPG.Events
         {
             if (inventoryPopulated == false)
             {
-                foreach (ItemInInventory item in shopInventoryData.inventoryData)
+                foreach (Item item in shopInventoryData.inventoryData)
                 {
                     storeInventory.AddItem(item);
                 }

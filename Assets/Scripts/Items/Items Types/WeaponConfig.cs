@@ -13,7 +13,8 @@ namespace RPG.Items
         [SerializeField] float weaponDamage = 5f;
         [SerializeField] float damageBonus = 0;
         [SerializeField] float weaponRange = 2f;
-        [SerializeField] float actionPointCost = 2f;
+        public float rateOfAttack = 2f;
+        [SerializeField] float hitPercentage = 75f;
         [SerializeField] bool isRightHanded = true;
         [SerializeField] Projectile projectile = null;
         const string weaponName = "Weapon";
@@ -92,10 +93,6 @@ namespace RPG.Items
         public float GetDamageBonus()
         {
             return damageBonus;
-        }
-        public float GetActionPointCost()
-        {
-            return actionPointCost;
         }
         
         private void OnDrawGizmos()

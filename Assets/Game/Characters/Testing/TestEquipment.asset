@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 105823a71572b624c8dd0f6d26625dd4, type: 3}
+  m_Name: TestEquipment
+  m_EditorClassIdentifier: 
+  defaultPrimary: {fileID: 11400000, guid: 3abaa410a54f8a94398334cf7c38e5d2, type: 2}
+  defaultSeconday: {fileID: 11400000, guid: 4cac18f1014781c4598d4d135f1b7e86, type: 2}
+  defaultArmor: {fileID: 11400000, guid: ef0de33980f30fb4db6111418c2a8e79, type: 2}
+  defaultTool: {fileID: 0}
+  defaultSpecial: {fileID: 0}

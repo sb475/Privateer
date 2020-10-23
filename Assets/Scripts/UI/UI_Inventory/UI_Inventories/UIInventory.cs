@@ -13,13 +13,13 @@ namespace RPG.UI{
     {
         public UIController uIController;
         public Inventory inventory;
-        ItemInInventory uiItemData;
+        Item uiItemData;
         [SerializeField] private GameObject itemSlotContainer;
         [SerializeField] private GameObject itemSlot;
         [SerializeField] public GameObject inventoryOwner;
         public GameObject selectedSlot;
         public TextMeshProUGUI displayCurrency;
-        [SerializeField] ItemInInventory selectedItemInInventory;
+        [SerializeField] Item selectedItemInInventory;
 
         public virtual void Awake() {
             
@@ -70,7 +70,7 @@ namespace RPG.UI{
             float itemSlotCellSize = 30f;
 
             //cycles through inventory items and generates image in ineventory UI.
-            foreach (ItemInInventory item in inventory.GetItemList())
+            foreach (Item item in inventory.GetItemList())
             {
                 if (item.isEquipped == true || item == null) continue;
                 
@@ -125,13 +125,13 @@ namespace RPG.UI{
             Debug.Log("Right Click");
         }
 
-        public void UI_ItemRemove(ItemInInventory itemToRemove)
+        public void UI_ItemRemove(Item itemToRemove)
         {
             inventory.RemoveItem(itemToRemove);
             RefreshInventoryItems();
         }
 
-        public void UI_ItemAdd(ItemInInventory itemToAdd)
+        public void UI_ItemAdd(Item itemToAdd)
         {
             inventory.AddItem(itemToAdd);
             RefreshInventoryItems();

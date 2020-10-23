@@ -14,7 +14,7 @@ namespace RPG.UI
             public event EventHandler<OnItemDroppedEventArgs> OnItemDropped;
             public class OnItemDroppedEventArgs : EventArgs
             {
-                public ItemInInventory itemInInventory;
+                public Item itemInInventory;
             }
            
 
@@ -41,7 +41,7 @@ namespace RPG.UI
                 droppedObject.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
             }
 
-            protected virtual void ActivateOnItemDropped (ItemSlot itemSlot, ItemInInventory uiItemInInventory)
+            protected virtual void ActivateOnItemDropped (ItemSlot itemSlot, Item uiItemInInventory)
             {
 
                 OnItemDropped?.Invoke(this, new OnItemDroppedEventArgs { itemInInventory = uiItemInInventory });

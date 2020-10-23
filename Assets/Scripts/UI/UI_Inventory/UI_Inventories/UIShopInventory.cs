@@ -66,12 +66,12 @@ namespace RPG.UI
             }
         }
         
-        public void BuyItemUI (ItemInInventory item)
+        public void BuyItemUI (Item item)
         {
             shopController.BrokerBuy(item);
         }
 
-        public void SellItemUI(ItemInInventory item)
+        public void SellItemUI(Item item)
         {
             shopController.BrokerSell(item);
         }

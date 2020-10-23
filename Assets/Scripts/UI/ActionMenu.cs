@@ -72,20 +72,20 @@ namespace RPG.UI {
         private void DisplayMenuOptions(Interactable interactable, GameObject displayMenuOptions, GameObject displayContainer)
         {
 
-            foreach (ActionMenuOptions options in interactable.actionMenuOptions)
+            foreach (ManualActions options in interactable.actionMenuOptions)
             {
                 GenerateOptionsDisplay(displayMenuOptions, displayContainer, options, interactable);
             }
         }
 
-        private void GenerateOptionsDisplay(GameObject displayMenuOptions, GameObject displayContainer, ActionMenuOptions options, Interactable interactable)
+        private void GenerateOptionsDisplay(GameObject displayMenuOptions, GameObject displayContainer, ManualActions options, Interactable interactable)
         {
             RectTransform displayMenuRectTransform = Instantiate(displayMenuOptions.transform, displayContainer.transform).GetComponent<RectTransform>();
 
             Text optionsToDisplay = displayMenuRectTransform.GetComponentInChildren<Text>();
 
             Button menuButton = displayMenuRectTransform.GetComponent<Button>();
-            menuButton.onClick.AddListener(() => GameEvents.instance.crewController.SelectActionMenu(options, interactable));
+            //menuButton.onClick.AddListener(() => GameEvents.instance.crewController.SelectActionMenu(options, interactable));
 
             displayMenuRectTransform.gameObject.SetActive(true);
 
@@ -114,12 +114,12 @@ namespace RPG.UI {
         }
         
         public static void ShowMenuOptions_Static(Interactable interactable) {
-            instance.ShowMenuOptions(interactable);
+            //instance.ShowMenuOptions(interactable);
         }
 
         public static void HideMenuOptions_Static()
         {
-            instance.HideMenuOptions();
+            //instance.HideMenuOptions();
         }
 
     }
