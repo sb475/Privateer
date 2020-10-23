@@ -24,11 +24,15 @@ namespace RPG.Items
 
         }
 
-        public ItemInInventory PickUpItem()
+        public Item PickUpItem()
+        {
+            Invoke("DestroyItemInWorld", 1f);
+            InfoToolTip.HideToolTip_Static();
+            return new Item { itemObject = item, itemQuantity = itemQuantity };
+        }
+        private void DestroyItemInWorld()
         {
             Destroy(gameObject);
-            InfoToolTip.HideToolTip_Static();
-            return new ItemInInventory { itemObject = item, itemQuantity = itemQuantity };
         }
 
 

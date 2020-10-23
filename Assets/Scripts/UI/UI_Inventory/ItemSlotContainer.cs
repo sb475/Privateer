@@ -30,7 +30,7 @@ namespace RPG.UI
             {
 
                 //Need to add functionality for "Use, Drop, and Invalid Drop"
-                ItemInInventory uiItemInInventory = droppedObject.GetComponent<UIItemData>().GetItemData();
+                Item uiItemInInventory = droppedObject.GetComponent<UIItemData>().GetItemData();
 
                 //Store where item came from in memory
 

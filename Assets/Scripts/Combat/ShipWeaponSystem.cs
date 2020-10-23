@@ -53,7 +53,7 @@ namespace RPG.Combat
 
         public IDamagable target;
         
-        StateManager turnManager;
+        //StateManager turnManager;
 
 
         public float shotSpeed;
@@ -68,7 +68,7 @@ namespace RPG.Combat
         {
             currentWeaponConfig = defaultWeapon;
             currentWeapon = new LazyValue<ShipWeapon>(SetupDefaultWeapon);
-            turnManager = GetComponent<StateManager>();
+            //turnManager = GetComponent<StateManager>();
             rateOfFire = currentWeaponConfig.GetRateOfFire();
             shotSpeed = currentWeaponConfig.projectile.projectileSpeed;
         }

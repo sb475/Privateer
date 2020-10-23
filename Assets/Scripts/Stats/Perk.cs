@@ -17,8 +17,6 @@ namespace RPG.Stats
         const string perkName = "Perk";
         public List<PerkDetails> perkDetails;
         
-       
-
         public PerkDetails GetPerkData ()
         {
             return perkDetails[perkLevel];

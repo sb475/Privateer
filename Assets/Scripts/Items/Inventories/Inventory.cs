@@ -7,7 +7,7 @@ using UnityEngine;
 namespace RPG.Items{
 
     [System.Serializable]
-    public class ItemInInventory
+    public class Item
     {
         public ItemConfig itemObject;
         public int itemQuantity;
@@ -24,29 +24,39 @@ namespace RPG.Items{
     }
 
     [System.Serializable]
-    public class Inventory : MonoBehaviour
+    public class Inventory
     {
-        [SerializeField] public List<ItemInInventory> itemList;
-        public List<ItemInInventory> inventoryData;
+
+        public List<Item> itemList;
         [SerializeField] int currency;
         public event EventHandler OnInventoryChanged;
+        [Header("Import items")]
+        public InventoryData itemData;
 
-        // public Inventory(List<ItemInInventory> inventoryData) 
-        // {
-        //     if (inventoryData != null)
-        //     {
-        //         itemList = inventoryData;
-        //     }
-        // }
+        public Inventory()
+        {
+            if (itemData != null)
+            {
+                itemList = itemData.inventoryData;
+            }
+            else
+            {
+                itemList = new List<Item>();
+            }
+        }
+        public Inventory(List<Item> inventoryData) 
+        {
+                itemList = inventoryData;
+        }
 
-        public void AddItem(ItemInInventory itemToAdd)
+        public void AddItem(Item itemToAdd)
         {
             //checks to see if item should be stacked
 
             if (itemToAdd.itemObject.CheckStackable())
             {
                 bool alreadyInInventory = false;
-                foreach (ItemInInventory item in itemList)
+                foreach (Item item in itemList)
                 {
                     if (item.itemObject == itemToAdd.itemObject)
                     {
@@ -64,7 +74,7 @@ namespace RPG.Items{
                 Debug.Log ("Item is not stackable but is stacked");
                 for (int i = 0; i < itemToAdd.itemQuantity; i++)
                 {
-                    AddItem(new ItemInInventory { itemObject = itemToAdd.itemObject, itemQuantity = 1 });
+                    AddItem(new Item { itemObject = itemToAdd.itemObject, itemQuantity = 1 });
                 }
             }
             else {
@@ -75,12 +85,12 @@ namespace RPG.Items{
             OnInventoryChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public void RemoveItem (ItemInInventory itemToRemove)
+        public void RemoveItem (Item itemToRemove)
         {
             if (itemToRemove.itemObject.CheckStackable())
             {
-                ItemInInventory itemInInventory = null;
-                foreach (ItemInInventory item in itemList)
+                Item itemInInventory = null;
+                foreach (Item item in itemList)
                 {
                     
                     if (item.itemObject == itemToRemove.itemObject)
@@ -104,7 +114,39 @@ namespace RPG.Items{
             OnInventoryChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public List<ItemInInventory> GetItemList(){
+        public void AddItemFromConfig(ItemConfig item, int quantity)
+        {
+            AddItem(new Item { itemObject = item, itemQuantity = quantity });
+        }
+
+        public Item RemoveItemFromInventory(ItemConfig item, int quantity)
+        {
+            Item itemToReturn = new Item();
+            
+            for (int i = 0; i < itemList.Count; i++)
+            {
+                if(itemList[i].itemObject == item)
+                {
+                    if (itemList[i].itemQuantity <= quantity)
+                    {
+                        Debug.Log("You do not have " + item.name);
+                        return null;
+                    }
+                    
+                    itemList[i].itemQuantity -= quantity;
+                    if (itemList[i].itemQuantity == 0)
+                    {
+                        itemList.Remove(itemList[i]);
+                    }
+
+                    itemToReturn = new Item { itemObject = item, itemQuantity = quantity };
+                }
+            }
+
+            return itemToReturn;
+        }
+
+        public List<Item> GetItemList(){
             return itemList;
         }
 
@@ -124,7 +166,7 @@ namespace RPG.Items{
             if (currency < 0) return;
         }
 
-        public void SellItem(ItemInInventory item, Inventory sellToInventoy)
+        public void SellItem(Item item, Inventory sellToInventoy)
         {
             this.RemoveCurreny(SellItemCost(item));
             this.AddItem(item);
@@ -133,7 +175,7 @@ namespace RPG.Items{
             sellToInventoy.RemoveItem(item);
         }
 
-        public void BuyItem(ItemInInventory item, Inventory moveToInventory)
+        public void BuyItem(Item item, Inventory moveToInventory)
         {
             moveToInventory.RemoveCurreny(BuyItemCost(item));
             moveToInventory.AddItem(item);
@@ -142,13 +184,13 @@ namespace RPG.Items{
             this.RemoveItem(item);
         }
 
-        public int BuyItemCost(ItemInInventory item)
+        public int BuyItemCost(Item item)
         {
             Debug.Log(item.itemObject.baseCost);
             //add modifier here
             return item.itemObject.baseCost * 3;
         }
-        public int SellItemCost(ItemInInventory item)
+        public int SellItemCost(Item item)
         {
             Debug.Log(item.itemObject.baseCost);
             //add modifier here

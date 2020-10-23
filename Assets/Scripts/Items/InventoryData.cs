@@ -8,6 +8,6 @@ namespace RPG.Items
     {
 
         const string inventoryName = "InventoryData";
-        public List<ItemInInventory> inventoryData;
+        public List<Item> inventoryData;
     }
 }

@@ -12,14 +12,14 @@ namespace RPG.UI{
 
     public class UIItemData : MonoBehaviour
     {
-        public ItemInInventory uiItemInInventory;
+        public Item uiItemInInventory;
 
-        public void SetItemData (ItemInInventory itemInInventory)
+        public void SetItemData (Item itemInInventory)
         {
             uiItemInInventory = itemInInventory;
             
         }
-        public ItemInInventory GetItemData ()
+        public Item GetItemData ()
         {
             return uiItemInInventory;
         }

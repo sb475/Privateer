@@ -146,11 +146,11 @@ namespace RPG.Global
 
 #region CharacterEvents
 
-        internal void BuyPerk(PerkType perkButtonType, int perkLevel)
-        {
-            Debug.Log("Adding perk " + perkButtonType);
-            playerObject.GetComponent<CharacterPerks>().AddPerk(Resources.Load<Perk>(perkButtonType.ToString()), perkLevel);
-        }
+        //internal void BuyPerk(PerkType perkButtonType, int perkLevel)
+        //{
+        //    Debug.Log("Adding perk " + perkButtonType);
+        //    playerObject.GetComponent<CharacterPerks>().AddPerk(Resources.Load<Perk>(perkButtonType.ToString()), perkLevel);
+        //}
 
         public List<CrewMember> GetCrewRoster()
         {

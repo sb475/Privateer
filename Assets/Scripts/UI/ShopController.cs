@@ -11,7 +11,7 @@ namespace RPG.UI
         public UIShopInventory merchant;
         [SerializeField] private GameObject gameBuffer;
         
-        public void BrokerBuy(ItemInInventory item)
+        public void BrokerBuy(Item item)
         {
             if (merchant.inventory.BuyItemCost(item) > player.inventory.GetCurrency())
             {
@@ -34,7 +34,7 @@ namespace RPG.UI
             gameBuffer.SetActive(true);
         }
 
-        public void BrokerSell(ItemInInventory item)
+        public void BrokerSell(Item item)
         {
 
             Debug.Log (merchant.inventory.SellItemCost(item));

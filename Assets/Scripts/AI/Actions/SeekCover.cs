@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace RPG.AI
 {
-
+    [CreateAssetMenu(fileName = "SeekCover", menuName = "AI/SeekCover", order = 0)]
     public class SeekCover : GAction
     {
         GameObject chosenObj = null;
@@ -42,7 +42,7 @@ namespace RPG.AI
 
                 if (coverPoints.Count != 0)
                 {
-                    actionDestination = this.transform.position;
+                    actionDestination = agent.transform.position;
 
                     for (int i = 0; i < coverPoints.Count; i++)
                     {
@@ -51,11 +51,11 @@ namespace RPG.AI
                         Vector3 hidePos = coverPoints[i].transform.position + hideDir.normalized * 2;
                         if (Vector3.Distance(hidePos, target.transform.position) > agent.fighter.GetWeaponRange()) continue;
 
-                        if (Vector3.Distance(this.transform.position, hidePos) < dist)
+                        if (Vector3.Distance(agent.transform.position, hidePos) < dist)
                         {
                             chosenSpot = hidePos;
                             chosenObj = coverPoints[i];
-                            dist = Vector3.Distance(this.transform.position, hidePos);
+                            dist = Vector3.Distance(agent.transform.position, hidePos);
                         }
                     }
 
@@ -66,7 +66,7 @@ namespace RPG.AI
                         agent.room.GetGOAPStates().ModifyState("CoverAvailable", -1);
                     }
                 }
-                Debug.Log("There was no cover available, " + gameObject.name + " is ready to engage");
+                Debug.Log("There was no cover available, " + agent.gameObject.name + " is ready to engage");
                 beliefs.ModifyState("readyToEngage", 1);
             }
             else

@@ -9,6 +9,7 @@ using TMPro;
 using RPG.Global;
 using RPG.Base;
 using RPG.Items;
+using RPG.Stats;
 
 namespace RPG.UI
 {
@@ -281,7 +282,7 @@ namespace RPG.UI
             Debug.Log(currentCrewToDisplay);
             OnCrewToDisplayChange?.Invoke(this, EventArgs.Empty);
 
-            yield return new WaitUntil(() => UpdateItemsFromEquipped(currentCrewToDisplay.equipment.GetEquippedItems()));
+            yield return new WaitUntil(() => UpdateItemsFromEquipped(currentCrewToDisplay.equipment.equipped));
 
 
         }
@@ -293,27 +294,15 @@ namespace RPG.UI
         }
 
         //when characterToDisplay changes, find that characters equipment and populate display with it
-        public bool UpdateItemsFromEquipped(List<ItemConfig> equippedItems)
+        public bool UpdateItemsFromEquipped(Dictionary<EquipmentSlots, ItemConfig> equippedItems)
         {
             int itemSlotIndex = 0;
             if (itemSlotIndex < equippedItems.Count)
             {
-                foreach (ItemSlot itemSlot in equippedItemSlots)
+                foreach (KeyValuePair<EquipmentSlots, ItemConfig> equipedItem in equippedItems)
                 {
-                    if (itemSlot.GetComponentInChildren<UIItemData>() != null)
-                    {
-                        Destroy(itemSlot.GetComponentInChildren<UIItemData>().gameObject);
-                    }
-
-                    if (equippedItems[itemSlotIndex] != null)
-                    {
-                        RectTransform newObjectInSlot = Instantiate(UI_item.transform, itemSlot.transform).GetComponent<RectTransform>();
-                        ItemInInventory newItemInSlot = newObjectInSlot.GetComponentInChildren<UIItemData>().uiItemInInventory = new ItemInInventory { itemObject = Resources.Load<ItemConfig>(equippedItems[itemSlotIndex].name), itemQuantity = 1 };
-                        Sprite newItemSprite = newObjectInSlot.GetComponentInChildren<Image>().sprite = newItemInSlot.itemObject.itemIcon;
-                        newItemInSlot.isEquipped = true;
-
-                    }
-                    itemSlotIndex++;
+                    Debug.Log(equipedItem.Key + " " + equipedItem.Value);
+                    //find and match equipmentSlots with hardcoded slots
                 }
 
             }

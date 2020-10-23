@@ -28,6 +28,10 @@ namespace RPG.Stats
         [SerializeField] int majorAttributePoints;
         [SerializeField] int minorAttributePoints;
         public List<Stat> characterBaseStat;
+
+        public Dictionary<string, int> characterPoints;
+        public Dictionary<StatName, float> characterStats;
+        public Dictionary<StatName, float> characterStatsModifier;
         public StatList characterBaseStatData;
 
         public event Action onLevelUp;
@@ -36,17 +40,30 @@ namespace RPG.Stats
 
         Experience experience;
 
+
+
         private void Awake() 
         {
             experience = GetComponent<Experience>();
-            characterBaseStat = characterBaseStatData.statList;
+            //characterBaseStat = characterBaseStatData.statList;
             currentLevel = new LazyValue<int>(CalculateLevel);
+            characterStats = new Dictionary<StatName, float>();
+            characterStatsModifier = new Dictionary<StatName, float>();
         }
 
        private void Start() 
        {
             currentLevel.ForceInit();
-       }
+            characterStats.Add(StatName.Charm, 2);
+            characterStatsModifier.Add(StatName.Charm, 2);
+            Debug.Log(GetStatValue(StatName.Charm));
+
+        }
+
+        public float GetStatValue(StatName stat)
+        {
+            return characterStats[stat] + characterStatsModifier[stat];
+        }
         public float GetStat(StatName stat)
         {
             return (GetBaseStatValue(stat) + GetAdditiveModifier(stat)) * (1 + GetPercetangeModifier(stat)/100);
@@ -134,25 +151,25 @@ namespace RPG.Stats
 
             //local stats from armor
 
-            if (GetComponent<CharacterEquipment>() != null)
-            {
-                CharacterEquipment characterEquipment = GetComponent<CharacterEquipment>();
+            //if (GetComponent<CharacterEquipment>() != null)
+            //{
+            //    CharacterEquipment characterEquipment = GetComponent<CharacterEquipment>();
 
-                foreach (float modifier in characterEquipment.GetAdditiveModifiers(stat))
-                {
-                    total += modifier;
-                }
-            }
+            //    foreach (float modifier in characterEquipment.GetAdditiveModifiers(stat))
+            //    {
+            //        total += modifier;
+            //    }
+            //}
             //local stats from perks
 
             if (GetComponent<CharacterPerks>() != null)
             {
                 CharacterPerks perkStats = GetComponent<CharacterPerks>();
 
-                foreach (float modifier in perkStats.GetAdditiveModifiers(stat))
-                {
-                    total += modifier;
-                }
+                //foreach (float modifier in perkStats.GetAdditiveModifiers(stat))
+                //{
+                //    total += modifier;
+                //}
 
             }
 

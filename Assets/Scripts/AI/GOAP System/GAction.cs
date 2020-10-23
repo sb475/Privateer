@@ -18,7 +18,7 @@ namespace RPG.AI
         public float duration = 0f;
         public GOAPState[] preConditions;
         public GOAPState[] afterEffects;
-        public IEngine engine;
+        //public IEngine engine;
         public GAgent agent;
 
         public Dictionary<string, int> preconditions;
@@ -44,7 +44,7 @@ namespace RPG.AI
 
         public virtual void Awake()
         {
-            engine = this.gameObject.GetComponent<IEngine>();
+            //engine = this.gameObject.GetComponent<IEngine>();
             agent = this.gameObject.GetComponent<GAgent>();
             localMemory = agent.localMemory;
             beliefs = agent.beliefs;

@@ -6,105 +6,60 @@ using UnityEngine;
 
 namespace RPG.Stats
 {
-    public class CharacterPerks : MonoBehaviour, IModifierProvider
+    public class CharacterPerks
     {
         [SerializeField] private List<Perk> characterPerks;
-        [SerializeField] private List<Modifier> perkModifiers;
+        Character character;
 
-        [SerializeField] int perkPoints;
-        [SerializeField] int majorAttributePoints;
-        [SerializeField] int minorAttributePoints;
-
-        public GenericModifier[] genericModifierItems;
-
-
-        public void AddPerk (Perk perkToAdd, int newPerkLevel)
+        public CharacterPerks(Character character)
         {
-           
-                foreach (Perk perks in characterPerks)
-                {
-                    //if the level of perk that is trying to be added is a different level then return this level.
-                    if (perkToAdd == perks)
-                    {
-                        perks.perkLevel = newPerkLevel;
-                        Debug.Log (perks.name + " is now at level " + perks.perkLevel + ". And the description says: " + perks.GetPerkData().perkDescription);
-                        return;
-                    }
-                }
-                characterPerks.Add(perkToAdd);
+            this.character = character;
         }
 
-        internal void AddAttribute(StatName statToDisplay)
+        public void RegisterPerk(Perk perk)
         {
-            foreach (Modifier mod in perkModifiers)
+            //maybe unpdate to dictionary.
+            characterPerks.Add(perk);
+
+            //add additive modifiers
+            foreach (Modifier stat in perk.GetPerkAddMod())
             {
-                //if the level of perk that is trying to be added is a different level then return this level.
-                if (statToDisplay == mod.statType)
+                if (!character.characterModAdd.ContainsKey(stat.statType))
                 {
-                    mod.statValue ++;
-                    return;
+                    character.characterModAdd.Add(stat.statType, stat.statValue);
+                }
+                else
+                {
+                    character.characterModAdd[stat.statType] = character.characterModAdd[stat.statType] += stat.statValue;
                 }
             }
-            perkModifiers.Add(new Modifier {statType = statToDisplay, statValue = 1});
-        }
 
-        public bool SpendFromPerk(Perk perkToAdd, int newPerkLevel)
-        {
-            if (perkPoints > 0)
+            //add percentage modifiers
+            foreach (Modifier stat in perk.GetPerkPercentMod())
             {
-                AddPerk(perkToAdd, newPerkLevel);
-                perkPoints -= 1;
-                return true;
-            }
-            else 
-            {
-                GameEvents.instance.SendMessage("You do not have enough points to spend");
-                return false;
-            }
-
-        }
-
-        public IEnumerable<float> GetAdditiveModifiers(StatName stat)
-        {
-            float totalStatValue = 0;
-
-            foreach (var perk in characterPerks)
-            {
-                if (perk == null) continue;
-
-                foreach (var modifier in perk.GetPerkAddMod())
+                if (!character.characterModPercent.ContainsKey(stat.statType))
                 {
-
-                    if (modifier.statType == stat)
-                    {
-                        totalStatValue += modifier.statValue;
-                    }
+                    character.characterModPercent.Add(stat.statType, stat.statValue);
+                }
+                else
+                {
+                    character.characterModPercent[stat.statType] = character.characterModPercent[stat.statType] += stat.statValue;
                 }
             }
-            foreach (Modifier am in perkModifiers)
-            {
-                if (stat == am.statType) totalStatValue +=  am.statValue;
-            }
-
-            yield return totalStatValue;
         }
-
-        public IEnumerable<float> GetPercentageModifiers(StatName stat)
+       public void AddPerkLevel (Perk perkName, int increase = 1)
         {
-
-            foreach (var perk in characterPerks)
+            int perkIndex = 0;
+            foreach (Perk perk in characterPerks)
             {
-                if (perk == null) continue;
-
-                foreach (var modifier in perk.GetPerkPercentMod())
+                if (perkName == perk)
                 {
-
-                    if (modifier.statType == stat)
-                    {
-                        yield return modifier.statValue;
-                    }
+                    break;
                 }
+                perkIndex++;
             }
+
+            characterPerks[perkIndex].perkLevel += increase;
         }
 
     }

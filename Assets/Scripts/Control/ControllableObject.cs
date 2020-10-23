@@ -15,7 +15,6 @@ namespace RPG.Control
 {
 
     [RequireComponent(typeof(IEngine))]
-    [RequireComponent(typeof(StateManager))]
     [RequireComponent(typeof(IDamagable))]
     [RequireComponent(typeof(IAttack))]
     public class ControllableObject: MonoBehaviour
@@ -24,7 +23,7 @@ namespace RPG.Control
         private enum TaskState { waiting, acting, next }
 
         public IEngine mov;
-        public StateManager turnManager;
+        //public StateManager turnManager;
         public IDamagable health;
         public IAttack IAttack;
         public delegate void DefaultBehaviour();
@@ -38,7 +37,7 @@ namespace RPG.Control
         public virtual void Awake()
         {
             mov = GetComponent<IEngine>();
-            turnManager = GetComponent<StateManager>();
+            //turnManager = GetComponent<StateManager>();
             health = GetComponent<IDamagable>();
             IAttack = GetComponent<IAttack>();
             taskSystem = new RPG_TaskSystem();
@@ -156,11 +155,7 @@ namespace RPG.Control
          public void MoveToTarget(Vector3 target, Action OnArrival)
          {
              Debug.Log("MoveToTarget invoked");
-             if (turnManager.canMove) 
-             {
-                 mov.MoveToLocation(target);
-                 OnArrival?.Invoke();
-             }
+
          }
 
         //special function that invokes IAttack's attack sequence versus a "MoveToInteract => Interact" type pattern.

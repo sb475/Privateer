@@ -8,7 +8,6 @@ namespace RPG.Items
 {
 
     [CreateAssetMenu(fileName = "ConsumableItem", menuName = "Item/Make Consumable", order = 0)]
-    [System.Serializable]
     public class ConsumableConfig : ItemConfig
     {
         const string itemName = "ConsumableItem";

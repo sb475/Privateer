@@ -36,7 +36,7 @@ namespace RPG.UI
                 //parent of item to later reference to set as ItemSlot variable if move is successful.
                 UIItemData uIItemData = droppedObject.GetComponent<UIItemData>();
                 //Need to add functionality for "Use, Drop, and Invalid Drop"
-                ItemInInventory uiItemInInventory = droppedObject.GetComponent<UIItemData>().GetItemData();
+                Item uiItemInInventory = droppedObject.GetComponent<UIItemData>().GetItemData();
 
                 //Store where item came from in memory
                 ItemSlot parentSlot = droppedObject.GetComponentInParent<ItemSlot>();
@@ -122,7 +122,7 @@ namespace RPG.UI
 
             }
 
-        private bool CheckToTransferSlot(ItemInInventory uiItemInInventory, ItemSlotGeneric uiSlot)
+        private bool CheckToTransferSlot(Item uiItemInInventory, ItemSlotGeneric uiSlot)
         {
             Debug.Log ("Check to Transfer: " + uiSlot.slotType);
             //if inventory slot, always allow
