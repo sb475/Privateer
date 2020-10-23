@@ -42,7 +42,7 @@ namespace RPG.Control
         public IControllable currentControllable;
         public IControllable lastControlledCrew;
 
-        public CameraController cameraControl;
+        public CamController cameraControl;
         float timeSinceClick;
 
 
@@ -85,7 +85,7 @@ namespace RPG.Control
                 }
             }
 
-            KeyMapping();
+            if (KeyMapping()) return;
 
             if (InteractWithUI()) return;
 
@@ -104,24 +104,41 @@ namespace RPG.Control
             
         }
 
-        private void KeyMapping()
+        private bool KeyMapping()
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
+                Debug.Log("1 was pressed");
                 SelectControllable(currentTeam[0]);
+                return true;
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                SelectControllable(currentTeam[0]);
+                Debug.Log("2 was pressed");
+                if (currentTeam[1] != null)
+                {
+                    SelectControllable(currentTeam[1]);
+                }
+                
+                return true;
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                SelectControllable(currentTeam[0]);
+                if (currentTeam[2] != null)
+                {
+                    SelectControllable(currentTeam[2]);
+                }
+                return true;
             }
             else if (Input.GetKeyDown(KeyCode.Alpha4))
             {
-                SelectControllable(currentTeam[0]);
+                if (currentTeam[3] != null)
+                {
+                    SelectControllable(currentTeam[3]);
+                }
+                return true;
             }
+            return false;
         }
         #region DeterminePlaterControl
 

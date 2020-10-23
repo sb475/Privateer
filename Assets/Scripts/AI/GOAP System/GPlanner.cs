@@ -61,7 +61,6 @@ namespace RPG.AI
             List<GAction> usableActions = new List<GAction>();
             foreach (GAction a in actions)
             {
-                Debug.Log(a + " is achievable: " + a.IsAchievable());
                 if (a.IsAchievable())
                     usableActions.Add(a);
             }
