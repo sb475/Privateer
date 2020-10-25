@@ -49,7 +49,7 @@ namespace RPG.UI
                 //pushed signal to listening CharacterEquip, add ship slot in future
 
                 }
-                uIInventory.RefreshInventoryItems();
+                //uIInventory.RefreshInventoryItems();
             
         }
 

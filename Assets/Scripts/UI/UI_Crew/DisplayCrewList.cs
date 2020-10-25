@@ -34,7 +34,7 @@ namespace RPG.UI
 
             if(crewDisplayContainer.GetComponentInChildren<CrewSwapContainer>().GetCrewListType() == CrewSwapContainer.CrewListType.currentTeam)
             {                
-                crewToDisplay = uIController.GetCrewMembersInTeam();             
+                crewToDisplay = uIController.GetCrewMembersOnTeam();             
             }
             else
             {

@@ -25,32 +25,17 @@ namespace RPG.UI
 
         private void OnEnable() {
 
-            Debug.Log(uIController.GetCrewToDisplay());
-            if (inventoryName == InventoryName.Player)
-            {
-                inventory = uIController.GetCrewToDisplay().GetComponent<Inventory>();
-            }
-            else
-            {
-                inventory = inventoryOwner.GetComponent<Inventory>();
-            }
-
             uIController.OnCrewToDisplayChange += OnCrewDisplayChange;
         }
         private void OnDisable() {
             uIController.OnCrewToDisplayChange -= OnCrewDisplayChange;
         }
-        public override void RefreshCurrencyDisplay()
-        {
-            displayCurrency.text = inventory.GetCurrency().ToString();
-        }
-
 
         private void OnCrewDisplayChange(object sender, EventArgs e)
         {
             if (inventoryName == InventoryName.Player)
             {
-                SetInventory(uIController.GetCrewToDisplay().GetComponent<Inventory>());
+                //SetInventory(uIController.GetCrewToDisplay().GetComponent<Inventory>());
             }
         }
 
@@ -68,12 +53,12 @@ namespace RPG.UI
         
         public void BuyItemUI (Item item)
         {
-            shopController.BrokerBuy(item);
+            //shopController.BrokerBuy(item);
         }
 
         public void SellItemUI(Item item)
         {
-            shopController.BrokerSell(item);
+            //shopController.BrokerSell(item);
         }
 
     }

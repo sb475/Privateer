@@ -13,17 +13,13 @@ using RPG.Base;
 
 namespace RPG.Combat
 {
-    public class Fighter : MonoBehaviour, IAction, ISaveable, IAttack
+    public class Fighter : MonoBehaviour, IAction, ISaveable, IFighter
     {
-
         Character character;
 
-        [SerializeField] float timeBetweenAttacks = 1f;
         [SerializeField] Transform rightHandTransform = null;
         [SerializeField] Transform leftHandTransform = null;
-        [SerializeField] WeaponConfig defaultWeapon = null;
-        [SerializeField] ArmorConfig defaultArmor = null;
-        public bool secondaryEqipped = false;
+        [SerializeField] WeaponConfig defaultWeapon;
 
         public IDamagable target;
         
@@ -34,16 +30,12 @@ namespace RPG.Combat
         public WeaponConfig currentWeaponConfig;
         LazyValue<Weapon> currentWeapon;
 
-        //Armor variables
-        [SerializeField] ArmorConfig currentArmorConfig;
-        LazyValue<Armor> currentArmor;
-
         private void Awake() {
             character = GetComponent<Character>();
+            defaultWeapon = Resources.Load<WeaponConfig>("Unarmed");
             currentWeaponConfig = defaultWeapon;
             //change this to pull from equipment.
             currentWeapon = new LazyValue<Weapon>(SetupDefaultWeapon);
-            currentArmor = new LazyValue<Armor>(SetupDefaultArmor);
         }
 
         private void Start() 
@@ -67,6 +59,13 @@ namespace RPG.Combat
             target = combatTarget;
             GetComponent<ActionScheduler>().StartAction(this);
             AttackBehavior(combatTarget);
+        }
+
+        public bool CanAttack(IDamagable combatTarget)
+        {
+            if (combatTarget == null) { return false; }
+            IDamagable targetToTest = combatTarget;
+            return targetToTest != null && !targetToTest.IsDead();
         }
 
         private void AttackBehavior(IDamagable target)
@@ -105,11 +104,6 @@ namespace RPG.Combat
         {
             return AttachWeapon(defaultWeapon);
         }
-
-        private Armor SetupDefaultArmor()
-        {
-            return AttachArmor(defaultArmor);
-        }
         
         public void EquipWeapon(WeaponConfig weapon)
         {
@@ -119,37 +113,11 @@ namespace RPG.Combat
             currentWeapon.value = AttachWeapon(weapon);
         }
 
-        public void EquipSecondary()
-        {
-            ItemConfig secondary;
-            character.equipment.equipped.TryGetValue(EquipmentSlots.secondary, out secondary);
-            EquipWeapon(secondary as WeaponConfig);
-            secondaryEqipped = true;
-        }
         public void EquipPrimary()
         {
             ItemConfig primary;
-            character.equipment.equipped.TryGetValue(EquipmentSlots.primary, out primary);
+            character.equipment.equipped.TryGetValue(EquipmentSlots.weapon, out primary);
             EquipWeapon(primary as WeaponConfig);
-        }
-
-        public void ReloadWeapon()
-        {
-            if (secondaryEqipped) EquipSecondary();
-            else EquipPrimary();
-        }
-
-        public void EquipArmor(ArmorConfig armor)
-        {
-            if (armor == null) armor = defaultArmor;
-
-            currentArmorConfig = armor;
-            currentArmor.value = AttachArmor(armor);
-        }
-
-        private Armor AttachArmor(ArmorConfig armor)
-        {
-            return armor.Spawn(rightHandTransform, leftHandTransform);
         }
 
         private Weapon AttachWeapon(WeaponConfig weapon)
@@ -158,7 +126,8 @@ namespace RPG.Combat
             return weapon.Spawn(rightHandTransform, leftHandTransform, animator);
         }
 
-    #endregion
+
+        #endregion
 
 
         #region Animations
@@ -218,12 +187,7 @@ namespace RPG.Combat
 
 
 
-        public bool CanAttack(IDamagable combatTarget)
-        {
-            if (combatTarget == null) { return false; }
-            IDamagable targetToTest = combatTarget;
-            return targetToTest != null && !targetToTest.IsDead();
-        }
+
 
         #region Getters
         public string DamageAsString()

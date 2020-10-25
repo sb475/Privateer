@@ -12,7 +12,7 @@ namespace RPG.Items
         public WeaponConfig defaultPrimary;
         public WeaponConfig defaultSeconday;
         public ArmorConfig defaultArmor;
-        public ToolConfig defaultTool;
+        public UtilityConfig defaultTool;
         public SpecialConfig defaultSpecial;
  
     }

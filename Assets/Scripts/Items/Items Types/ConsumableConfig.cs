@@ -14,7 +14,7 @@ namespace RPG.Items
 
         private void Awake()
         {
-            itemType = ItemType.consumable;
+            //itemType = ItemType.consumable;
             isEquippable = false;
             isStackable = true;
         }

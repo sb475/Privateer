@@ -30,3 +30,7 @@ MonoBehaviour:
   animatorOverride: {fileID: 0}
   equippedPrefab: {fileID: 0}
   armorType: 0
+  weaponSlots: 2
+  utlitySlots: 2
+  specialSlots: 2
+  cargoSlots: 4

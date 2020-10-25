@@ -16,23 +16,23 @@ public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandl
     public UnityEvent onTabSelected;
     public UnityEvent onTabDeselected;
 
-    public void OnPointerClick(PointerEventData eventData)
+    public virtual void OnPointerClick(PointerEventData eventData)
     {
         tabGroup.OnTabSelected(this);
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
         tabGroup.OnTabEnter(this);
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public virtual void OnPointerExit(PointerEventData eventData)
     {
             tabGroup.OnTabExit(this);
     }
 
     // Start is called before the first frame update
-    void Start()
+    public virtual void Start()
     {
         background = GetComponent<Image>();
         tabGroup.Subscribe(this);

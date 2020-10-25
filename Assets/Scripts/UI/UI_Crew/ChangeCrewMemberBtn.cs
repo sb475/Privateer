@@ -27,7 +27,7 @@ namespace RPG.UI{
         {
             if (rightClick)
             {
-                if (displayInTeamIndex == uIController.GetCrewMembersInTeam().Count - 1)
+                if (displayInTeamIndex == uIController.GetCrewMembersOnTeam().Count - 1)
                 {
                     displayInTeamIndex = 0;
                 }
@@ -39,7 +39,7 @@ namespace RPG.UI{
             {
                 if (displayInTeamIndex == 0)
                 {
-                    displayInTeamIndex = uIController.GetCrewMembersInTeam().Count - 1;
+                    displayInTeamIndex = uIController.GetCrewMembersOnTeam().Count - 1;
                 }
                 else
                 {
@@ -47,8 +47,8 @@ namespace RPG.UI{
                 }
             }
 
-            StartCoroutine(uIController.SetCrewToDisplay(uIController.GetCrewMembersInTeam()[displayInTeamIndex]));
-            Debug.Log(uIController.GetCrewMembersInTeam()[displayInTeamIndex]);
+            StartCoroutine(uIController.SetCrewToDisplay(uIController.GetCrewMembersOnTeam()[displayInTeamIndex]));
+            Debug.Log(uIController.GetCrewMembersOnTeam()[displayInTeamIndex]);
         }
 
     }

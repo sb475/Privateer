@@ -77,7 +77,7 @@ namespace RPG.UI
                     return;
                 }
 
-                uIInventory.RefreshInventoryItems();
+                //uIInventory.RefreshInventoryItems();
             }
         }
 

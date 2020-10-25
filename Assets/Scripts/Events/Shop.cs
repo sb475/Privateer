@@ -28,7 +28,7 @@ namespace RPG.Events
             uIController.ShowShopMenu();
             storeInventory = GetComponent<CharacterInteraction>().inventory;
             PopulateInventory();
-            uIShopInventory.SetInventory(storeInventory);
+            //uIShopInventory.SetInventory(storeInventory);
         }
 
         private void PopulateInventory()

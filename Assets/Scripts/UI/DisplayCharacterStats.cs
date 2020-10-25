@@ -67,7 +67,7 @@ namespace RPG.UI{
             currentHealth.text = playerToDisplay.GetComponent<Health>().GetHealthPoints().ToString();
             totalHealth.text = playerToDisplay.GetComponent<Health>().GetMaxHealthPoints().ToString();
             displayArmor.text = playerToDisplay.GetStat(StatName.Armor).ToString();
-            displayDamage.text = playerToDisplay.GetComponent<IAttack>().DamageAsString();
+            displayDamage.text = playerToDisplay.GetComponent<IFighter>().DamageAsString();
 
 
             foreach (StatName stat in statsToDisplay)

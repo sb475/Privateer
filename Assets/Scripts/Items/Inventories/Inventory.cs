@@ -196,7 +196,8 @@ namespace RPG.Items{
             //add modifier here
             return item.itemObject.baseCost * 1;
         }
-    
+
+
     }
 
 

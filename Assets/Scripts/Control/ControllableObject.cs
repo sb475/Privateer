@@ -16,7 +16,7 @@ namespace RPG.Control
 
     [RequireComponent(typeof(IEngine))]
     [RequireComponent(typeof(IDamagable))]
-    [RequireComponent(typeof(IAttack))]
+    [RequireComponent(typeof(IFighter))]
     public class ControllableObject: MonoBehaviour
     {
 
@@ -25,7 +25,7 @@ namespace RPG.Control
         public IEngine mov;
         //public StateManager turnManager;
         public IDamagable health;
-        public IAttack IAttack;
+        public IFighter IAttack;
         public delegate void DefaultBehaviour();
         public DefaultBehaviour defaultBehaviour;
         [SerializeField] private TaskState taskState;
@@ -39,7 +39,7 @@ namespace RPG.Control
             mov = GetComponent<IEngine>();
             //turnManager = GetComponent<StateManager>();
             health = GetComponent<IDamagable>();
-            IAttack = GetComponent<IAttack>();
+            IAttack = GetComponent<IFighter>();
             taskSystem = new RPG_TaskSystem();
         }
 
@@ -161,7 +161,7 @@ namespace RPG.Control
         //special function that invokes IAttack's attack sequence versus a "MoveToInteract => Interact" type pattern.
         public void ExecuteTask_Attack(RPG_TaskSystem.Task.Attack task)
         {
-            task.controllable.GetComponent<IAttack>().Attack(task.interactable.GetComponent<IDamagable>());
+            task.controllable.GetComponent<IFighter>().Attack(task.interactable.GetComponent<IDamagable>());
             taskState = TaskState.waiting;
 
         }

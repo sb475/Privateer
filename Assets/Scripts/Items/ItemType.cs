@@ -8,15 +8,21 @@ namespace RPG.Items
     {
         characterArmor,
         characterWeapon,
-        accessory,
-        consumable,
+        utlity,
         special,
-        trade,
-        food,
-        water,
-        fuel
+        cargo,
     }
-    
+
+    public enum ItemFilter
+    {
+        none,
+        armor,
+        weapon,
+        utility,
+        special,
+        cargo,
+    }
+
     public enum WeaponType
     {
         kinetic,

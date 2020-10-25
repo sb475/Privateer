@@ -8,7 +8,7 @@ using static RPG.Combat.ShipWeaponSystem;
 
 namespace RPG.Combat
 {
-    public class ShipWeaponControl : MonoBehaviour, IAttack
+    public class ShipWeaponControl : MonoBehaviour, IFighter
     {
         public GameObject shipWeapons;
         public List<ShipWeaponSystem> allWeapons;

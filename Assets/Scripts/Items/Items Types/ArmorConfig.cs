@@ -12,14 +12,20 @@ namespace RPG.Items
         [SerializeField] Armor equippedPrefab = null;
         [SerializeField] ArmorType armorType;
         const string armorName = "Armor";
+        public int weaponSlots;
+        public int utlitySlots;
+        public int specialSlots;
+        public int cargoSlots;
 
-        private void Awake()
+        public ArmorConfig()
         {
             itemType = ItemType.characterArmor;
+            itemFilter = ItemFilter.armor;
             isEquippable = true;
             isStackable = false;
         }
 
+        //need to update animation for prefab
         public Armor Spawn(Transform rightHand, Transform leftHand)
         {
             //DestroyOldWeapon(rightHand, leftHand);

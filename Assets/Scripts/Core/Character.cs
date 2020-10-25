@@ -1,24 +1,16 @@
 ﻿using RPG.AI;
-using RPG.Base;
 using RPG.Combat;
-using RPG.Control;
 using RPG.Items;
 using RPG.Movement;
 using RPG.Stats;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Security.Permissions;
 using UnityEngine;
 
-public class Character : MonoBehaviour, IStat
+public class Character : MonoBehaviour, IStat, IInventory
 {
-    [Header("Progression")]
-    [Range(1, 10)]
-    [SerializeField] int startingLevel = 1;
-    [SerializeField] GameObject levelUpParticleEffect = null;
-    public Experience experience = new Experience();
 
+
+    Inventory IInventory.inventory { get { return inventory; } set { inventory = value; } }
     public float defaultHealth;
 
     public Rigidbody body;
@@ -59,7 +51,7 @@ public class Character : MonoBehaviour, IStat
         characterPoints = new Dictionary<CharacterPointTypes, int>();
         perks = new CharacterPerks(this);
         inventory = new Inventory();
-        equipment = new CharacterEquipment(defaultEquip, this);
+        equipment = new CharacterEquipment(this);
 
         characterBase.Add(StatName.Health, defaultHealth);
         InitializePoints();

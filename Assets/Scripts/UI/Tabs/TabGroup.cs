@@ -19,6 +19,7 @@ public class TabGroup : MonoBehaviour
             tabButtons = new List<TabButton>();
         }
 
+        button.background.color = tabIdle;
         tabButtons.Add(button);
     }
 
@@ -28,7 +29,7 @@ public class TabGroup : MonoBehaviour
         if (selectedTab == null || button != selectedTab) 
         {
             button.background.color = tabHover;
-            LeanTween.alpha(button.GetComponent<RectTransform>(), 1, 0.2f);
+            //LeanTween.alpha(button.GetComponent<RectTransform>(), 1, 0.2f);
         }
     }
 
@@ -54,9 +55,15 @@ public class TabGroup : MonoBehaviour
 
         ResetTabs();
         button.background.color = TabActive;
-        LeanTween.alpha(button.GetComponent<RectTransform>(), 1, 0.2f);
+        //LeanTween.alpha(button.GetComponent<RectTransform>(), 1, 0.2f);
 
         int index = button.transform.GetSiblingIndex();
+        SwapWindow(index);
+
+    }
+
+    private void SwapWindow(int index)
+    {
         for (int i = 0; i < objectsToSwap.Count; i++)
         {
             if (i == index)
@@ -68,6 +75,23 @@ public class TabGroup : MonoBehaviour
                 objectsToSwap[i].SetActive(false);
             }
         }
+    }
+
+    public void SelectTabByIndex(TabButton button, int i)
+    {
+
+        if (selectedTab != null)
+        {
+            selectedTab.Deselect();
+        }
+        selectedTab = tabButtons[i];
+
+        selectedTab.Select();
+
+        ResetTabs();
+        tabButtons[i].background.color = TabActive;
+
+        SwapWindow(i);
 
     }
     public void ResetTabs()
@@ -76,7 +100,7 @@ public class TabGroup : MonoBehaviour
         {
             if (selectedTab!=null && selectedTab == button) continue;
             button.background.color = tabIdle;
-            LeanTween.alpha(button.GetComponent<RectTransform>(), .7f, 0.5f);
+            //LeanTween.alpha(button.GetComponent<RectTransform>(), .7f, 0.5f);
         }
     }
 }
