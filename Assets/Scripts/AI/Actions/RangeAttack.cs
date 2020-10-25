@@ -28,20 +28,7 @@ namespace RPG.AI
             //if the current weapon does not have projectiles, look to see if others do, if not cannot range attack.
             if (!agent.fighter.currentWeaponConfig.HasProjectile())
             {
-                if ((agent.character.equipment.equipped[EquipmentSlots.secondary] as WeaponConfig).HasProjectile())
-                {
-                    if (agent.fighter.currentWeaponConfig == agent.character.equipment.equipped[EquipmentSlots.secondary]) return false;
-                    agent.fighter.EquipSecondary();
-                }
-                else if ((agent.character.equipment.equipped[EquipmentSlots.primary] as WeaponConfig).HasProjectile())
-                {
-                    if (agent.fighter.currentWeaponConfig == agent.character.equipment.equipped[EquipmentSlots.primary]) return false;
-                    agent.fighter.EquipPrimary();
-                }
-                else
-                {
-                    return false;
-                }
+                if (!agent.character.equipment.SwitchToRangedWeapon(true)) return false;
             }
 
             float weaponRange = agent.fighter.GetWeaponRange();

@@ -28,20 +28,11 @@ namespace RPG.AI
 
             //if character is using a range weapon cannot rush. If current weapon has range then check secondary.
             if (agent.fighter.currentWeaponConfig.HasProjectile())
-            { 
-                if (!(agent.character.equipment.equipped[EquipmentSlots.secondary] as WeaponConfig).HasProjectile())
-                {
-                    if (agent.fighter.currentWeaponConfig == agent.character.equipment.equipped[EquipmentSlots.secondary] as WeaponConfig) return false;
-                    agent.fighter.EquipWeapon(agent.character.equipment.equipped[EquipmentSlots.secondary] as WeaponConfig);
-                }
-                else
-                {
-                    return false;
-                }
+            {
+                if (!agent.character.equipment.SwitchToRangedWeapon(false)) return false;
             }
 
-
-        float weaponRange = agent.fighter.GetWeaponRange();
+            float weaponRange = agent.fighter.GetWeaponRange();
             if (Vector3.Distance(target.transform.position, agent.transform.position) < weaponRange)
             {
                 actionDestination = agent.transform.position;

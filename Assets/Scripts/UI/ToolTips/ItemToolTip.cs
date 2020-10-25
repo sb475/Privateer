@@ -74,7 +74,7 @@ namespace RPG.UI {
 
             DisplayItemStats(item, displayItemStatsCell, statDisplayContainer);
 
-            if (parentInventory.GetType() == typeof(UIPlayerInventory)) {
+            if (parentInventory.GetType() == typeof(UIShipCargo)) {
 
                 CompareEquippedItemInSlot(itemData, parentInventory);
 
@@ -82,7 +82,7 @@ namespace RPG.UI {
             
             if (parentInventory.GetType() == typeof(UIShopInventory))
             {
-                DisplayItemCost(itemData, (UIShopInventory)parentInventory);
+                //DisplayItemCost(itemData, (UIShopInventory)parentInventory);
             }
 
 
@@ -93,17 +93,17 @@ namespace RPG.UI {
 
         }
 
-        private void DisplayItemCost(UIItemData itemData, UIShopInventory parentInventoryShop)
-        {
-            if (parentInventoryShop.inventoryName == UIShopInventory.InventoryName.Player)
-            {
-                itemCost.text = "Sell for: " + parentInventoryShop.inventory.SellItemCost(itemData.uiItemInInventory).ToString();
-            }
-            else
-            {
-                itemCost.text = "Buy for: " + parentInventoryShop.inventory.BuyItemCost(itemData.uiItemInInventory).ToString();
-            }
-        }
+        //private void DisplayItemCost(UIItemData itemData, UIShopInventory parentInventoryShop)
+        //{
+        //    if (parentInventoryShop.inventoryName == UIShopInventory.InventoryName.Player)
+        //    {
+        //        itemCost.text = "Sell for: " + parentInventoryShop.inventory.SellItemCost(itemData.uiItemInInventory).ToString();
+        //    }
+        //    else
+        //    {
+        //        itemCost.text = "Buy for: " + parentInventoryShop.inventory.BuyItemCost(itemData.uiItemInInventory).ToString();
+        //    }
+        //}
 
         private void DisplayItemStats(ItemConfig item, GameObject itemStatsCell, GameObject displayContainer)
         {

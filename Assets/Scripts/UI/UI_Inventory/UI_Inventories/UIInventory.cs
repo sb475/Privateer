@@ -6,110 +6,139 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
+using RPG.Core;
+using RPG.Base;
 
 namespace RPG.UI{
-
     public class UIInventory : MonoBehaviour
     {
         public UIController uIController;
-        public Inventory inventory;
         Item uiItemData;
-        [SerializeField] private GameObject itemSlotContainer;
-        [SerializeField] private GameObject itemSlot;
-        [SerializeField] public GameObject inventoryOwner;
         public GameObject selectedSlot;
-        public TextMeshProUGUI displayCurrency;
-        [SerializeField] Item selectedItemInInventory;
+
+        public GameObject itemSlotContainer;
+        public GameObject itemSlot;
+        public int inventorySize;
+        public GameObject inventorySource;
+        public Inventory inventory;
+        public bool setInventorySize;
+        public ItemFilter itemFilter;
 
         public virtual void Awake() {
             
-            if (inventoryOwner != null)
-            {
-
-                inventory = inventoryOwner.GetComponent<Inventory>();
-
-            }
             uIController = GetComponentInParent<UIController>();
         }
 
-        // public virtual void Start() {
-        //     SetInventory(inventory);
-        // }
-
-        public virtual void SetInventory (Inventory inventory)
+        public virtual void Start ()
         {
-            inventory.OnInventoryChanged -= Inventory_OnInvetoryChanged;
-            this.inventory = inventory;
-            inventory.OnInventoryChanged += Inventory_OnInvetoryChanged;
-            RefreshInventoryItems();
+            InitializeInventory();
         }
 
-        private void Inventory_OnInvetoryChanged(object sender, EventArgs e)
+        private void InitializeInventory()
         {
-            RefreshInventoryItems();
+            inventory = inventorySource.GetComponent<IInventory>().inventory;
+            if (itemFilter != ItemFilter.none)
+            {
+                List<Item> filteredItems = new List<Item>();
+                foreach (Item item in inventory.GetItemList())
+                {
+                    if (item.itemObject.itemFilter == itemFilter) filteredItems.Add(item);
+
+                }
+                UpdateInventory(filteredItems);
+            }
+            else
+            {
+                UpdateInventory(inventory.GetItemList());
+            }
         }
 
-        public virtual void RefreshCurrencyDisplay()
+        public virtual void BuildInvSlots(int inventoryCount)
         {
-            
+            Debug.Log("Inventory count is: " + inventoryCount);
+            int childCount = itemSlotContainer.transform.childCount;
+            Debug.Log("Current child count is: " + childCount);
+            if (setInventorySize && itemSlotContainer.transform.childCount < inventorySize)
+            {
+                for(int i = inventorySize - childCount; i < inventorySize; i++)
+                {
+                    CreateInvSlot();
+                }
+                Debug.Log("Added " + (childCount - inventorySize) + " slots");
+            }
+            else if (itemSlotContainer.transform.childCount < inventoryCount)
+            {
+                for (int i = inventoryCount - childCount; i < inventoryCount; i++)
+                {
+                    CreateInvSlot();
+                }
+                Debug.Log("Added " + (inventoryCount - childCount) + " slots");
+            }
         }
 
-        public void RefreshInventoryItems ()
+        private void CreateInvSlot()
         {
-            foreach (Transform child in itemSlotContainer.transform) {
-                if (child == itemSlot.transform) 
+            RectTransform itemSlotRectTransform = Instantiate(itemSlot.transform, itemSlotContainer.transform).GetComponent<RectTransform>();
+
+            itemSlotRectTransform.gameObject.SetActive(true);            
+        }
+        private void UpdateInventory(List<Item> itemList)
+        {
+            Debug.Log("Item list count: " + itemList.Count);
+            BuildInvSlots(itemList.Count+1);
+
+            int invIndex = 0;
+            foreach (Transform child in itemSlotContainer.transform)
+            {
+                if (child == itemSlot.transform)
                 {
                     child.gameObject.SetActive(false);
                     continue;
                 }
-                Destroy(child.gameObject);    
-            }
 
-            int x = 0; 
-            int y = 0;
-            float itemSlotCellSize = 30f;
-
-            //cycles through inventory items and generates image in ineventory UI.
-            foreach (Item item in inventory.GetItemList())
-            {
-                if (item.isEquipped == true || item == null) continue;
-                
-                RectTransform itemSlotRectTransform = Instantiate(itemSlot.transform, itemSlotContainer.transform).GetComponent<RectTransform>();
-   
-                itemSlotRectTransform.gameObject.SetActive(true);
-                
-                itemSlotRectTransform.anchoredPosition = new Vector2(x * itemSlotCellSize, y * itemSlotCellSize);
-
-                GameObject uiItem = itemSlotRectTransform.Find("UI_Item").gameObject;
-
-                //Sets icon of Item Config
-                Image uiItemImage = uiItem.GetComponent<Image>();
-                uiItemImage.sprite = item.itemObject.itemIcon;
-
-                //Sets up relavent data information for referencing later
-                UIItemData itemData = uiItem.GetComponent<UIItemData>();
-                itemData.SetItemData(item);
-                
-
-                Text displayItemAmount = itemSlotRectTransform.Find("UI_ItemQuantityText").GetComponentInChildren<Text>();
-                if (item.itemQuantity > 1)
+                if (invIndex < itemList.Count)
                 {
-                    displayItemAmount.text = item.itemQuantity.ToString();
+                    Item item = itemList[invIndex];
+                    GameObject uiItem = child.Find("UI_Item").gameObject;
+                    //Sets icon of Item Config
+                    Image uiItemImage = uiItem.GetComponent<Image>();
+                    uiItemImage.sprite = item.itemObject.itemIcon;
+
+                    //Sets up relavent data information for referencing later
+                    UIItemData itemData = uiItem.GetComponent<UIItemData>();
+                    itemData.SetItemData(item);
+
+                    Text displayItemAmount = child.GetComponentInChildren<Text>();
+                    if (item.itemQuantity > 1)
+                    {
+                        displayItemAmount.text = item.itemQuantity.ToString();
+                    }
+                    else
+                    {
+                        displayItemAmount.text = "";
+                    }
                 }
-                else
+                else if (setInventorySize)
                 {
-                    displayItemAmount.text = "";
+                    //Set to empty slots
                 }
+                
+                invIndex++;
+                Debug.Log("Inventory Index is: " + invIndex);
+            }           
+        }
 
+        public virtual void SetInventory(Inventory inventory)
+        {
 
-                //think this is dead code
-                x++;
-                if (x > 4) {
-                    x = 0;
-                    y++;
-                }
-            }
-            RefreshCurrencyDisplay();
+            inventory.OnInventoryChanged -= Inventory_OnInvetoryChanged;
+            inventory.OnInventoryChanged += Inventory_OnInvetoryChanged;
+           
+        }
+
+        private void Inventory_OnInvetoryChanged(object sender, EventArgs e)
+        {
+            
         }
 
         public virtual void LeftClick(ItemBehavior itemBehavior)
@@ -125,17 +154,17 @@ namespace RPG.UI{
             Debug.Log("Right Click");
         }
 
-        public void UI_ItemRemove(Item itemToRemove)
-        {
-            inventory.RemoveItem(itemToRemove);
-            RefreshInventoryItems();
-        }
+        //public void UI_ItemRemove(Item itemToRemove)
+        //{
+        //    inventory.RemoveItem(itemToRemove);
+        //    RefreshInventoryItems();
+        //}
 
-        public void UI_ItemAdd(Item itemToAdd)
-        {
-            inventory.AddItem(itemToAdd);
-            RefreshInventoryItems();
-        }
+        //public void UI_ItemAdd(Item itemToAdd)
+        //{
+        //    inventory.AddItem(itemToAdd);
+        //    RefreshInventoryItems();
+        //}
 
 
         public void SelectItemInInventory(GameObject itemToSelect)
@@ -153,11 +182,6 @@ namespace RPG.UI{
         public UIItemData GetUIItemFromSlot(ItemSlot itemSlot)
         {
             return itemSlot.GetComponentInChildren<UIItemData>();
-        }
-
-        public GameObject GetInventoryOwner()
-        {
-            return inventoryOwner;
         }
 
     }

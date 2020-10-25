@@ -51,7 +51,7 @@ namespace RPG.Control
 
         //template for perks to be added
 
-        [SerializeField] private UIPlayerInventory uIInventory;
+        [SerializeField] private UIShipCargo uIInventory;
         
         bool isDraggingUI = false;
         private bool isPaused;

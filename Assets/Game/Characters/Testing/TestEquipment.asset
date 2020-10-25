@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultPrimary: {fileID: 11400000, guid: 3abaa410a54f8a94398334cf7c38e5d2, type: 2}
   defaultSeconday: {fileID: 11400000, guid: 4cac18f1014781c4598d4d135f1b7e86, type: 2}
-  defaultArmor: {fileID: 11400000, guid: ef0de33980f30fb4db6111418c2a8e79, type: 2}
+  defaultArmor: {fileID: 11400000, guid: b9d392ceaf61a874cb628dcef484db0b, type: 2}
   defaultTool: {fileID: 0}
   defaultSpecial: {fileID: 0}

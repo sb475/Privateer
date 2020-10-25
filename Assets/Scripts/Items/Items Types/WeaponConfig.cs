@@ -21,6 +21,7 @@ namespace RPG.Items
 
         private void Awake() {
             itemType = ItemType.characterWeapon;
+            itemFilter = ItemFilter.weapon;
             isEquippable = true;
         }
 

@@ -1,4 +1,5 @@
 using RPG.AI;
+using RPG.Stats;
 using UnityEngine;
 
 namespace RPG.Control
@@ -7,6 +8,12 @@ namespace RPG.Control
     public class CrewMember : Character, IRaycastable, IControllable
     {
         private string crewName;
+
+        [Header("Progression")]
+        [Range(1, 10)]
+        [SerializeField] int startingLevel = 1;
+        [SerializeField] GameObject levelUpParticleEffect = null;
+        public Experience experience = new Experience();
         public PlayerController controller;
 
         public float followDistance = 5f;

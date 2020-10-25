@@ -11,6 +11,7 @@ namespace RPG.Base
     {
         [Header("General Item Configs")]
         public ItemType itemType;
+        public ItemFilter itemFilter;
         public float mass;
         public bool isStackable;
         public bool isEquippable;

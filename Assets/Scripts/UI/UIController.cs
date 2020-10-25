@@ -10,11 +10,19 @@ using RPG.Global;
 using RPG.Base;
 using RPG.Items;
 using RPG.Stats;
+using RPG.Core;
 
 namespace RPG.UI
 {
     public class UIController : MonoBehaviour
     {
+
+        [Header("Player Data")]
+        public Ship ship;
+        public PlayerController crewController;
+        [SerializeField] CrewMember currentCrewToDisplay;
+        [SerializeField] List<CrewMember> crewMembersOnTeam;
+        [SerializeField] List<CrewMember> crewMembersOnShip;
 
         [Header("Window Theme")]
         [Tooltip("All the menu and sub-menu windows")]
@@ -37,12 +45,6 @@ namespace RPG.UI
         [Header("BattleHud Options")]
         public Image selectTacticDisplay;
 
-        public EventSystem eventSystem;
-        Tints tint;
-        Transform tintParent;
-        public enum Tints { blue = 0, orange = 1, red = 2, green = 3, purple = 4, pink = 5, custom1 = 6, custom2 = 7, custom3 = 8 };
-        public static bool onPC = false;
-        List<GameObject> tintChildren;
         public enum Theme { blue, orange, red, green, purple, pink, custom1, custom2, custom3 };
         [Header("Theme Settings")]
         public Theme theme;
@@ -54,17 +56,11 @@ namespace RPG.UI
 
         [Header("Character UI Objects")]
         [SerializeField] GameObject characterUI;
-        [SerializeField] GameObject menuImage;
-        [SerializeField] GameObject submenu;
-        [SerializeField] GameObject shipManageBtn;
-        [SerializeField] GameObject inventoryBtn;
-        [SerializeField] DisplayCrewList currentTeamDisplay;
-        [SerializeField] DisplayCrewList onShipDisplay;
         
         [Header("Equipment and Inventory Slots")]
-        public List<ItemSlot> equippedItemSlots;
+        
         public GameObject UI_item;
-        public UIPlayerInventory playerInventory;
+        public UIShipCargo playerInventory;
         public DisplayCharacterStats playerEquipmentStats;
 
         [Header("Event UI Objects")]
@@ -78,11 +74,6 @@ namespace RPG.UI
         [SerializeField] Vector3 animationScale;
         [SerializeField] Vector3 normalScale;
         [SerializeField] float timeSinceLastEvent = Mathf.Infinity;
-
-        [Header("Crew Data")]
-        [SerializeField] CrewMember currentCrewToDisplay;
-        [SerializeField] List<CrewMember> crewMembersInTeam;
-        [SerializeField] List<CrewMember> crewMembersOnShip;
 
         public event EventHandler<EventArgs> OnCrewToDisplayChange;
 
@@ -114,21 +105,9 @@ namespace RPG.UI
         internal Color pressedButtonColor;
 
 
-        //public List<Button> buttons;
-
-
-        private void Awake()
-        {
-//            GameEvents.instance.OnFightBrokeOut += ActivateBattleHud;
-//            GameEvents.instance.battleTacticChanged += OnBattleTacticChange;
-            //SetTheme();
-
-        }
-
         private void Start() {
-            StartCoroutine(SetCrewToDisplay(GameEvents.instance.crewController.GetCurrentCrewMember()));
-            crewMembersInTeam = GameEvents.instance.GetCrewRoster();
-            crewMembersOnShip = GameEvents.instance.GetShipRoster();
+            crewMembersOnTeam = crewController.ListCrew();
+            crewMembersOnShip = crewController.ListCrewOnShip();
         }
 
 
@@ -232,7 +211,7 @@ namespace RPG.UI
             }
         }
 
-        #endregion
+
 
         private void SetTheme ()
         {
@@ -259,15 +238,17 @@ namespace RPG.UI
             }
         }
 
-#region Character Displays
+        #endregion
+
+        #region Character Displays
         public CrewMember GetCrewToDisplay()
         {
             return currentCrewToDisplay;
         }
 
-        public List<CrewMember> GetCrewMembersInTeam ()
+        public List<CrewMember> GetCrewMembersOnTeam ()
         {
-            return crewMembersInTeam;
+            return crewMembersOnTeam;
         }
 
         public List<CrewMember> GetCrewMembersOnSip()
@@ -277,12 +258,13 @@ namespace RPG.UI
 
         public IEnumerator SetCrewToDisplay(CrewMember crewToDisplay)
         {  
-            currentCrewToDisplay = crewToDisplay; 
+            currentCrewToDisplay = crewToDisplay;
 
             Debug.Log(currentCrewToDisplay);
             OnCrewToDisplayChange?.Invoke(this, EventArgs.Empty);
 
-            yield return new WaitUntil(() => UpdateItemsFromEquipped(currentCrewToDisplay.equipment.equipped));
+            yield return null;
+            //yield return new WaitUntil(() => UpdateItemsFromEquipped(currentCrewToDisplay.equipment.equipped));
 
 
         }
