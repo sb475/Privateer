@@ -12,7 +12,9 @@ https://www.youtube.com/watch?v=qpXxcvS-g3g
 Tutorials that have been very helpful:
 
 https://www.youtube.com/user/Brackeys
+
 https://www.youtube.com/channel/UCR35rzd4LLomtQout93gi0w
+
 https://www.youtube.com/channel/UCFK6NCbuCIVzA6Yj1G_ZqCg
 
 
