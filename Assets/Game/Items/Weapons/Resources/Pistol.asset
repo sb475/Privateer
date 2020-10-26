@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Pistol
   m_EditorClassIdentifier: 
   itemType: 1
+  itemFilter: 2
   mass: 0
   isStackable: 0
   isEquippable: 1
@@ -30,7 +31,8 @@ MonoBehaviour:
   weaponDamage: 6
   damageBonus: -1
   weaponRange: 25
-  actionPointCost: 2
+  rateOfAttack: 2
+  hitPercentage: 75
   isRightHanded: 1
   projectile: {fileID: 1700606204100941100, guid: c76cd6c67b377534681f715a62494699,
     type: 3}
