@@ -190,23 +190,7 @@ namespace RPG.Global
         {
             PerkPoolChanged?.Invoke(this, poolValue);
         }
-        internal void MoveCrewToCurrent(CrewMember crewToSwap)
-        {
-            Debug.Log(crewToSwap.name + " moving to team");
-            GetShipRoster().Remove(crewToSwap); 
-            GetCrewRoster().Add(crewToSwap);
-            if (UpdateCrewList != null) UpdateCrewList?.Invoke(this, EventArgs.Empty);
-            
-        }
 
-        internal void MoveCrewToShip(CrewMember crewToSwap)
-        {
-            Debug.Log(crewToSwap.name + " moving to ship");
-            GetCrewRoster().Remove(crewToSwap);
-            GetShipRoster().Add(crewToSwap);
-
-            if (UpdateCrewList != null) UpdateCrewList?.Invoke(this, EventArgs.Empty);
-        }
 
 
 

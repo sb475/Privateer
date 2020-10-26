@@ -33,7 +33,7 @@ namespace RPG.Control
         public List<CrewMember> currentTeam;
         public List<CrewMember> crewOnShip;
         public Ship ship;
-        public bool canControlShip;
+        public bool onShip;
         public bool controllingShip;
         public float zoomContolTransition;
         public float maxZoomOnChar;
@@ -143,7 +143,7 @@ namespace RPG.Control
         #region DeterminePlaterControl
 
         private void DetermineShipControl ()
-        { if (canControlShip)
+        { if (onShip)
             {
                 
                 if (cameraControl.GetCameraZoom() < zoomContolTransition)
@@ -176,7 +176,7 @@ namespace RPG.Control
 
         private void SetCamera ()
         {
-            if (canControlShip)
+            if (onShip)
             {
                 cameraControl.SetZoomSpeed(100f);
                 cameraControl.SetCameraMaxZoom(maxZoomOnShip);
@@ -268,7 +268,7 @@ namespace RPG.Control
                                     }
 
                                 }
-                                else if (hit.collider.GetComponent<Ship>() && canControlShip)
+                                else if (hit.collider.GetComponent<Ship>() && onShip)
                                 {
                                     ship = hit.collider.GetComponent<Ship>();
                                     if (interactable != null)

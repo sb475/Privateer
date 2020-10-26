@@ -43,7 +43,7 @@ namespace RPG.UI{
                 foreach (Item item in inventory.GetItemList())
                 {
                     if (item.itemObject.itemFilter == itemFilter) filteredItems.Add(item);
-
+                    
                 }
                 UpdateInventory(filteredItems);
             }
@@ -84,19 +84,20 @@ namespace RPG.UI{
         }
         private void UpdateInventory(List<Item> itemList)
         {
-            Debug.Log("Item list count: " + itemList.Count);
-            BuildInvSlots(itemList.Count+1);
+            int itemCount;
+            if (itemList == null) itemCount = 0;
+            
+            itemCount = itemList.Count;
+            Debug.Log("Item list count: " + itemCount);
+
+            BuildInvSlots(itemCount);
 
             int invIndex = 0;
             foreach (Transform child in itemSlotContainer.transform)
             {
-                if (child == itemSlot.transform)
-                {
-                    child.gameObject.SetActive(false);
-                    continue;
-                }
-
-                if (invIndex < itemList.Count)
+                Debug.Log(itemSlotContainer.transform.childCount);
+                Debug.Log("Inventory Index is: " + invIndex);
+                if (invIndex < itemCount && itemCount != 0)
                 {
                     Item item = itemList[invIndex];
                     GameObject uiItem = child.Find("UI_Item").gameObject;
@@ -117,15 +118,33 @@ namespace RPG.UI{
                     {
                         displayItemAmount.text = "";
                     }
+                    if (child.gameObject.activeSelf == false) child.gameObject.SetActive(true);
                 }
                 else if (setInventorySize)
                 {
                     //Set to empty slots
                 }
-                
+                else
+                {
+                    RemoveExcessdChildren(child);
+
+                }
+
                 invIndex++;
-                Debug.Log("Inventory Index is: " + invIndex);
+                
             }           
+        }
+
+        private void RemoveExcessdChildren(Transform child)
+        {
+            if (child == itemSlot.transform)
+            {
+                child.gameObject.SetActive(false);
+            }
+            else
+            {
+                Destroy(child.gameObject);
+            }
         }
 
         public virtual void SetInventory(Inventory inventory)

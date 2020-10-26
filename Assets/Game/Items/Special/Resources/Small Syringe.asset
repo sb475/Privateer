@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Small Syringe
   m_EditorClassIdentifier: 
   itemType: 3
+  itemFilter: 4
   mass: 0
-  marketValue: 5
   isStackable: 1
   isEquippable: 0
   baseCost: 5
@@ -22,7 +22,6 @@ MonoBehaviour:
     type: 3}
   itemIcon: {fileID: 21300000, guid: 8144acae632f40449aa9f42c8ccc8074, type: 3}
   itemDescription: A small syringe to heal yourself or nearby ally.
-  additiveItemStats:
-  - statType: 0
-    statValue: 15
-  percentageItemStats: []
+  genericModifier:
+    additiveModifiers: []
+    percentageModifiers: []

@@ -253,7 +253,7 @@ namespace RPG.UI
 
         public List<CrewMember> GetCrewMembersOnSip()
         {
-            return crewMembersOnShip;
+            return crewController.crewOnShip;
         }
 
         public IEnumerator SetCrewToDisplay(CrewMember crewToDisplay)
@@ -266,6 +266,15 @@ namespace RPG.UI
             yield return null;
             //yield return new WaitUntil(() => UpdateItemsFromEquipped(currentCrewToDisplay.equipment.equipped));
 
+
+        }
+
+        internal void DropCrewMember(CrewMember crewToSwap, List<CrewMember> recieving, List<CrewMember> losing)
+        {
+            Debug.Log(crewToSwap.name + " moving to team");
+            recieving.Add(crewToSwap);
+            losing.Remove(crewToSwap);
+            //if (UpdateCrewList != null) UpdateCrewList?.Invoke(this, EventArgs.Empty);
 
         }
 
