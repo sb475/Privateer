@@ -18,3 +18,6 @@ https://www.youtube.com/channel/UCR35rzd4LLomtQout93gi0w
 https://www.youtube.com/channel/UCFK6NCbuCIVzA6Yj1G_ZqCg
 
 
+Dialogue Pixel Crusher Documentation
+
+https://www.pixelcrushers.com/dialogue_system/manual2x/html/index.html
