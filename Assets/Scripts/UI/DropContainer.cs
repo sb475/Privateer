@@ -7,7 +7,7 @@ namespace RPG.UI
     {
         public UIController uIController;
 
-        private void Awake() {
+        public virtual void Awake() {
             uIController = GetComponentInParent<UIController>();
         }
        
@@ -15,7 +15,13 @@ namespace RPG.UI
         {
             if (eventData.pointerDrag.GetComponent<DroppableObject>() == null ) return;
 
-        }   
+        }
+
+        public void UpdateParent(GameObject droppedObject, GameObject parentToUpdate)
+        {
+            droppedObject.transform.SetParent(parentToUpdate.transform, false);
+            //droppedObject.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+        }
 
     }
 

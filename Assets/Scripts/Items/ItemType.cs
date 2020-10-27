@@ -6,21 +6,13 @@ namespace RPG.Items
 {
     public enum ItemType 
     {
-        characterArmor,
-        characterWeapon,
-        utlity,
-        special,
-        cargo,
-    }
-
-    public enum ItemFilter
-    {
-        none,
         armor,
         weapon,
         utility,
         special,
         cargo,
+        shipWeapon,
+        all,
     }
 
     public enum WeaponType

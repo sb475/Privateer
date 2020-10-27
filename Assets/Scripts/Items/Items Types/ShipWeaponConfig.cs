@@ -22,7 +22,7 @@ namespace RPG.Items
 
         private void Awake()
         {
-            itemType = ItemType.characterWeapon;
+            itemType = ItemType.shipWeapon;
             isEquippable = true;
         }
 

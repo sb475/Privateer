@@ -22,7 +22,7 @@ namespace RPG.UI{
         public GameObject inventorySource;
         public Inventory inventory;
         public bool setInventorySize;
-        public ItemFilter itemFilter;
+        public ItemType itemFilter;
 
         public virtual void Awake() {
             
@@ -31,25 +31,31 @@ namespace RPG.UI{
 
         public virtual void Start ()
         {
-            InitializeInventory();
+            UpdateInventory();
         }
 
-        private void InitializeInventory()
+        private void OnEnable()
+        {
+            UpdateInventory();
+        }
+
+        public void UpdateInventory()
         {
             inventory = inventorySource.GetComponent<IInventory>().inventory;
-            if (itemFilter != ItemFilter.none)
+            if (itemFilter != ItemType.all)
             {
                 List<Item> filteredItems = new List<Item>();
                 foreach (Item item in inventory.GetItemList())
                 {
-                    if (item.itemObject.itemFilter == itemFilter) filteredItems.Add(item);
+                    if (item.itemObject.itemType == itemFilter) filteredItems.Add(item);
+
                     
                 }
-                UpdateInventory(filteredItems);
+                UpdateInventoryItems(filteredItems);
             }
             else
             {
-                UpdateInventory(inventory.GetItemList());
+                UpdateInventoryItems(inventory.GetItemList());
             }
         }
 
@@ -76,19 +82,19 @@ namespace RPG.UI{
             }
         }
 
-        private void CreateInvSlot()
+        private void CreateInvSlot()    
         {
             RectTransform itemSlotRectTransform = Instantiate(itemSlot.transform, itemSlotContainer.transform).GetComponent<RectTransform>();
 
             itemSlotRectTransform.gameObject.SetActive(true);            
         }
-        private void UpdateInventory(List<Item> itemList)
+        private void UpdateInventoryItems(List<Item> itemList)
         {
             int itemCount;
             if (itemList == null) itemCount = 0;
             
             itemCount = itemList.Count;
-            Debug.Log("Item list count: " + itemCount);
+            Debug.Log("Item list count: " + itemCount + " " + itemFilter);
 
             BuildInvSlots(itemCount);
 

@@ -7,7 +7,7 @@ namespace RPG.UI
 {
     public class ItemSlotGeneric : DropContainer
         {
-            public SlotType slotType = SlotType.inventoryContainer;
+            public SlotType slotType = SlotType.inventorySlot;
 
             public UIInventory uIInventory;
 
@@ -18,8 +18,10 @@ namespace RPG.UI
             }
            
 
-            private void Awake()
+            public override void Awake()
             {
+                base.Awake();
+       
                 uIInventory = GetComponentInParent<UIInventory>();
             }
 
@@ -33,12 +35,6 @@ namespace RPG.UI
             public UIInventory GetInventoryController()
             {
                 return uIInventory;
-            }
-
-            public void UpdateParent(GameObject droppedObject, GameObject parentToUpdate)
-            {
-                droppedObject.transform.SetParent(parentToUpdate.transform);
-                droppedObject.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
             }
 
             protected virtual void ActivateOnItemDropped (ItemSlot itemSlot, Item uiItemInInventory)

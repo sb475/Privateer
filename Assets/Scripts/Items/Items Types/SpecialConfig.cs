@@ -20,8 +20,7 @@ namespace RPG.Items
         const string weaponName = "Weapon";
 
         private void Awake() {
-            itemType = ItemType.characterWeapon;
-            itemFilter = ItemFilter.special;
+            itemType = ItemType.special;
             isEquippable = true;
         }
 

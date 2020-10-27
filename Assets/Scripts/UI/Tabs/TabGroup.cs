@@ -68,6 +68,7 @@ public class TabGroup : MonoBehaviour
         {
             if (i == index)
             {
+                Debug.Log("Showing window: " + objectsToSwap[i].name);
                 objectsToSwap[i].SetActive(true);
             }
             else

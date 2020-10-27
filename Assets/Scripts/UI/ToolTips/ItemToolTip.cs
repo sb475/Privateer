@@ -111,7 +111,7 @@ namespace RPG.UI {
 
             //create custom display per item type
             switch (item.CheckItemType()){
-                case ItemType.characterWeapon:
+                case ItemType.weapon:
                     //subclasses must be cast in order to call some functions
                     WeaponConfig weaponItem = (WeaponConfig)item;
                     GenerateItemStatDisplay(itemStatsCell, displayContainer, "Damage", (weaponItem.GetDamage() + "" + weaponItem.GetDamageBonus()).ToString());
