@@ -15,6 +15,8 @@ namespace RPG.Control
         public Inventory inventory;
         public IDamagable health;
 
+        DialogueSystemTrigger dialogue;
+
 
         public override void Awake()
         {
@@ -24,9 +26,16 @@ namespace RPG.Control
             interactionPoint = gameObject.transform;
             inventory = GetComponent<Inventory>();
             health = GetComponent<IDamagable>();
+            dialogue = GetComponent<DialogueSystemTrigger>();
+
 
             InitializeDefaultBehaviour();
 
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.T)) dialogue.OnUse();
         }
 
         public override void DefaultInteract(ControllableObject callingController)
@@ -48,6 +57,9 @@ namespace RPG.Control
             }
             else if (GetComponent<DialogueSystemTrigger>() != null)
             {
+
+
+
                 defaultAction = new RPG_TaskSystem.Task.Talk { interactable = this };
                 defaultCursorType = CursorType.Dialogue;
             }

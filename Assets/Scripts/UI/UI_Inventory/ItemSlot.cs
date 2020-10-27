@@ -12,11 +12,11 @@ namespace RPG.UI
     public class ItemSlot : ItemSlotGeneric
     {
 
-        public ItemType slotEquippableType;
+        public ItemType allowedItem;
         private UIItemData uiItemInSlot;     
 
-        private void Awake() {
-            uIInventory = GetComponentInParent<UIInventory>();
+        public override void Awake() {
+            base.Awake();
             uiItemInSlot = GetComponentInChildren<UIItemData>();
         }
 
@@ -50,34 +50,45 @@ namespace RPG.UI
                     //sends the message that item has been dropped and pushes to CharacterEquip script.
 
                     //Slot behavior
-                    switch (slotToAddTo.slotType)
-                    {
-                        case SlotType.characterEquipSlot:
-                            uiItemInInventory.isEquipped = true;
-                            GameEvents.instance.uiController.UpdateDisplayValues();
-                            GameEvents.instance.OnItemChanged();
-                            break;
-                        case SlotType.inventorySlot:
-                            uiItemInInventory.isEquipped = false;
-                            break;
-                        case SlotType.shopSlot:
-                            break;
-                    }
+                    HandleDropItem(slotToAddTo, uiItemInInventory);
 
                     if (slotType != SlotType.inventoryContainer)
                     {
                         uiItemInSlot = uIItemData;
                     }
-                    
+
                 }
                 else
                 {
-                   GameEvents.instance.SendEventMessage("You cannot equip this here");
+                    GameEvents.instance.SendEventMessage("You cannot equip this here");
                     // eventData.pointerDrag.transform.position = eventData.pointerDrag.GetComponent<ItemDrag>().GetLastItemPosition();
                     return;
                 }
 
                 //uIInventory.RefreshInventoryItems();
+            }
+        }
+
+        public virtual bool ItemMoveCondition()
+        {
+            return true;
+        }
+
+        public virtual void HandleDropItem(ItemSlotGeneric slotToAddTo, Item uiItemInInventory)
+        {
+            switch (slotToAddTo.slotType)
+            {
+                case SlotType.characterEquipSlot:
+                    uiItemInInventory.isEquipped = true;
+                    if (uIInventory.inventory.itemList.Contains(uiItemInInventory)) uIInventory.inventory.AddItem(uiItemInInventory);
+                    GameEvents.instance.uiController.UpdateDisplayValues();
+                    GameEvents.instance.OnItemChanged();
+                    break;
+                case SlotType.inventorySlot:
+                    uiItemInInventory.isEquipped = false;
+                    break;
+                case SlotType.shopSlot:
+                    break;
             }
         }
 
@@ -124,6 +135,7 @@ namespace RPG.UI
 
         private bool CheckToTransferSlot(Item uiItemInInventory, ItemSlotGeneric uiSlot)
         {
+            if (!ItemMoveCondition()) return false;
             Debug.Log ("Check to Transfer: " + uiSlot.slotType);
             //if inventory slot, always allow
             if (uiSlot.slotType == SlotType.inventoryContainer || uiSlot.slotType == SlotType.shopSlot || uiSlot.slotType == SlotType.inventorySlot) 
@@ -131,12 +143,14 @@ namespace RPG.UI
                 return true;
             }
 
+            
+
             ItemSlot uiItemSlot = (ItemSlot)uiSlot; 
 
             //if slot does not match, do not allow
-            if (uiItemSlot.slotEquippableType == uiItemInInventory.itemObject.CheckItemType())
+            if (uiItemSlot.allowedItem == uiItemInInventory.itemObject.CheckItemType())
             {
-                return true;
+               return true;
             }
 
             return false;

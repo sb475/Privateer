@@ -23,6 +23,7 @@ namespace RPG.UI
         [SerializeField] CrewMember currentCrewToDisplay;
         [SerializeField] List<CrewMember> crewMembersOnTeam;
         [SerializeField] List<CrewMember> crewMembersOnShip;
+        
 
         [Header("Window Theme")]
         [Tooltip("All the menu and sub-menu windows")]
@@ -56,12 +57,10 @@ namespace RPG.UI
 
         [Header("Character UI Objects")]
         [SerializeField] GameObject characterUI;
-        
-        [Header("Equipment and Inventory Slots")]
-        
-        public GameObject UI_item;
-        public UIShipCargo playerInventory;
-        public DisplayCharacterStats playerEquipmentStats;
+
+        [Header("Loadout")]
+
+        public DisplayAvailableCrew displayAvailableCrew;
 
         [Header("Event UI Objects")]
         [SerializeField] GameObject eventUI;
@@ -271,9 +270,10 @@ namespace RPG.UI
 
         internal void DropCrewMember(CrewMember crewToSwap, List<CrewMember> recieving, List<CrewMember> losing)
         {
-            Debug.Log(crewToSwap.name + " moving to team");
-            recieving.Add(crewToSwap);
+            Debug.Log(crewToSwap.name + " from " + recieving + " to " + losing);
+            if (!recieving.Contains(crewToSwap)) recieving.Add(crewToSwap);
             losing.Remove(crewToSwap);
+            displayAvailableCrew.GenerateAvailableCrew();
             //if (UpdateCrewList != null) UpdateCrewList?.Invoke(this, EventArgs.Empty);
 
         }

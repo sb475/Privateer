@@ -19,8 +19,7 @@ namespace RPG.Items
 
         public ArmorConfig()
         {
-            itemType = ItemType.characterArmor;
-            itemFilter = ItemFilter.armor;
+            itemType = ItemType.armor;
             isEquippable = true;
             isStackable = false;
         }

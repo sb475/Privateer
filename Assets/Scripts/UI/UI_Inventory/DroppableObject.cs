@@ -18,15 +18,16 @@ namespace RPG.UI
         {
             rectTransform = GetComponent<RectTransform>();
             canvasGroup = GetComponent<CanvasGroup>();
-            parentRectTransform = GetComponent<RectTransform>();
-            parentDropContainer = GetComponentInParent<DropContainer>();
+            parentRectTransform = GetComponentInParent<RectTransform>();
+            //parentDropContainer = GetComponentInParent<DropContainer>();
             uIController = GetComponentInParent<UIController>();
 
         }
 
         public virtual void OnBeginDrag(PointerEventData eventData)
         {
-            lastPosition = gameObject.transform.position;
+            Debug.Log("OnBeginDrag");
+            //lastPosition = gameObject.transform.position;
             canvasGroup.blocksRaycasts = false;
             canvasGroup.alpha = .6f;
         }
@@ -38,14 +39,16 @@ namespace RPG.UI
 
         public virtual void OnDrop(PointerEventData eventData)
         {
-            throw new System.NotImplementedException();
+            Debug.Log("OnDrop");
+            canvasGroup.blocksRaycasts = true;
+            canvasGroup.alpha = 1f;
         }
 
         public virtual void OnEndDrag(PointerEventData eventData)
         {
+            Debug.Log("OnEdnDrag");
             canvasGroup.blocksRaycasts = true;
             canvasGroup.alpha = 1f;
-
 
             //sets item back to where it came from if not dropped on an ItemSlot
             transform.localPosition = Vector3.zero;

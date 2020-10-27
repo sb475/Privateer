@@ -387,8 +387,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 20
@@ -466,8 +464,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 143
@@ -539,8 +535,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 19
@@ -612,8 +606,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 316
@@ -679,8 +671,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 19.747261
@@ -758,8 +748,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 390.32965
@@ -825,8 +813,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 632.3383
@@ -893,8 +879,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 631.2949
@@ -1010,8 +994,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 20
@@ -1097,8 +1079,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 17.297295
@@ -1171,8 +1151,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 254.48648
@@ -1203,8 +1181,8 @@ MonoBehaviour:
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: Technician/Intellect - "I was repairing the port stabilization boosters
-          when Rakt jumped out from behind the interface panel. I stumbled back. Must
-          have hit my head on something."
+          when Rakt jumped out from behind the interface panel. I stumbled back.
+          Must have hit my head on something."
         type: 0
         typeString: 
       - title: Dialogue Text
@@ -1246,8 +1224,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 284
@@ -1320,8 +1296,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 315.64865
@@ -1394,8 +1368,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 637.62164
@@ -1469,8 +1441,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 568
@@ -1542,8 +1512,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 517
@@ -1579,8 +1547,8 @@ MonoBehaviour:
       - title: Dialogue Text
         value: Well, some of the other pilots through that it'd be hilarious to call
           me "captain bumpy-landings". In turn I thought it'd be hilarious to take
-          all their credits over a game of cards. needless to say, neither party thought
-          it was funny.
+          all their credits over a game of cards. needless to say, neither party
+          thought it was funny.
         type: 0
         typeString: 
       - title: Parenthetical
@@ -1622,8 +1590,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 601.48645
@@ -1696,8 +1662,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 857.29724
@@ -1769,8 +1733,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 1178.9188
@@ -1855,8 +1817,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 1318.108
@@ -1932,8 +1892,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 823.40546
@@ -2005,8 +1963,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 1030.1622
@@ -2078,8 +2034,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 893.0271
@@ -2151,8 +2105,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 1101.1351
@@ -2224,8 +2176,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 1284.919
@@ -2259,8 +2209,8 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: All finished sir. Should I do anything other than rest and change my
-          socks?
+        value: All finished sir. Should I do anything other than rest and change
+          my socks?
         type: 0
         typeString: 
       - title: Parenthetical
@@ -2292,8 +2242,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 1534.3242
@@ -2360,8 +2308,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 1549.1891
@@ -2427,16 +2373,14 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 1547.8379
         y: 453.8109
         width: 160
         height: 30
-    canvasScrollPosition: {x: 125.67569, y: 0}
-    canvasZoom: 0.7399999
+    canvasScrollPosition: {x: 0, y: 0}
+    canvasZoom: 0.5300001
   - id: 3
     fields:
     - title: Title
@@ -2556,8 +2500,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 1
@@ -2630,8 +2572,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 239
@@ -2709,8 +2649,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 246.4679
@@ -2776,8 +2714,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 602.4679
@@ -2849,8 +2785,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 352.22018
@@ -2916,8 +2850,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 522.3854
@@ -2989,8 +2921,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 162
@@ -3062,8 +2992,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 445.58716
@@ -3097,8 +3025,8 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: Why yes I do. My supply of light armor has dried up. Do you think you
-          could find me a pair?
+        value: Why yes I do. My supply of light armor has dried up. Do you think
+          you could find me a pair?
         type: 0
         typeString: 
       - title: Parenthetical
@@ -3142,8 +3070,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 795
@@ -3207,14 +3133,13 @@ MonoBehaviour:
       conditionsString: 
       userScript: 'SetQuestState("Thank YOU COME AGAIN", "active");
 
-        SetQuestEntryState("Thank YOU COME AGAIN", 1, "active");
+        SetQuestEntryState("Thank
+        YOU COME AGAIN", 1, "active");
 
 '
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 848.2569
@@ -3330,8 +3255,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 30
@@ -3404,8 +3327,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 196
@@ -3477,8 +3398,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 485
@@ -3550,8 +3469,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 487
@@ -3617,8 +3534,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 808
@@ -3740,8 +3655,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 30
@@ -3813,8 +3726,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 77
@@ -3880,8 +3791,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 391
@@ -3953,8 +3862,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 391
@@ -4020,8 +3927,6 @@ MonoBehaviour:
       onExecute:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       canvasRect:
         serializedVersion: 2
         x: 671

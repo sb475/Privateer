@@ -35,6 +35,7 @@ public class Character : MonoBehaviour, IStat, IInventory
     public Inventory inventory;
     public CharacterEquipment equipment;
     public CharacterPerks perks;
+    public Sprite portrait;
 
 
     public virtual void Awake()

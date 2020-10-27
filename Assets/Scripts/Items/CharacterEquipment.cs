@@ -11,7 +11,8 @@ namespace RPG.Items
         weapon,
         tool,
         armor,
-        special
+        special,
+
     }
 
     [System.Serializable]
@@ -20,10 +21,10 @@ namespace RPG.Items
         Character character;
         DefaultEquip defaultEquip;
         public Dictionary<EquipmentSlots, ItemConfig> equipped;
-        public WeaponConfig[] weaponsAvailable;
+        public Item[] weaponsAvailable;
         public ArmorConfig currentArmor;
-        public UtilityConfig[] toolsAvailable;
-        public SpecialConfig[] specialAvailable;
+        public Item[] utilityAvailable;
+        public Item[] specialAvailable;
 
         private List<Modifier> modifiersToAdd = new List<Modifier>();
 
@@ -33,15 +34,15 @@ namespace RPG.Items
             equipped = new Dictionary<EquipmentSlots, ItemConfig>();
             if (character.defaultEquip != null)
                 this.defaultEquip = character.defaultEquip;
-                Debug.Log("Default armor is: " + defaultEquip.defaultArmor);
+                //Debug.Log("Default armor is: " + defaultEquip.defaultArmor);
 
             if (defaultEquip.defaultArmor != null)
             {
                 Equip(EquipmentSlots.armor, defaultEquip.defaultArmor);
                 currentArmor = equipped[EquipmentSlots.armor] as ArmorConfig;
-                weaponsAvailable = new WeaponConfig[currentArmor.weaponSlots];
-                toolsAvailable = new UtilityConfig[currentArmor.utlitySlots];
-                specialAvailable = new SpecialConfig[currentArmor.specialSlots];
+                weaponsAvailable = new Item[currentArmor.weaponSlots];
+                utilityAvailable = new Item[currentArmor.utlitySlots];
+                specialAvailable = new Item[currentArmor.specialSlots];
             }
         }
 
@@ -61,10 +62,11 @@ namespace RPG.Items
         {
             WeaponConfig weaponToTest = new WeaponConfig();
 
-            foreach (WeaponConfig weapon in weaponsAvailable)
+            foreach (Item weapon in weaponsAvailable)
             {
+                WeaponConfig weaponAvail = weapon.itemObject as WeaponConfig;
                 //add evaluation to determine which is best.
-                if (weapon.HasProjectile() == ranged) weaponToTest = weapon;
+                if (weaponAvail.HasProjectile() == ranged) weaponToTest = weaponAvail;
             }
 
             if (weaponToTest != null)
@@ -88,7 +90,8 @@ namespace RPG.Items
             }
             else if (equipmentSlot == EquipmentSlots.armor)
             {
-                TryEquip(equipmentSlot, itemToEquip as ArmorConfig);
+                currentArmor = itemToEquip as ArmorConfig;
+                TryEquip(equipmentSlot, currentArmor);
             }
             else if (equipmentSlot == EquipmentSlots.armor)
             {
