@@ -61,6 +61,7 @@ namespace RPG.UI
         [Header("Loadout")]
 
         public DisplayAvailableCrew displayAvailableCrew;
+        public List<CrewPanel> crewPanels;
 
         [Header("Event UI Objects")]
         [SerializeField] GameObject eventUI;
@@ -270,12 +271,15 @@ namespace RPG.UI
 
         internal void DropCrewMember(CrewMember crewToSwap, List<CrewMember> recieving, List<CrewMember> losing)
         {
-            Debug.Log(crewToSwap.name + " from " + recieving + " to " + losing);
             if (!recieving.Contains(crewToSwap)) recieving.Add(crewToSwap);
             losing.Remove(crewToSwap);
-            displayAvailableCrew.GenerateAvailableCrew();
             //if (UpdateCrewList != null) UpdateCrewList?.Invoke(this, EventArgs.Empty);
 
+        }
+
+        public void RegisterCrewPanel (CrewPanel crewPanel)
+        {
+            crewPanels.Add(crewPanel);
         }
 
         //Alert other UI elements that display values need to be updated.

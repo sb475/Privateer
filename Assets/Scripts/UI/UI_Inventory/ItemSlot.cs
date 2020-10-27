@@ -33,13 +33,14 @@ namespace RPG.UI
         {
             if (droppedObject != null)
             {
+                ItemBehavior itemInfo = droppedObject.GetComponent<ItemBehavior>();
                 //parent of item to later reference to set as ItemSlot variable if move is successful.
-                UIItemData uIItemData = droppedObject.GetComponent<UIItemData>();
+                UIItemData uIItemData = itemInfo.GetItemData();
                 //Need to add functionality for "Use, Drop, and Invalid Drop"
-                Item uiItemInInventory = droppedObject.GetComponent<UIItemData>().GetItemData();
+                Item uiItemInInventory = uIItemData.GetItemData();
 
                 //Store where item came from in memory
-                ItemSlot parentSlot = droppedObject.GetComponentInParent<ItemSlot>();
+                ItemSlot parentSlot = itemInfo.parentSlot;
                 //Function ensures that object can be eqipped at current slot
 
                 if (CheckToTransferSlot(uiItemInInventory, slotToAddTo))

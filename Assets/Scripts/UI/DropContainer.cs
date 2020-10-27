@@ -1,8 +1,12 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace RPG.UI
 {
+    [RequireComponent(typeof(Canvas))]
+    [RequireComponent(typeof(Image))]
+    [RequireComponent(typeof(GraphicRaycaster))]
     public class DropContainer : MonoBehaviour, IDropHandler
     {
         public UIController uIController;
@@ -19,8 +23,8 @@ namespace RPG.UI
 
         public void UpdateParent(GameObject droppedObject, GameObject parentToUpdate)
         {
-            droppedObject.transform.SetParent(parentToUpdate.transform, false);
-            //droppedObject.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            droppedObject.transform.SetParent(parentToUpdate.transform);
+            droppedObject.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
         }
 
     }

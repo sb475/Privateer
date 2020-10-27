@@ -3,6 +3,7 @@ using RPG.Control;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 namespace RPG.UI
 {
@@ -10,22 +11,33 @@ namespace RPG.UI
     {
 
         //this needs to be made into a base class for droppedable items.
-        public Transform parentToReturnTo; 
         public CrewMember crew;
-        public CrewSlot crewSwap;
-        Image image;
+        public CrewSlot parentCrewSlot;
 
 
         public override void Awake() {
             base.Awake();
 
-            parentToReturnTo = parentDropContainer.transform;
+            parentCrewSlot = GetComponentInParent<CrewSlot>();
+        }
+
+        public override void UpdateParentComponents()
+        {
+            base.UpdateParentComponents();
+            parentCrewSlot = GetComponentInParent<CrewSlot>();
+        }
+
+
+        public override void OnDrag(PointerEventData eventData)
+        {
+            base.OnDrag(eventData);
+            
         }
 
         public override void OnDrop(PointerEventData eventData)
         {
-            base.OnDrop(eventData);
-            GetComponentInParent<CrewSlot>().AddCrewToList(eventData.pointerDrag, GetComponentInParent<CrewSlot>());
+            Debug.Log("Item dropped on");
+            //GetComponentInParent<CrewSlot>().AddCrewToList(eventData.pointerDrag, GetComponentInParent<CrewSlot>());
         }
 
         public void SetCrewOnObject(CrewMember crewToSet)
@@ -38,5 +50,6 @@ namespace RPG.UI
             return crew;
         }
 
+       
     }
 }

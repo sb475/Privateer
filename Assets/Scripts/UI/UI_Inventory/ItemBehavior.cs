@@ -23,7 +23,6 @@ namespace RPG.UI
             parentSlot = GetComponentInParent<ItemSlot>();
             itemData = GetComponent<UIItemData>();
             uIInventory = parentSlot.GetInventoryController();
-            uIController = GetComponentInParent<UIController>();
 
         }
 

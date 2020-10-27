@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace RPG.UI
 {
-    public class DroppableObject : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
+    public class DroppableObject : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler//, IDropHandler
     {
         public UIController uIController;
         public Canvas canvas;
@@ -18,15 +18,21 @@ namespace RPG.UI
         {
             rectTransform = GetComponent<RectTransform>();
             canvasGroup = GetComponent<CanvasGroup>();
-            parentRectTransform = GetComponentInParent<RectTransform>();
-            //parentDropContainer = GetComponentInParent<DropContainer>();
-            uIController = GetComponentInParent<UIController>();
+            UpdateParentComponents();
 
         }
 
+        public virtual void UpdateParentComponents ()
+        {
+            parentRectTransform = GetComponentInParent<RectTransform>();
+            parentDropContainer = GetComponentInParent<DropContainer>();
+            uIController = GetComponentInParent<UIController>();
+        }
+
+
         public virtual void OnBeginDrag(PointerEventData eventData)
         {
-            Debug.Log("OnBeginDrag");
+            //Debug.Log("OnBeginDrag");
             //lastPosition = gameObject.transform.position;
             canvasGroup.blocksRaycasts = false;
             canvasGroup.alpha = .6f;
@@ -39,14 +45,14 @@ namespace RPG.UI
 
         public virtual void OnDrop(PointerEventData eventData)
         {
-            Debug.Log("OnDrop");
+            //Debug.Log("OnDrop");
             canvasGroup.blocksRaycasts = true;
             canvasGroup.alpha = 1f;
         }
 
         public virtual void OnEndDrag(PointerEventData eventData)
         {
-            Debug.Log("OnEdnDrag");
+            //Debug.Log("OnEnDrag");
             canvasGroup.blocksRaycasts = true;
             canvasGroup.alpha = 1f;
 
