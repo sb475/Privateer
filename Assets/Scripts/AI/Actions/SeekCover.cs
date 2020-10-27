@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace RPG.AI
 {
-    [CreateAssetMenu(fileName = "SeekCover", menuName = "AI/SeekCover", order = 0)]
     public class SeekCover : GAction
     {
         GameObject chosenObj = null;

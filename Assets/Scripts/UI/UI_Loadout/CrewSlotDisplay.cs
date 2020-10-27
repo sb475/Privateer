@@ -15,40 +15,39 @@ public class CrewSlotDisplay : MonoBehaviour
     Inventory cargoHold;
     [SerializeField] ItemType itemType;
 
-
     public void UpdateCrewSlotDisplay(ArmorEquipSlot armorRef)
     {
         this.armorRef = armorRef;
-        cargoHold = armorRef.crewPaneldrop.uIController.ship.cargoHold;
+        cargoHold = armorRef.crewPanel.uIController.ship.cargoHold;
         Item[] currentlyAvailableItems;
         int slotAmount = 0;
 
         if (itemType == ItemType.weapon)
         {
             slotAmount = armorRef.currentArmor.weaponSlots;
-            currentlyAvailableItems = armorRef.crewPaneldrop.crewOnSlot.equipment.weaponsAvailable;
+            currentlyAvailableItems = armorRef.crewRef.equipment.weaponsAvailable;
         }
         else if (itemType == ItemType.special)
         {
             slotAmount = armorRef.currentArmor.specialSlots;
-            currentlyAvailableItems = armorRef.crewPaneldrop.crewOnSlot.equipment.specialAvailable;
+            currentlyAvailableItems = armorRef.crewRef.equipment.specialAvailable;
         }
         else if (itemType == ItemType.utility)
         {
             slotAmount = armorRef.currentArmor.utlitySlots;
-            currentlyAvailableItems = armorRef.crewPaneldrop.crewOnSlot.equipment.utilityAvailable;
+            currentlyAvailableItems = armorRef.crewRef.equipment.utilityAvailable;
         }
         else
         {
             slotAmount = armorRef.currentArmor.cargoSlots;
-            currentlyAvailableItems = armorRef.crewPaneldrop.crewOnSlot.inventory.itemList.ToArray();
+            currentlyAvailableItems = armorRef.crewRef.inventory.itemList.ToArray();
         }
 
         //update slots on display
         BuildInvSlots(slotAmount);
 
         //populate current items in character list
-        int leftOver = PopulateSlots(armorRef.crewPaneldrop.crewOnSlot.equipment.weaponsAvailable);
+        int leftOver = PopulateSlots(armorRef.crewRef.equipment.weaponsAvailable);
         //if any are left over, move items to ships cargo haul and then resize the array, items outside the array size will be lost unless moved to cargo first.
         if (leftOver > 0)
         {

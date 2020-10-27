@@ -13,7 +13,7 @@ namespace RPG.UI
     public class DisplayAvailableCrew : DropContainer
     {
 
-
+        List<CrewMember> crewToDisplay = new List<CrewMember>();
         [SerializeField] private GameObject crewDisplayButton;
         [SerializeField] private GameObject crewDisplayContainer;
 
@@ -35,11 +35,11 @@ namespace RPG.UI
         public void GenerateAvailableCrew()
         {
                 
-            List<CrewMember> crewToDisplay = new List<CrewMember>();
+            
             crewToDisplay = uIController.GetCrewMembersOnSip();
 
             RefreshItemDisplayStat();
-            
+
             foreach (CrewMember crew in crewToDisplay)
             {
                 //Debug.Log(crew.GetCrewName());
@@ -70,13 +70,17 @@ namespace RPG.UI
         public override void OnDrop(PointerEventData eventData)
         {
             Debug.Log("Item dropped");
-            if (eventData.pointerDrag.GetComponent<CrewDraggable>() == null) return;
+            CrewDraggable dropped = eventData.pointerDrag.GetComponent<CrewDraggable>();
+            if (dropped == null) return;
 
             Debug.Log("Item was dropped");
             CrewMember crewToSwap = eventData.pointerDrag.GetComponent<CrewDraggable>().GetCrewMemberOnObject();
             if (crewToSwap == null) return;
 
-            uIController.DropCrewMember(crewToSwap, uIController.crewController.currentTeam, uIController.crewController.crewOnShip);
+            uIController.DropCrewMember(crewToSwap, uIController.crewController.crewOnShip, uIController.crewController.currentTeam);
+
+            dropped.parentCrewSlot.ResetSlot();
+            Destroy(eventData.pointerDrag);
             GenerateAvailableCrew();
         }
 

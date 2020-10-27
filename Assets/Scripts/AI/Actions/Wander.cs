@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace RPG.AI
 {
-    [CreateAssetMenu(fileName = "Wander", menuName = "AI/Wander", order = 0)]
     public class Wander: GAction
     {
         int nextPoint;

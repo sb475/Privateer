@@ -11,31 +11,56 @@ namespace RPG.UI{
         
     public class CrewSlot : DropContainer
     {
-        
         public CrewMember crewOnSlot;
+        public CrewDraggable crewDragObj;
         public bool onShip;
-        Image image;
+        [SerializeField] Sprite defaultImage;
+        Sprite image;
         public override void Awake()
         {
             base.Awake();
+            if (defaultImage != null) image = GetComponent<Image>().sprite;
+        }
+
+        private void Start()
+        {
+            crewDragObj = GetComponentInChildren<CrewDraggable>();
+            if (crewDragObj == null) image = defaultImage;
         }
 
         public override void OnDrop(PointerEventData eventData)
-        {
-            Debug.Log ("Crew dropped");
-            GameObject droppedObject = eventData.pointerDrag;
-            AddCrewToList(droppedObject, this);
-            
-
+        {           
+            AddCrewToSlot(eventData.pointerDrag);
         }
 
-        public void AddCrewToList(GameObject droppedObject, CrewSlot slotToAddTo)
+        public virtual void ResetSlot()
         {
+            crewDragObj = null;
+            crewOnSlot = null;
+        }
+
+        public virtual void AddCrewToSlot(GameObject droppedObject)
+        {
+            Debug.Log("Adding " + droppedObject + " to " + this.gameObject.name);
             CrewDraggable dropped = droppedObject.GetComponent<CrewDraggable>();
             if (dropped == null) return;
 
             CrewMember crewToSwap = dropped.GetCrewMemberOnObject();
             if (crewToSwap == null) return;
+
+            dropped.parentCrewSlot.ResetSlot();
+
+            //if there's something in container then swap items.
+            if (crewDragObj != null)
+            {
+                //Debug.Log("Swapping " + crewDragObj + " with " + dropped.parentCrewSlot.gameObject.name);
+                dropped.parentCrewSlot.AddCrewToSlot(crewDragObj.gameObject);
+                UpdateParent(droppedObject, this.gameObject);
+            }
+            else
+            {
+                UpdateParent(droppedObject, this.gameObject);
+            }
 
             if (onShip)
             {
@@ -45,10 +70,15 @@ namespace RPG.UI{
             {
                 uIController.DropCrewMember(crewToSwap, uIController.crewController.currentTeam, uIController.crewController.crewOnShip);
             }
-           UpdateParent(dropped.gameObject, slotToAddTo.gameObject);
 
+            dropped.parentCrewSlot = this;
             crewOnSlot = crewToSwap;
+            crewDragObj = dropped;
+            image = null;
+
+            uIController.displayAvailableCrew.GenerateAvailableCrew();
         }
+
     }
 
     
