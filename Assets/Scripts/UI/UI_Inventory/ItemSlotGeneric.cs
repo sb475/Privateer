@@ -9,7 +9,8 @@ namespace RPG.UI
         {
             public SlotType slotType = SlotType.inventorySlot;
 
-            public UIInventory uIInventory;
+        public Inventory sourceInventory;
+        public UIInventory parentUIInventory;
 
             public event EventHandler<OnItemDroppedEventArgs> OnItemDropped;
             public class OnItemDroppedEventArgs : EventArgs
@@ -22,7 +23,8 @@ namespace RPG.UI
             {
                 base.Awake();
        
-                uIInventory = GetComponentInParent<UIInventory>();
+                parentUIInventory = GetComponentInParent<UIInventory>();
+                if (sourceInventory == null) sourceInventory = parentUIInventory.inventory;
             }
 
             public override void OnDrop(PointerEventData eventData)
@@ -34,7 +36,7 @@ namespace RPG.UI
 
             public UIInventory GetInventoryController()
             {
-                return uIInventory;
+                return parentUIInventory;
             }
 
             protected virtual void ActivateOnItemDropped (ItemSlot itemSlot, Item uiItemInInventory)

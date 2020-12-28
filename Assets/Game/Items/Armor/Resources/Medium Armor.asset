@@ -31,4 +31,8 @@ MonoBehaviour:
     percentageModifiers: []
   animatorOverride: {fileID: 0}
   equippedPrefab: {fileID: 0}
-  armorType: 0
+  armorType: 1
+  weaponSlots: 4
+  utlitySlots: 4
+  specialSlots: 3
+  cargoSlots: 3

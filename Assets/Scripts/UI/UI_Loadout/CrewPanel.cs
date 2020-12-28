@@ -1,4 +1,5 @@
 ﻿using RPG.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,7 @@ public class CrewPanel : MonoBehaviour
 
     public ArmorEquipSlot armorEquipSlot;
     public PanelCrewSlot crewSlot;
+    public CrewSlotDisplay[] slotContainers;
 
     private void Awake()
     {
@@ -23,11 +25,18 @@ public class CrewPanel : MonoBehaviour
     private void Start()
     {
         uIController = crewSlot.uIController;
-        if (panelActive)
+        if (!panelActive)
         {
             panelImage.color = inactiveColor;
         }
 
+    }
+
+    private void ChangePanelColor(Color color)
+    {
+        Color c = panelImage.color;
+        c = color;
+        panelImage.color = c;
     }
 
     public void ActivatePanel()
@@ -35,10 +44,15 @@ public class CrewPanel : MonoBehaviour
 
         if (crewSlot.crewOnSlot == null) return;
         Debug.Log("Panel active!");
-
-        uIController.RegisterCrewPanel(this);
         panelImage.color = activeColor;
-        //armorEquipSlot.currentArmor = crewSlot.crewOnSlot.equipment.currentArmor;
+        panelActive = true;
+
+        Debug.Log(crewSlot.crewOnSlot.GetCrewName());
+        uIController.RegisterCrewPanel(this);
+
+        armorEquipSlot.UpdateArmor();
+        UpdateSlotDisplay();
+
     }
 
     public void DeActivatePanel()
@@ -47,4 +61,11 @@ public class CrewPanel : MonoBehaviour
         panelImage.color = inactiveColor;
     }
 
+    public void UpdateSlotDisplay()
+    {
+        foreach (CrewSlotDisplay slotDisplay in slotContainers)
+        {
+            slotDisplay.UpdateCrewSlotDisplay(armorEquipSlot);
+        }
+    }
 }

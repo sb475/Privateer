@@ -21,6 +21,11 @@ namespace RPG.UI
 
         }
 
+        public virtual void OnPostDrag()
+        {
+            
+        }
+
         public void UpdateParent(GameObject droppedObject, GameObject parentToUpdate)
         {
             droppedObject.transform.SetParent(parentToUpdate.transform);

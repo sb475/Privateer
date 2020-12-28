@@ -101,24 +101,27 @@ namespace RPG.UI{
             int invIndex = 0;
             foreach (Transform child in itemSlotContainer.transform)
             {
-                Debug.Log(itemSlotContainer.transform.childCount);
-                Debug.Log("Inventory Index is: " + invIndex);
+
+                ItemSlot itemSlot = child.GetComponent<ItemSlot>();
+               
                 if (invIndex < itemCount && itemCount != 0)
                 {
-                    Item item = itemList[invIndex];
-                    GameObject uiItem = child.Find("UI_Item").gameObject;
-                    //Sets icon of Item Config
-                    Image uiItemImage = uiItem.GetComponent<Image>();
-                    uiItemImage.sprite = item.itemObject.itemIcon;
 
-                    //Sets up relavent data information for referencing later
-                    UIItemData itemData = uiItem.GetComponent<UIItemData>();
-                    itemData.SetItemData(item);
+                    itemSlot.uiItemInSlot.SetItemData(itemList[invIndex]);
+                   // Item item = itemList[invIndex];
+                    //GameObject uiItem = child.Find("UI_Item").gameObject;
+                    //Sets icon of Item Config
+                    //Image uiItemImage = uiItem.GetComponent<Image>();
+                    //uiItemImage.sprite = item.itemObject.itemIcon;
+
+                    ////Sets up relavent data information for referencing later
+                    //UIItemData itemData = uiItem.GetComponent<UIItemData>();
+                    //itemData.SetItemData(item);
 
                     Text displayItemAmount = child.GetComponentInChildren<Text>();
-                    if (item.itemQuantity > 1)
+                    if (itemSlot.uiItemInSlot.uiItem.itemQuantity > 1)
                     {
-                        displayItemAmount.text = item.itemQuantity.ToString();
+                        displayItemAmount.text = itemSlot.uiItemInSlot.uiItem.itemQuantity.ToString();
                     }
                     else
                     {

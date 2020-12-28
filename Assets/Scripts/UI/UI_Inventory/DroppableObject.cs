@@ -19,6 +19,7 @@ namespace RPG.UI
             rectTransform = GetComponent<RectTransform>();
             canvasGroup = GetComponent<CanvasGroup>();
             UpdateParentComponents();
+            canvas = uIController.GetComponent<Canvas>();
 
         }
 

@@ -11,7 +11,7 @@ namespace RPG.UI
 
         private void Awake()
         {
-            uIInventory = GetComponentInParent<UIInventory>();
+            parentUIInventory = GetComponentInParent<UIInventory>();
         }
 
         public override void OnDrop(PointerEventData eventData)

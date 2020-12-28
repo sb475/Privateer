@@ -10,10 +10,16 @@ using UnityEngine.UI;
 public class CrewSlotDisplay : MonoBehaviour
 {
     ArmorEquipSlot armorRef;
+    CrewPanel crewPanel;
     public GameObject itemSlotContainer;
     public ItemSlot itemSlot;
     Inventory cargoHold;
     [SerializeField] ItemType itemType;
+
+    private void Awake()
+    {
+        crewPanel = GetComponentInParent<CrewPanel>();
+    }
 
     public void UpdateCrewSlotDisplay(ArmorEquipSlot armorRef)
     {
@@ -66,30 +72,34 @@ public class CrewSlotDisplay : MonoBehaviour
         int invIndex = 0;
         foreach (Transform child in itemSlotContainer.transform)
         {
-            Debug.Log(itemSlotContainer.transform.childCount);
-            Debug.Log("Inventory Index is: " + invIndex);
-            if (invIndex < itemCount && itemCount != 0)
+            if (itemList[invIndex] != null)
             {
-                Item item = itemList[invIndex];
-                GameObject uiItem = child.Find("UI_Item").gameObject;
-                //Sets icon of Item Config
-                Image uiItemImage = uiItem.GetComponent<Image>();
-                uiItemImage.sprite = item.itemObject.itemIcon;
-
-                //Sets up relavent data information for referencing later
-                UIItemData itemData = uiItem.GetComponent<UIItemData>();
-                itemData.SetItemData(item);
-
-                Text displayItemAmount = child.GetComponentInChildren<Text>();
-                if (item.itemQuantity > 1)
+                //get the itemslot stored in child
+                ItemSlot itemSlot = child.GetComponent<ItemSlot>();
+                itemSlot.sourceInventory = crewPanel.crewSlot.crewOnSlot.inventory;
+                Debug.Log(itemSlotContainer.transform.childCount);
+                Debug.Log("Inventory Index is: " + invIndex);
+                if (invIndex < itemCount && itemCount != 0)
                 {
-                    displayItemAmount.text = item.itemQuantity.ToString();
+                    Debug.Log("UIItem in slow: " + itemSlot.uiItemInSlot);
+                    Debug.Log("Item in itemlist: " + itemList[invIndex]);
+                    //set item data from current crew inventory
+                    itemSlot.uiItemInSlot.SetItemData(itemList[invIndex]);
+
+
+                    //set the amount based on inventory
+                    Text displayItemAmount = child.GetComponentInChildren<Text>();
+                    if (itemSlot.uiItemInSlot.uiItem.itemQuantity > 1)
+                    {
+                        displayItemAmount.text = itemSlot.uiItemInSlot.uiItem.itemQuantity.ToString();
+                    }
+                    else
+                    {
+                        displayItemAmount.text = "";
+                    }
+
+
                 }
-                else
-                {
-                    displayItemAmount.text = "";
-                }
-                if (child.gameObject.activeSelf == false) child.gameObject.SetActive(true);
             }
         }
 
@@ -103,20 +113,35 @@ public class CrewSlotDisplay : MonoBehaviour
         int childCount = itemSlotContainer.transform.childCount;
         Debug.Log("Current child count is: " + childCount);
 
-        if (itemSlotContainer.transform.childCount < slotCount)
+        if (childCount < slotCount)
         {
             for (int i = slotCount - childCount; i < slotCount; i++)
             {
-                CreateInvSlot();
+                    CreateInvSlot();
             }
             Debug.Log("Added " + (slotCount - childCount) + " slots");
         }
-        else if (itemSlotContainer.transform.childCount > slotCount)
+        else if (childCount > slotCount)
         {
-            for (int i = childCount; childCount == slotCount; i--)
+            Debug.Log("Removing " + (childCount - slotCount) + " slots");
+
+            Debug.Log(childCount);
+            for (int i = childCount; i > slotCount; i-=1)
             {
-                DestroyChild(transform.GetChild(i));
+                Debug.Log(i);
+                transform.GetChild(i-1).gameObject.SetActive(false);
             }
+        }
+        else if (childCount == slotCount)
+        {
+            Debug.Log("Slots equal, setting object active");
+            for (int i = 0; i < slotCount; i++)
+            {
+                
+                //if child is not active activate it
+                if (transform.GetChild(i).gameObject.activeSelf == false) transform.GetChild(i).gameObject.SetActive(true);
+            }
+                
         }
     }
 
@@ -125,10 +150,6 @@ public class CrewSlotDisplay : MonoBehaviour
         if (child == itemSlot.transform)
         {
             child.gameObject.SetActive(false);
-        }
-        else
-        {
-            Destroy(child.gameObject);
         }
     }
 

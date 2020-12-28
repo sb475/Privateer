@@ -67,23 +67,23 @@ namespace RPG.UI {
             gameObject.SetActive(true);
 
            
-            ItemConfig item = itemData.uiItemInInventory.itemObject;
+            ItemConfig item = itemData.uiItem.itemObject;
             
             itemName.text = item.GetName();
             itemDescription.text =item.GetDescription();
 
             DisplayItemStats(item, displayItemStatsCell, statDisplayContainer);
 
-            if (parentInventory.GetType() == typeof(UIShipCargo)) {
+            //if (parentInventory.GetType() == typeof(UIShipCargo)) {
 
-                CompareEquippedItemInSlot(itemData, parentInventory);
+            //    CompareEquippedItemInSlot(itemData, parentInventory);
 
-            }
+            //}
             
-            if (parentInventory.GetType() == typeof(UIShopInventory))
-            {
-                //DisplayItemCost(itemData, (UIShopInventory)parentInventory);
-            }
+            //if (parentInventory.GetType() == typeof(UIShopInventory))
+            //{
+            //    //DisplayItemCost(itemData, (UIShopInventory)parentInventory);
+            //}
 
 
             float textPaddingSize = 4f;
@@ -144,16 +144,16 @@ namespace RPG.UI {
         public void CompareEquippedItemInSlot(UIItemData itemData, UIInventory parentInventory)
         {
             //if item is equipped, it must already be in the character equipment slot and therefore does not need to be compared to anything. Guards recursive comparison.
-            if (itemData.uiItemInInventory.isEquipped == true) return;        
+            if (itemData.uiItem.isEquipped == true) return;        
 
-            ItemConfig item = itemData.uiItemInInventory.itemObject;
+            ItemConfig item = itemData.uiItem.itemObject;
 
             foreach (Transform child in parentInventory.GetEquipmentSlots().transform)
             {
                 //check to see if child exists, if not then move on
                 if (child.gameObject.GetComponentInChildren<UIItemData>() == null) continue;
 
-                ItemConfig equippedItem = child.gameObject.GetComponentInChildren<UIItemData>().uiItemInInventory.itemObject;
+                ItemConfig equippedItem = child.gameObject.GetComponentInChildren<UIItemData>().uiItem.itemObject;
 
                 if (equippedItem.CheckItemType() == item.CheckItemType())
                 {

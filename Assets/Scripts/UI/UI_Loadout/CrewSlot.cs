@@ -15,17 +15,18 @@ namespace RPG.UI{
         public CrewDraggable crewDragObj;
         public bool onShip;
         [SerializeField] Sprite defaultImage;
-        Sprite image;
+        Image image;
         public override void Awake()
         {
             base.Awake();
-            if (defaultImage != null) image = GetComponent<Image>().sprite;
+
+            image = GetComponent<Image>();
         }
 
         private void Start()
         {
             crewDragObj = GetComponentInChildren<CrewDraggable>();
-            if (crewDragObj == null) image = defaultImage;
+            if (crewDragObj == null) image.sprite = defaultImage;
         }
 
         public override void OnDrop(PointerEventData eventData)
@@ -37,6 +38,10 @@ namespace RPG.UI{
         {
             crewDragObj = null;
             crewOnSlot = null;
+            image.sprite = defaultImage;
+            Color c = image.color;
+            c.a = 1;
+            image.color = c;
         }
 
         public virtual void AddCrewToSlot(GameObject droppedObject)
@@ -74,7 +79,9 @@ namespace RPG.UI{
             dropped.parentCrewSlot = this;
             crewOnSlot = crewToSwap;
             crewDragObj = dropped;
-            image = null;
+            Color c = image.color;
+            c.a = 0;
+            image.color = c;
 
             uIController.displayAvailableCrew.GenerateAvailableCrew();
         }

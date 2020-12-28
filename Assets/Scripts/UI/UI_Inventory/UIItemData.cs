@@ -7,29 +7,33 @@ using System;
 using UnityEngine.EventSystems;
 using RPG.Stats;
 using RPG.Base;
+using UnityEngine.UI;
 
 namespace RPG.UI{
 
     public class UIItemData : MonoBehaviour
     {
-        public Item uiItemInInventory;
+        public Item uiItem;
+        Image image;
 
-        public void SetItemData (Item itemInInventory)
+
+        public void SetItemData (Item item)
         {
-            uiItemInInventory = itemInInventory;
-            
+            image = GetComponent<Image>();
+            uiItem = item;
+            image.sprite = item.itemObject.itemIcon;
         }
         public Item GetItemData ()
         {
-            return uiItemInInventory;
+            return uiItem;
         }
         public void SetEquipped(bool state)
         {
-            uiItemInInventory.EquipItem(state);
+            uiItem.EquipItem(state);
         }
         public ItemConfig GetInventoryItemConfig()
         {
-            return uiItemInInventory.itemObject;
+            return uiItem.itemObject;
         }
 
 

@@ -43,11 +43,11 @@ namespace RPG.UI
         {
             if (this.inventoryName == InventoryName.Player)
             {
-                SellItemUI(itemBehavior.GetItemData().uiItemInInventory); 
+                SellItemUI(itemBehavior.GetItemData().uiItem); 
             }
             else 
             {
-                BuyItemUI(itemBehavior.GetItemData().uiItemInInventory);
+                BuyItemUI(itemBehavior.GetItemData().uiItem);
             }
         }
         

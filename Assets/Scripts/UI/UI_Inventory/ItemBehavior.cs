@@ -13,8 +13,9 @@ namespace RPG.UI
     {
         public ItemSlot parentSlot;
         private UIInventory uIInventory;
-
+        public GameObject quantityTextObject;
         private UIItemData itemData;
+        public bool hasInventoryController = true;
 
         public override void Awake()
         {
@@ -22,7 +23,7 @@ namespace RPG.UI
 
             parentSlot = GetComponentInParent<ItemSlot>();
             itemData = GetComponent<UIItemData>();
-            uIInventory = parentSlot.GetInventoryController();
+            //if (hasInventoryController) uIInventory = parentSlot.GetInventoryController();
 
         }
 
@@ -62,7 +63,7 @@ namespace RPG.UI
 
         public override void OnDrop(PointerEventData eventData)
         {
-          GetComponentInParent<ItemSlot>().AddItemToSlot(eventData.pointerDrag, GetComponentInParent<ItemSlot>());
+          //GetComponentInParent<ItemSlot>().AddItemToSlot(eventData.pointerDrag, GetComponentInParent<ItemSlot>());
         }
 
         public Vector3 GetLastItemPosition()

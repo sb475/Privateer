@@ -80,6 +80,7 @@ namespace RPG.UI
             uIController.DropCrewMember(crewToSwap, uIController.crewController.crewOnShip, uIController.crewController.currentTeam);
 
             dropped.parentCrewSlot.ResetSlot();
+
             Destroy(eventData.pointerDrag);
             GenerateAvailableCrew();
         }

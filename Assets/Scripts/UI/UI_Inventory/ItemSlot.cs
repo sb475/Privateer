@@ -13,7 +13,7 @@ namespace RPG.UI
     {
 
         public ItemType allowedItem;
-        private UIItemData uiItemInSlot;     
+        public UIItemData uiItemInSlot;
 
         public override void Awake() {
             base.Awake();
@@ -31,6 +31,7 @@ namespace RPG.UI
 
         public void AddItemToSlot(GameObject droppedObject, ItemSlotGeneric slotToAddTo)
         {
+            if (droppedObject.GetComponent<ItemBehavior>() == null) return;
             if (droppedObject != null)
             {
                 ItemBehavior itemInfo = droppedObject.GetComponent<ItemBehavior>();
@@ -51,7 +52,9 @@ namespace RPG.UI
                     //sends the message that item has been dropped and pushes to CharacterEquip script.
 
                     //Slot behavior
+                    parentSlot.OnPostDrag();
                     HandleDropItem(slotToAddTo, uiItemInInventory);
+
 
                     if (slotType != SlotType.inventoryContainer)
                     {
@@ -81,9 +84,7 @@ namespace RPG.UI
             {
                 case SlotType.characterEquipSlot:
                     uiItemInInventory.isEquipped = true;
-                    if (uIInventory.inventory.itemList.Contains(uiItemInInventory)) uIInventory.inventory.AddItem(uiItemInInventory);
-                    GameEvents.instance.uiController.UpdateDisplayValues();
-                    GameEvents.instance.OnItemChanged();
+
                     break;
                 case SlotType.inventorySlot:
                     uiItemInInventory.isEquipped = false;
@@ -91,6 +92,8 @@ namespace RPG.UI
                 case SlotType.shopSlot:
                     break;
             }
+
+            
         }
 
         private void MoveItemOver(GameObject droppedObject, ItemSlot parentSlot, ItemSlotGeneric slotToMoveTo )
@@ -104,6 +107,8 @@ namespace RPG.UI
                 GameEvents.instance.OnItemChanged();
             }
 
+
+
             //this needs to be changed to reference UI_Item type
             if (slotToMoveTo.GetComponentInChildren<UIItemData>() != null)
             {
@@ -112,11 +117,24 @@ namespace RPG.UI
             else
             {
                 UpdateParent(droppedObject, slotToMoveTo.gameObject);
+                
+            }
+            if (slotToMoveTo.sourceInventory != sourceInventory)
+            {
+                TransferItemToNewInventory(uiItemInSlot.uiItem, slotToMoveTo.sourceInventory);
             }
 
         }
 
-        private void SwapItem(GameObject itemToSwap, ItemSlot parentSlotToSwapTo)
+        public void TransferItemToNewInventory(Item uItem, Inventory targetInventory)
+        {
+            Debug.Log("Inventories not the same, transfering " + uItem); 
+            targetInventory.AddItem(uItem);
+            sourceInventory.RemoveItem(uItem);
+
+        }
+
+        public void SwapItem(GameObject itemToSwap, ItemSlot parentSlotToSwapTo)
         {
             GameObject currentChild = GetComponentInChildren<UIItemData>().gameObject;
                     
@@ -134,19 +152,17 @@ namespace RPG.UI
 
             }
 
-        private bool CheckToTransferSlot(Item uiItemInInventory, ItemSlotGeneric uiSlot)
+        public bool CheckToTransferSlot(Item uiItemInInventory, ItemSlotGeneric uiSlot)
         {
             if (!ItemMoveCondition()) return false;
-            Debug.Log ("Check to Transfer: " + uiSlot.slotType);
+            Debug.Log("Check to Transfer: " + uiSlot.slotType);
             //if inventory slot, always allow
-            if (uiSlot.slotType == SlotType.inventoryContainer || uiSlot.slotType == SlotType.shopSlot || uiSlot.slotType == SlotType.inventorySlot) 
+            if (uiSlot.slotType == SlotType.inventoryContainer || uiSlot.slotType == SlotType.shopSlot || uiSlot.slotType == SlotType.inventorySlot)
             {
                 return true;
             }
 
-            
-
-            ItemSlot uiItemSlot = (ItemSlot)uiSlot; 
+            ItemSlot uiItemSlot = (ItemSlot)uiSlot;
 
             //if slot does not match, do not allow
             if (uiItemSlot.allowedItem == uiItemInInventory.itemObject.CheckItemType())
