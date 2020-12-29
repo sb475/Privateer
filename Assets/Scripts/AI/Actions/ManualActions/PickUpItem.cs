@@ -21,7 +21,7 @@ namespace RPG.AI {
             itemToPickup = target.GetComponent<ItemInWorld>();
             if (itemToPickup == null) return false;
 
-            if (Vector3.Distance(target.transform.position, agent.transform.position) < itemToPickup.interactRadius)
+            if (Vector3.Distance(target.transform.position, agent.transform.position) <= itemToPickup.interactRadius)
             {
                 actionDestination = agent.transform.position;
                 return true;
@@ -62,7 +62,7 @@ namespace RPG.AI {
         {
             if (!actionComplete)
             {
-                //Debug.Log("Action completed successfully");
+                Debug.Log("Pikcup completed successfully");
                 actionComplete = true;
             }
 

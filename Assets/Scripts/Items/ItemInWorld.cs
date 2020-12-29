@@ -21,12 +21,11 @@ namespace RPG.Items
             interactionPoint = gameObject.transform;
             InitializeOutline();
             defaultAction = new RPG_TaskSystem.Task.Pickup {interactable = this};
-
         }
 
         public Item PickUpItem()
         {
-            Invoke("DestroyItemInWorld", 1f);
+            Invoke("DestroyItemInWorld", .3f);
             InfoToolTip.HideToolTip_Static();
             return new Item { itemObject = item, itemQuantity = itemQuantity };
         }

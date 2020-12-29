@@ -32,6 +32,7 @@ public class CrewPanel : MonoBehaviour
 
     }
 
+    
     private void ChangePanelColor(Color color)
     {
         Color c = panelImage.color;

@@ -59,6 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 503d6ce01e5120b4fa0c13b56c37613c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultAct: 6
   actionMenuOptions: 050000000600000003000000
   interactRadius: 3
   defaultCursorType: 0
