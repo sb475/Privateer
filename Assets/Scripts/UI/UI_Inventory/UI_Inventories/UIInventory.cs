@@ -64,6 +64,8 @@ namespace RPG.UI{
             Debug.Log("Inventory count is: " + inventoryCount);
             int childCount = itemSlotContainer.transform.childCount;
             Debug.Log("Current child count is: " + childCount);
+            Debug.Log("setInventorySize : " + setInventorySize);
+            Debug.Log("InventorySize : " + inventorySize);
             if (setInventorySize && itemSlotContainer.transform.childCount < inventorySize)
             {
                 for(int i = inventorySize - childCount; i < inventorySize; i++)
@@ -80,6 +82,10 @@ namespace RPG.UI{
                 }
                 Debug.Log("Added " + (inventoryCount - childCount) + " slots");
             }
+            else
+            {
+                Debug.Log("Did not build any inventory slots");
+            }
         }
 
         private void CreateInvSlot()    
@@ -90,13 +96,14 @@ namespace RPG.UI{
         }
         private void UpdateInventoryItems(List<Item> itemList)
         {
-            int itemCount;
-            if (itemList == null) itemCount = 0;
-            
-            itemCount = itemList.Count;
-            Debug.Log("Item list count: " + itemCount + " " + itemFilter);
+            int itemCount = 0;
+            if (itemList != null)
+            {
+                itemCount = itemList.Count;
+                Debug.Log("Item list count: " + itemCount + " " + itemFilter);
 
-            BuildInvSlots(itemCount);
+                BuildInvSlots(itemCount);
+            }
 
             int invIndex = 0;
             foreach (Transform child in itemSlotContainer.transform)
@@ -152,6 +159,7 @@ namespace RPG.UI{
             }
             else
             {
+                Debug.Log("Destroying child: " + child.name);
                 Destroy(child.gameObject);
             }
         }
